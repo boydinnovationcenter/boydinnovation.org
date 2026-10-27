@@ -1,0 +1,63 @@
+---
+import { getEntry } from 'astro:content';
+import PhotoHero from '../components/PhotoHero.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const entry = await getEntry('bookATour', 'bookATour');
+if (!entry) throw new Error('Missing Book a Tour content: src/content/book-a-tour.yaml');
+const { seo, heading, image, meetingsUrl } = entry.data;
+
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+		{ '@type': 'ListItem', position: 2, name: 'Book a Tour', item: `${site.url}/book-a-tour` },
+	],
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	<PhotoHero heading={heading} image={image} weight={500} />
+	<section class="scheduler" aria-label="Schedule a tour">
+		<div class="container">
+			<!-- HubSpot Meetings scheduler; HubSpot's script turns this into the booking calendar. -->
+			<div class="meetings-iframe-container" data-src={meetingsUrl}></div>
+			<noscript>
+				<p><a href={meetingsUrl.replace('?embed=true', '')}>Book a tour on our scheduling page</a></p>
+			</noscript>
+		</div>
+	</section>
+	<script
+		is:inline
+		type="text/javascript"
+		src="https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js"
+		defer></script>
+</BaseLayout>
+
+<style>
+	.scheduler {
+		padding-block: var(--space-6) var(--space-7);
+	}
+
+	/* Reserve the scheduler's height so the page doesn't jump when it loads. */
+	.meetings-iframe-container {
+		max-width: 56rem;
+		min-height: 44.7rem;
+		margin-inline: auto;
+	}
+
+	/* HubSpot gives the iframe a 312px minimum width; on the narrowest phones
+	   let it use the side gutters instead of scrolling the page sideways. */
+	@media (max-width: 22.5rem) {
+		.scheduler .container {
+			width: 100%;
+		}
+	}
+
+	.meetings-iframe-container :global(iframe) {
+		width: 100%;
+	}
+</style>

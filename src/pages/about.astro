@@ -1,0 +1,59 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import AboutHero from '../components/about/AboutHero.astro';
+import AboutStory from '../components/about/AboutStory.astro';
+import BoardGrid from '../components/about/BoardGrid.astro';
+import TeamGrid from '../components/about/TeamGrid.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const entry = await getEntry('about', 'about');
+if (!entry) throw new Error('Missing About content: src/content/about.yaml');
+const { seo, hero, story, teamHeading, boardHeading } = entry.data;
+
+const team = (await getCollection('team')).sort((a, b) => a.data.order - b.data.order);
+const board = (await getCollection('board')).sort((a, b) => a.data.order - b.data.order);
+const organizationId = `${site.url}/#organization`;
+
+// Breadcrumb, the page itself, and the people listed on it as part of the organization.
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+				{ '@type': 'ListItem', position: 2, name: 'About', item: `${site.url}/about` },
+			],
+		},
+		{
+			'@type': 'AboutPage',
+			url: `${site.url}/about`,
+			name: seo.title,
+			about: { '@id': organizationId },
+		},
+		...team.map(({ data }) => ({
+			'@type': 'Person',
+			name: data.name,
+			jobTitle: data.role.charAt(0) + data.role.slice(1).toLowerCase(),
+			worksFor: { '@id': organizationId },
+			...(data.email ? { email: data.email } : {}),
+			...(data.linkedin ? { sameAs: [data.linkedin] } : {}),
+		})),
+		...board.map(({ data }) => ({
+			'@type': 'Person',
+			name: data.name,
+			description: data.affiliation,
+			memberOf: { '@type': 'OrganizationRole', roleName: 'Board of Directors', memberOf: { '@id': organizationId } },
+		})),
+	],
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	<AboutHero {...hero} />
+	<AboutStory {...story} />
+	<TeamGrid heading={teamHeading} />
+	<BoardGrid heading={boardHeading} />
+</BaseLayout>

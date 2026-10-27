@@ -1,0 +1,145 @@
+---
+import { Image } from 'astro:assets';
+import CtaButton from '../CtaButton.astro';
+
+interface Props {
+	eyebrow: string;
+	headline: [string, string, string];
+	actions: { label: string; href: string }[];
+	drawing: ImageMetadata;
+}
+
+const { eyebrow, headline, actions, drawing } = Astro.props;
+const [first, underlined, last] = headline;
+---
+
+<section class="about-hero" aria-labelledby="about-title">
+	<div class="container about-hero__grid">
+		<div class="about-hero__text">
+			<p class="about-hero__eyebrow">{eyebrow}</p>
+			<h1 id="about-title">
+				<span class="about-hero__line">{first}</span>
+				<span class="about-hero__line about-hero__underlined">
+					{underlined}
+					<svg viewBox="0 0 600 24" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+						<path d="M4 16 C 120 8, 300 6, 596 12" />
+					</svg>
+				</span>
+				<span class="about-hero__line about-hero__last">{last}</span>
+			</h1>
+			<div class="about-hero__actions">
+				{
+					actions.map((action, i) => (
+						<CtaButton variant={i === 0 ? 'primary' : 'outline'} label={action.label} href={action.href} />
+					))
+				}
+			</div>
+		</div>
+		<Image class="about-hero__drawing" src={drawing} alt="" width={330} densities={[1, 2]} loading="eager" />
+	</div>
+</section>
+
+<style>
+	.about-hero {
+		padding-block: calc(var(--header-height) + 2rem) var(--space-6);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.about-hero__grid {
+		display: grid;
+		gap: var(--space-5);
+		align-items: center;
+	}
+
+	.about-hero__eyebrow {
+		font-size: clamp(0.9rem, 0.85rem + 0.2vw, 1rem);
+		font-weight: 500;
+		color: var(--color-accent);
+	}
+
+	h1 {
+		margin-block: var(--space-3) var(--space-6);
+		font-size: clamp(1.9rem, 1rem + 3.9vw, 4.6rem);
+		font-weight: 700;
+		line-height: 1.05;
+	}
+
+	.about-hero__line {
+		display: block;
+	}
+
+	.about-hero__underlined {
+		position: relative;
+		width: fit-content;
+		font-size: 0.91em;
+	}
+
+	/* Hand-drawn green underline (a Squarespace text highlight on the live site). */
+	.about-hero__underlined svg {
+		position: absolute;
+		left: -1%;
+		bottom: -0.2em;
+		width: 102%;
+		height: 0.3em;
+		overflow: visible;
+	}
+
+	.about-hero__underlined path {
+		fill: none;
+		stroke: var(--color-accent);
+		stroke-width: 6;
+		stroke-linecap: round;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.about-hero__last {
+		margin-top: 0.15em;
+		font-size: 1.27em;
+	}
+
+	.about-hero__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+	}
+
+	.about-hero__actions :global(.btn) {
+		min-width: 13.25rem;
+		min-height: 4.25rem;
+		border-radius: var(--radius);
+	}
+
+	.about-hero__actions :global(.btn--outline) {
+		border-color: var(--color-accent);
+		color: var(--color-accent);
+		font-weight: 400;
+	}
+
+	.about-hero__drawing {
+		justify-self: center;
+		width: min(60%, 20.2rem);
+	}
+
+	@media (max-width: 47.99rem) {
+		.about-hero__actions :global(.btn) {
+			flex: 1 1 100%;
+			min-height: 3.5rem;
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.about-hero {
+			padding-block: 7.3rem 5.5rem;
+		}
+
+		.about-hero__grid {
+			grid-template-columns: minmax(0, 1fr) 20.2rem;
+			gap: clamp(2rem, 6vw, 6rem);
+		}
+
+		.about-hero__drawing {
+			width: 100%;
+		}
+	}
+</style>

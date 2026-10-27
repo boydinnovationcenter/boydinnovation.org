@@ -1,0 +1,35 @@
+# Staff shown under "Our Team" on the About page. See CONTENT.md.
+# order sets the position (lowest first). email and linkedin are optional.
+
+- id: sam-herskovitz
+  name: "Sam Herskovitz"
+  role: "EXECUTIVE DIRECTOR"
+  order: 1
+  photo: ../assets/images/team/sam-herskovitz.jpg
+  photoAlt: "Sam Herskovitz, smiling, in a light blue shirt outdoors, affiliated with Boyd Innovation Center in Columbia, SC"
+  email: sam@boydinnovation.org
+  linkedin: "https://www.linkedin.com/in/samherskovitz/"
+- id: mia-gates
+  name: "Mia Gates"
+  role: "MARKETING AND EVENTS"
+  order: 2
+  photo: ../assets/images/team/mia-gates.png
+  photoAlt: "Mia Gates in a white blazer smiling outdoors near a stone archway - Boyd Innovation Center in Columbia, SC"
+  email: mia@boydinnovation.org
+  linkedin: "https://www.linkedin.com/in/mia-gates144/"
+- id: shyam-ganesh-babu
+  name: "Shyam Ganesh Babu"
+  role: "SPONSORS AND PARTNERSHIPS"
+  order: 3
+  photo: ../assets/images/team/shyam-ganesh-babu.jpg
+  photoAlt: "Shyam in blue blazer and pink shirt outdoors at Boyd Innovation Center Columbia SC"
+  email: shyam@boydinnovation.org
+  linkedin: "https://www.linkedin.com/in/shyamgb/"
+- id: kennedy-marren
+  name: "Kennedy Marren"
+  role: "OPERATIONS AND PROGRAMS"
+  order: 4
+  photo: ../assets/images/team/kennedy-marren.jpg
+  photoAlt: "Kennedy Marren smiling outdoors on University of South Carolina campus, wearing a black blazer — Boyd Innovation Center Columbia SC"
+  email: kennedy@boydinnovation.org
+  linkedin: "https://www.linkedin.com/in/kennedy-marren-3b7225351"

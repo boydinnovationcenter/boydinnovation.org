@@ -2,13 +2,13 @@
 import { getEntry } from 'astro:content';
 import SpaceOptions from '../components/home/SpaceOptions.astro';
 import MemberLogos from '../components/MemberLogos.astro';
+import PhotoHero from '../components/PhotoHero.astro';
 import PhotoStrip from '../components/PhotoStrip.astro';
 import Amenities from '../components/space/Amenities.astro';
 import ConferenceRooms from '../components/space/ConferenceRooms.astro';
 import CoworkingPlans from '../components/space/CoworkingPlans.astro';
 import EventSpace from '../components/space/EventSpace.astro';
 import OfficeSpaces from '../components/space/OfficeSpaces.astro';
-import SpaceHero from '../components/space/SpaceHero.astro';
 import VirtualTour from '../components/space/VirtualTour.astro';
 import { site } from '../config/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -74,7 +74,7 @@ const structuredData = {
 
 <BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
 	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-	<SpaceHero {...hero} />
+	<PhotoHero {...hero} />
 	<div class="space-intro">
 		<SpaceOptions {...spaces} />
 	</div>

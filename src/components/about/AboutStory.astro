@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+	image: ImageMetadata;
+	alt: string;
+	paragraphs: string[];
+	stats: { value: string; label: string }[];
+}
+
+const { image, alt, paragraphs, stats } = Astro.props;
+---
+
+<section class="story" aria-label="About the Boyd Innovation Center">
+	<div class="container story__grid">
+		<Image
+			class="story__image"
+			src={image}
+			alt={alt}
+			widths={[480, 720, 1024]}
+			sizes="(min-width: 64rem) 34vw, 100vw"
+		/>
+		<div class="story__text">
+			{paragraphs.map((text) => <p>{text}</p>)}
+			<dl class="story__stats">
+				{
+					stats.map((stat) => (
+						<div class="stat">
+							<dt>{stat.label}</dt>
+							<dd>{stat.value}</dd>
+						</div>
+					))
+				}
+			</dl>
+		</div>
+	</div>
+</section>
+
+<style>
+	.story {
+		padding-block: var(--space-7);
+	}
+
+	.story__grid {
+		display: grid;
+		gap: var(--space-6);
+		align-items: start;
+	}
+
+	.story__image {
+		width: 100%;
+		aspect-ratio: 3 / 2;
+		object-fit: cover;
+		border-radius: var(--radius);
+	}
+
+	.story__text {
+		display: grid;
+		gap: var(--space-3);
+	}
+
+	.story__stats {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.6rem;
+		margin-top: var(--space-4);
+	}
+
+	/* Label comes first in the HTML (dt before dd); the number shows on top. */
+	.stat {
+		display: flex;
+		flex-direction: column-reverse;
+		justify-content: flex-end;
+		align-items: center;
+		gap: 0.15rem;
+		padding: var(--space-2) var(--space-1) var(--space-3);
+		border: 1px solid var(--color-black);
+		border-radius: var(--radius);
+		text-align: center;
+	}
+
+	.stat dd {
+		margin: 0;
+		font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.4rem);
+		font-weight: 700;
+	}
+
+	.stat dt {
+		font-size: var(--text-sm);
+		font-weight: 700;
+		color: var(--color-text-strong);
+	}
+
+	@media (min-width: 48rem) {
+		.story__stats {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.story {
+			padding-block: 5.9rem;
+		}
+
+		.story__grid {
+			grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+			gap: clamp(2rem, 4vw, 3.5rem);
+		}
+	}
+</style>

@@ -1,0 +1,11 @@
+# Book a Tour page (https://boydinnovation.org/book-a-tour).
+
+bookATour:
+  seo:
+    title: "Tech Startup Space in Columbia SC | Boyd Innovation"
+    description: "Tour the top tech startup space in Columbia, SC. See coworking, dedicated desks, and phone booths built for founders. Book your 30-min tour today."
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+  heading: "The Place To Build A Tech Startup In The Midlands"
+  image: ../assets/images/space/strip-4-main-space.jpg
+  # HubSpot Meetings link for tour bookings.
+  meetingsUrl: "https://meetings.hubspot.com/kennedy-marren?embed=true"

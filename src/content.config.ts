@@ -309,4 +309,70 @@ const eventsPage = defineCollection({
 		}),
 });
 
-export const collections = { home, programs, members, space, events, eventsPage };
+/** Staff shown under "Our Team" on /about, one entry each in src/content/team.yaml. */
+const team = defineCollection({
+	loader: file('src/content/team.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			name: z.string(),
+			role: z.string(),
+			order: z.number(),
+			photo: image(),
+			photoAlt: z.string(),
+			email: z.email().optional(),
+			linkedin: z.url().optional(),
+		}),
+});
+
+/** Board of Directors on /about, one entry each in src/content/board.yaml. */
+const board = defineCollection({
+	loader: file('src/content/board.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			name: z.string(),
+			/** Title and organization, e.g. "Founder, HuntStand". */
+			affiliation: z.string(),
+			order: z.number(),
+			photo: image(),
+			photoAlt: z.string(),
+		}),
+});
+
+/** About page copy. One entry ("about") in src/content/about.yaml. */
+const about = defineCollection({
+	loader: file('src/content/about.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+			hero: z.object({
+				eyebrow: z.string(),
+				/** Three lines; the middle one gets the green hand-drawn underline. */
+				headline: z.tuple([z.string(), z.string(), z.string()]),
+				actions: z.array(link),
+				drawing: image(),
+			}),
+			story: z.object({
+				image: image(),
+				alt: z.string(),
+				paragraphs: z.array(z.string()),
+				stats: z.array(z.object({ value: z.string(), label: z.string() })),
+			}),
+			teamHeading: z.string(),
+			boardHeading: z.string(),
+		}),
+});
+
+/** Book a Tour page. One entry ("bookATour") in src/content/book-a-tour.yaml. */
+const bookATour = defineCollection({
+	loader: file('src/content/book-a-tour.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+			heading: z.string(),
+			image: image(),
+			/** HubSpot Meetings scheduling link. */
+			meetingsUrl: z.url(),
+		}),
+});
+
+export const collections = { home, programs, members, space, events, eventsPage, team, board, about, bookATour };

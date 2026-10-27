@@ -1,0 +1,133 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+
+interface Props {
+	heading: string;
+}
+
+const { heading } = Astro.props;
+const team = (await getCollection('team')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<section class="team" aria-labelledby="team-heading">
+	<div class="container">
+		<h2 id="team-heading">{heading}</h2>
+		<ul class="team__grid" role="list">
+			{
+				team.map(({ data: person }) => (
+					<li class="person">
+						<Image
+							class="person__photo"
+							src={person.photo}
+							alt={person.photoAlt}
+							width={148}
+							densities={[1, 2]}
+						/>
+						<h3>{person.name}</h3>
+						<p class="person__role">{person.role}</p>
+						<ul class="person__links" role="list">
+							{person.email && (
+								<li>
+									<a href={`mailto:${person.email}`}>
+										<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+											<path d="M3 5h18v14H3z M3 5l9 8 9-8" />
+										</svg>
+										<span class="visually-hidden">
+											Email {person.name} ({person.email})
+										</span>
+									</a>
+								</li>
+							)}
+							{person.linkedin && (
+								<li>
+									<a href={person.linkedin} target="_blank" rel="noopener">
+										<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+											<rect x="2.5" y="2.5" width="19" height="19" rx="2" />
+											<path d="M7.5 10v7 M7.5 7v.01 M11 17v-7 M11 13a2.5 2.5 0 0 1 5.5 0v4" />
+										</svg>
+										<span class="visually-hidden">{person.name} on LinkedIn (opens in a new tab)</span>
+									</a>
+								</li>
+							)}
+						</ul>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.team {
+		padding-block: var(--space-7) var(--space-8);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.team__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+		gap: var(--space-5) clamp(1.5rem, 6vw, 5.75rem);
+		margin-top: var(--space-6);
+		padding: 0;
+		list-style: none;
+	}
+
+	.person {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.3rem;
+		padding: var(--space-5) var(--space-2) var(--space-4);
+		border: 1px solid var(--color-paper);
+		border-radius: var(--radius);
+		text-align: center;
+	}
+
+	.person__photo {
+		width: 9.25rem;
+		aspect-ratio: 1;
+		object-fit: cover;
+		border-radius: 50%;
+		margin-bottom: var(--space-3);
+	}
+
+	.person__role {
+		font-size: var(--text-sm);
+		font-weight: 700;
+		line-height: 1.4;
+		color: var(--color-accent);
+	}
+
+	.person__links {
+		display: flex;
+		gap: 0.5rem;
+		margin-top: var(--space-3);
+		padding: 0;
+		list-style: none;
+	}
+
+	.person__links a {
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		color: var(--color-text-on-dark);
+		transition: color 0.2s ease;
+	}
+
+	.person__links a:hover {
+		color: var(--color-accent);
+	}
+
+	.person__links svg {
+		width: 1.75rem;
+		height: 1.75rem;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+</style>

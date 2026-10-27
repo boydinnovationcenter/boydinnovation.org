@@ -1,0 +1,102 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+
+interface Props {
+	heading: string;
+}
+
+const { heading } = Astro.props;
+const board = (await getCollection('board')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<section class="board" aria-labelledby="board-heading">
+	<div class="container">
+		<h2 id="board-heading">{heading}</h2>
+		<ul class="board__grid" role="list">
+			{
+				board.map(({ data: member }) => (
+					<li class="director">
+						<div class="director__text">
+							<h3>{member.name}</h3>
+							<p>{member.affiliation}</p>
+						</div>
+						<Image
+							class="director__photo"
+							src={member.photo}
+							alt={member.photoAlt}
+							width={100}
+							densities={[1, 2]}
+						/>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.board {
+		padding-block: var(--space-7) var(--space-8);
+	}
+
+	/* Rows of three that stay centered, so a short last row sits in the middle. */
+	.board__grid {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.6rem;
+		margin-top: var(--space-6);
+		padding: 0;
+		list-style: none;
+	}
+
+	.director {
+		flex: 0 1 calc((100% - 1.2rem) / 3);
+		min-width: min(100%, 16rem);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-3);
+		padding: var(--space-3) var(--space-4);
+		border: 1px solid var(--color-black);
+		border-radius: var(--radius);
+		color: var(--color-text-strong);
+	}
+
+	.director__text {
+		text-align: center;
+		flex: 1;
+	}
+
+	.director h3 {
+		font-weight: 700;
+	}
+
+	.director p {
+		font-size: var(--text-sm);
+		font-weight: 700;
+	}
+
+	.director__photo {
+		flex: none;
+		width: 6.25rem;
+		aspect-ratio: 1;
+		object-fit: cover;
+		border-radius: 50%;
+	}
+
+	@media (max-width: 47.99rem) {
+		.director {
+			flex-basis: calc((100% - 0.6rem) / 2);
+			min-width: 0;
+			flex-direction: column-reverse;
+			padding: var(--space-3) var(--space-2);
+			gap: var(--space-2);
+		}
+
+		.director__photo {
+			width: 5rem;
+		}
+	}
+</style>

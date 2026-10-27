@@ -1,0 +1,35 @@
+# About page copy (https://boydinnovation.org/about). Team and board are in team.yaml and board.yaml.
+
+about:
+  seo:
+    title: "Tech Startup Hub in Columbia, SC | Boyd Innovation"
+    description: "Meet the team helping 230+ founders build scalable tech companies in Columbia, SC. Workspace, programs, and community. Come build with us."
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+
+  hero:
+    eyebrow: "OUR MISSION"
+    headline:
+      - "We help founders build"
+      - "scalable tech companies"
+      - "in Columbia, SC."
+    actions:
+      - { label: "COWORK HERE", href: /space }
+      - { label: "EXPLORE PROGRAMS", href: /programs }
+    drawing: ../assets/images/about/facade-drawing.png
+
+  story:
+    image: ../assets/images/about/community.jpg
+    alt: "Founders and community members networking at a Boyd Innovation Center event in Columbia, SC, beneath string lights in a brick warehouse venue"
+    paragraphs:
+      - "The Boyd Innovation Center exists to support high-growth, high-tech startup founders in Columbia, SC. Through programs, resources, community building, and physical space, we are one part of a larger ecosystem working to bring and retain tech companies here in the Midlands."
+      - "Since opening our doors in 2022, we've put founders at the center of our mission, bringing together people from all stages of the entrepreneurial journey — from early-stage dreamers to scaling success stories. That means practical help: workspace to build from, programming that sharpens ideas into companies, and connections to the mentors, investors, and peers who can move a venture forward."
+      - "We believe Columbia has what it takes to be a place where tech companies start, grow, and stay. Building that future requires more than any one organization can do alone, which is why we work alongside the universities, investors, and civic partners who share that goal."
+      - "From students to remote tech workers to side hustlers to established founders, the BIC is here to support you on your journey. Whether you're testing your first idea or hiring your fiftieth employee, you'll find people here who want to see you succeed."
+    stats:
+      - { value: "1000+", label: "PROGRAM ENGAGEMENT" }
+      - { value: "120+", label: "JOBS CREATED" }
+      - { value: "1.80M+", label: "FUNDING RAISED" }
+      - { value: "230+", label: "FOUNDERS SERVED" }
+
+  teamHeading: "Our Team"
+  boardHeading: "Board of Directors"

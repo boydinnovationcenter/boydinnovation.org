@@ -1,0 +1,34 @@
+# Board of Directors on the About page. See CONTENT.md.
+# order sets the position (lowest first).
+
+- id: lanford-holloway
+  name: "Lanford Holloway"
+  affiliation: "Founder, HuntStand"
+  order: 1
+  photo: ../assets/images/board/lanford-holloway.webp
+  photoAlt: "Lanford Holloway, Boyd Innovation Center board member, smiling headshot in light blue shirt"
+- id: andrew-daniel
+  name: "Andrew Daniel"
+  affiliation: "Partner, SoftDocs"
+  order: 2
+  photo: ../assets/images/board/andrew-daniel.jpg
+  photoAlt: "Andrew Daniel, Boyd Innovation Center board member, smiling outdoors in Columbia SC"
+- id: colin-griffin
+  name: "Colin Griffin"
+  affiliation: "Founder/CEO, Krumware"
+  order: 3
+  photo: ../assets/images/board/colin-griffin.jpg
+  photoAlt: "Colin Griffin, board member at Boyd Innovation Center, Columbia SC startup hub"
+- id: joe-wilczewski
+  name: "Joe Wilczewski"
+  affiliation: "Boyd Foundation"
+  order: 4
+  # Placeholder silhouette until a headshot is available.
+  photo: ../assets/images/board/placeholder-silhouette.jpg
+  photoAlt: ""
+- id: melissa-pegus
+  name: "Melissa Pegus"
+  affiliation: "CEO, VC Investor"
+  order: 5
+  photo: ../assets/images/board/melissa-pegus.jpg
+  photoAlt: "Melissa Pegus, Boyd Innovation Center board member"

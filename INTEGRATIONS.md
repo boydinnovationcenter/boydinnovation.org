@@ -53,6 +53,14 @@ No page-specific Code Injection on /space.
 
 No page-specific Code Injection on /events; everything was in on-page code blocks.
 
+## Book a Tour page
+
+| Integration | Details | Astro location |
+|---|---|---|
+| HubSpot Meetings scheduler | `meetings.hubspot.com/kennedy-marren?embed=true`, loaded with `MeetingsEmbedCode.js` | `meetingsUrl` in [book-a-tour.yaml](src/content/book-a-tour.yaml), [book-a-tour.astro](src/pages/book-a-tour.astro) |
+
+No page-specific Code Injection on /about or /book-a-tour.
+
 ## Still to inventory
 
 - Per-page Code Injection on every other page, including Eventbrite widgets, the Google Calendar subscribe button, and the pages that use the HubSpot CTA triggers. Each page will be added here as it is migrated.

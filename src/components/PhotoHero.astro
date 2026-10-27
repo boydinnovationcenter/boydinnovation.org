@@ -1,20 +1,26 @@
 ---
+/**
+ * Full-bleed photo hero with a navy wash, the flywheel mark and an h1
+ * (Space, Book a Tour). The button is optional.
+ */
 import { Image } from 'astro:assets';
-import flywheel from '../../assets/images/brand/flywheel.png';
-import CtaButton from '../CtaButton.astro';
+import flywheel from '../assets/images/brand/flywheel.png';
+import CtaButton from './CtaButton.astro';
 
 interface Props {
 	heading: string;
-	cta: { label: string; href: string };
+	cta?: { label: string; href: string };
 	image: ImageMetadata;
+	/** Headline weight; the live Space headline is bold, Book a Tour's is not. */
+	weight?: 500 | 700;
 }
 
-const { heading, cta, image } = Astro.props;
+const { heading, cta, image, weight = 700 } = Astro.props;
 ---
 
-<section class="space-hero" aria-labelledby="space-title">
+<section class="photo-hero" aria-labelledby="page-title">
 	<Image
-		class="space-hero__bg"
+		class="photo-hero__bg"
 		src={image}
 		alt=""
 		widths={[640, 1024, 1440, 1920, 2500]}
@@ -22,15 +28,15 @@ const { heading, cta, image } = Astro.props;
 		loading="eager"
 		fetchpriority="high"
 	/>
-	<Image class="space-hero__flywheel" src={flywheel} alt="" width={100} densities={[1, 2, 3]} loading="eager" />
-	<div class="space-hero__content">
-		<h1 id="space-title">{heading}</h1>
-		<CtaButton class="space-hero__cta" variant="glass" label={cta.label} href={cta.href} />
+	<Image class="photo-hero__flywheel" src={flywheel} alt="" width={100} densities={[1, 2, 3]} loading="eager" />
+	<div class="photo-hero__content">
+		<h1 id="page-title" style={`font-weight: ${weight}`}>{heading}</h1>
+		{cta && <CtaButton class="photo-hero__cta" variant="glass" label={cta.label} href={cta.href} />}
 	</div>
 </section>
 
 <style>
-	.space-hero {
+	.photo-hero {
 		position: relative;
 		isolation: isolate;
 		display: flex;
@@ -41,7 +47,7 @@ const { heading, cta, image } = Astro.props;
 		color: var(--color-text-on-dark);
 	}
 
-	.space-hero__bg {
+	.photo-hero__bg {
 		position: absolute;
 		inset: 0;
 		z-index: -2;
@@ -51,7 +57,7 @@ const { heading, cta, image } = Astro.props;
 	}
 
 	/* Navy wash at 70%, as on the live site. */
-	.space-hero::before {
+	.photo-hero::before {
 		content: '';
 		position: absolute;
 		inset: 0;
@@ -59,14 +65,14 @@ const { heading, cta, image } = Astro.props;
 		background: rgb(4 30 52 / 0.7);
 	}
 
-	.space-hero__flywheel {
+	.photo-hero__flywheel {
 		position: absolute;
 		top: calc(var(--header-height) + 1.5rem);
 		right: var(--gutter);
 		width: clamp(3.5rem, 7vw, 6.25rem);
 	}
 
-	.space-hero__content {
+	.photo-hero__content {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: flex-end;
@@ -79,11 +85,10 @@ const { heading, cta, image } = Astro.props;
 		flex: 1 1 32rem;
 		max-width: 46ch;
 		font-size: clamp(2.4rem, 1.5rem + 3.6vw, 5.07rem);
-		font-weight: 700;
 		line-height: 1.09;
 	}
 
-	.space-hero :global(.space-hero__cta) {
+	.photo-hero :global(.photo-hero__cta) {
 		width: 13.25rem;
 		min-height: 4.25rem;
 		border-radius: var(--radius);

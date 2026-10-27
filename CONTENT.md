@@ -124,6 +124,18 @@ actions:
 
 The hero, calendar links and photo strip are in `src/content/events-page.yaml`.
 
+## About page: team and board
+
+- **Staff** are in **`src/content/team.yaml`**: name, role, order, photo, photo description, and optional email and LinkedIn link.
+- **Board members** are in **`src/content/board.yaml`**: name, affiliation (title and organization), order and photo.
+- Put photos in `src/assets/images/team/` or `src/assets/images/board/`. Square photos work best; they're shown in a circle.
+- To add someone, copy an existing entry and give it a new `id` (for example `jane-doe`). To remove someone, delete their entry.
+- Mission text and the four stats are in `src/content/about.yaml`.
+
+## Book a Tour
+
+The tour scheduler link is `meetingsUrl` in **`src/content/book-a-tour.yaml`**. To send tour bookings to a different HubSpot calendar, replace that link (keep `?embed=true` at the end).
+
 ## Site-wide details
 
 The navigation menu, footer links, address, phone number and social media links are in **`src/config/site.ts`**. Edit the text between the quotation marks and leave the rest alone.

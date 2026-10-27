@@ -242,3 +242,53 @@ What's left of the LCP time is render delay from the site-wide third-party scrip
 
 12. **Meta description is empty** on the live Events page. AGENTS.md says to keep meta tags exactly, so it's empty here too, but this is the one page where writing one would clearly help SEO. Want me to draft one for approval?
 13. **Tech on Tap** needs its next date and Eventbrite event; until then it doesn't show (its Oct 22 date has passed).
+
+## About (`/about`)
+
+Reference: live site captured 2026-10-27 at 1440, 768 and 390px. Title, meta description, canonical and social tags are copied exactly.
+
+### Content
+
+- **Team** (`src/content/team.yaml`) and **Board of Directors** (`src/content/board.yaml`) are content collections, one entry per person, as AGENTS.md asks. Each person's order on the page is set by `order`.
+- Mission copy, stats and hero text are in `src/content/about.yaml`.
+
+### Fixes and technical changes
+
+- **One `<h1>`:** the live headline was three separate `<h1>` elements. It's now one heading with three styled lines; the hand-drawn green underline under "scalable tech companies" is redrawn as an inline SVG.
+- **"OUR MISSION" was huge on phones** (Squarespace scaled text); it's now the same small label at every width.
+- **Email and LinkedIn icons:** the live icons were unlabeled image links (Lighthouse flagged "Links do not have a discernible name"). They're now crisp SVG icons with labels such as "Email Sam Herskovitz (sam@boydinnovation.org)" and "Sam Herskovitz on LinkedIn (opens in a new tab)". The email links no longer end in a stray `?`.
+- **Stats** (1000+, 120+, 1.80M+, 230+) are a description list, so screen readers read each number with its label.
+- **Board grid:** the centered short last row is kept, built with flexbox so it adapts to any number of directors. On phones it's two per row, as on live.
+- **Alt text:** Melissa Pegus's photo had none and now names her. Joe Wilczewski's placeholder is a stock silhouette, not his photo, so it's now decorative (`alt=""`); his name is right beside it.
+- **Structured data:** `BreadcrumbList`, `AboutPage`, and a `Person` for each team member (job title, email, LinkedIn, works for BIC) and each board member (affiliation, board role).
+
+### Performance (Lighthouse, mobile, 2026-10-27)
+
+| | Live | Astro (local preview) |
+|---|---|---|
+| Performance | 23 / 23 | 97 / 98 |
+| LCP | 25.5–26.1 s | 1.9 s |
+| FCP | 12.8–13.0 s | 0.9 s |
+| Accessibility | 96 | 100 |
+| Page weight | 3.4 MB | 1.9–2.0 MB |
+
+## Book a Tour (`/book-a-tour`)
+
+Reference: live site captured 2026-10-27. Title, meta description, canonical and social tags are copied exactly.
+
+- Same photo hero as Space; the two pages now share one `PhotoHero` component. The headline weight matches live (medium here, bold on Space).
+- **HubSpot Meetings scheduler** (`meetings.hubspot.com/kennedy-marren`) is embedded the same way as live, with HubSpot's embed script. Its link is in `src/content/book-a-tour.yaml`. On desktop HubSpot shows a narrow list of times rather than a calendar; that's HubSpot's own layout and matches live.
+- **Fixed:** at 320px the scheduler made the page scroll sideways (HubSpot sets a 312px minimum width). On the narrowest phones the scheduler now uses the side margins.
+- Space for the scheduler is reserved before it loads, so the page doesn't jump.
+- Without JavaScript, a link to the scheduling page appears instead.
+
+| | Live | Astro (local preview) |
+|---|---|---|
+| Performance | 51 / 51 | 96 / 96 |
+| LCP | 21.8–29.3 s | 2.0 s |
+| Accessibility | 100 | 100 |
+| Page weight | 4.4–4.8 MB | 2.7–3.3 MB (most of it is HubSpot's scheduler) |
+
+### Open questions
+
+14. **Tour bookings go to Kennedy's personal HubSpot meetings link.** If tours should rotate across the team or survive a staffing change, a HubSpot team (round-robin) meetings link would be sturdier. It's a one-line change in `book-a-tour.yaml`.
