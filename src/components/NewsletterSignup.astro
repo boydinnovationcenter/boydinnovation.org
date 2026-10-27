@@ -11,7 +11,7 @@ import { tracking } from '../config/site';
 const background = await getImage({ src: swirl, width: 1600, format: 'webp' });
 ---
 
-<section class="newsletter" aria-labelledby="newsletter-heading">
+<section class="newsletter" id="newsletter" aria-labelledby="newsletter-heading">
 	<div class="newsletter__panel" style={`--newsletter-bg: url(${background.src})`}>
 		<h2 id="newsletter-heading">Join Our Newsletter</h2>
 		<p class="newsletter__intro">Monthly updates on events, programs, and what Columbia's founders are building.</p>

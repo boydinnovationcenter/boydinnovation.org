@@ -1,0 +1,10 @@
+title: "Palmetto Hacks"
+section: upcoming
+dateLabel: "Sat · OCT 10, 2026"
+start: "2026-10-10"
+location: "University of South Carolina"
+description: "Build something cool, enjoy free food, and win prizes. No tech-experience needed."
+image: ../../assets/images/events/palmetto-hacks.jpg
+imageAlt: "Palmetto Hacks"
+actions:
+  - { label: "Register", href: "https://www.palmettohacks.com/" }

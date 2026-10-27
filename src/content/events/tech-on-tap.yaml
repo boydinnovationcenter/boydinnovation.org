@@ -1,0 +1,15 @@
+# Monthly. Update start, dateLabel and the Eventbrite event for each month's Tech on Tap.
+title: "Tech on Tap"
+section: recurring
+order: 0
+dateLabel: "Thu · Oct 22, 2026 · 5:00 PM"
+start: "2026-10-22T17:00"
+location: "The Boyd Innovation Center"
+description: "Tech on Tap is a monthly community gathering to connect with Columbia’s tech scene and learn from pros who have built, scaled, and exited successful companies."
+image: ../../assets/images/events/tech-on-tap.jpg
+imageAlt: "Tech on Tap"
+actions:
+  - label: "Register"
+    eventbrite: { id: "2001623057447", url: "https://www.eventbrite.com/e/tech-on-tap-october-2026-tickets-2001623057447?aff=oddtdtcreator&keep_tld=true" }
+  - label: "Learn more"
+    href: /tech-on-tap

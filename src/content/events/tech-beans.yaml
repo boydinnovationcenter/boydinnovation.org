@@ -1,0 +1,11 @@
+title: "Tech Beans"
+section: recurring
+order: 1
+dateLabel: "Tuesday Mornings · 8:00–9:00 AM"
+location: "The Boyd Innovation Center"
+description: "Coffee and casual conversation centered around building scalable, high-growth startups in Columbia."
+image: ../../assets/images/events/tech-beans.png
+imageAlt: "Tech Beans"
+actions:
+  - label: "Register"
+    eventbrite: { id: "1995983756145", url: "https://www.eventbrite.com/e/tech-beans-tickets-1995983756145" }

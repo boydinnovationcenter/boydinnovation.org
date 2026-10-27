@@ -40,7 +40,7 @@ import SocialIcon from './SocialIcon.astro';
 					<ul role="list">
 						{group.links.map((link) => (
 							<li>
-								<a href={link.href} {...(link.external && { target: '_blank', rel: 'noopener' })}>
+								<a href={link.href} {...(link.external ? { target: '_blank', rel: 'noopener' } : {})}>
 									{link.label}
 									{link.external && <span class="visually-hidden"> (opens in a new tab)</span>}
 								</a>

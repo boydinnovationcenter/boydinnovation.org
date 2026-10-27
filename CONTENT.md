@@ -99,6 +99,31 @@ Member logos are in **`src/content/members.yaml`**, one entry per company:
 - `order` sets the position (lowest first).
 - `url` and `description` are optional. With a `url`, the logo becomes a link to the company's site.
 
+## Events
+
+Each event on the Events page is its own file in **`src/content/events/`**. To add an event, copy an existing file, rename it (for example `pitch-night-2027.yaml`), and edit it:
+
+```yaml
+title: "Pitch Night"
+section: upcoming            # "recurring" or "upcoming"
+dateLabel: "Thu · Jan 14, 2027 · 6:00 PM"   # shown on the card exactly as written
+start: "2027-01-14T18:00"    # Columbia time, 24-hour clock
+location: "The Boyd Innovation Center"
+description: "One or two sentences."
+image: ../../assets/images/events/pitch-night.jpg
+imageAlt: "Pitch Night"
+actions:
+  - { label: "Register", href: "https://..." }
+```
+
+- **Dates:** `start` is `YYYY-MM-DD` or `YYYY-MM-DDTHH:MM`. For multi-day events, also add `end`. Recurring events with no single date (like Tech Beans) leave both out.
+- **Past events dim automatically after they end and disappear 48 hours later.** You don't need to remove them by hand, though you can delete the file.
+- **Eventbrite pop-up checkout:** instead of `href`, use `eventbrite: { id: "1234567890", url: "https://www.eventbrite.com/e/..." }`. The id is the number at the end of the Eventbrite event link.
+- **Images** go in `src/assets/images/events/`, ideally 16:9 (for example 1920×1080).
+- Recurring events appear in the order of their `order` number; upcoming events appear by date.
+
+The hero, calendar links and photo strip are in `src/content/events-page.yaml`.
+
 ## Site-wide details
 
 The navigation menu, footer links, address, phone number and social media links are in **`src/config/site.ts`**. Edit the text between the quotation marks and leave the rest alone.

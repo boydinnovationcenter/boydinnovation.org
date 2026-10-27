@@ -39,7 +39,7 @@ const isProduction = import.meta.env.PUBLIC_SITE_ENV === 'production';
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>{title}</title>
-		<meta name="description" content={description} />
+		{description && <meta name="description" content={description} />}
 		<link rel="canonical" href={canonical} />
 		{!isProduction && <meta name="robots" content="noindex, nofollow" />}
 

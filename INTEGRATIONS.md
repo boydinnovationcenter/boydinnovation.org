@@ -43,6 +43,16 @@ No page-specific Code Injection on /programs.
 
 No page-specific Code Injection on /space.
 
+## Events page
+
+| Integration | Details | Astro location |
+|---|---|---|
+| Eventbrite checkout pop-up | Event `1995983756145` (Tech Beans), `2001623057447` (Tech on Tap, Oct 2026), loaded from `eb_widgets.js` | `eventbrite: { id, url }` in [src/content/events/](src/content/events/), wired up in [EventGrid.astro](src/components/events/EventGrid.astro) |
+| Google Calendar subscription | Public calendar `c_5432f27d…@group.calendar.google.com`, offered for Google, Apple (webcal), Outlook.com and Office 365 | [events-page.yaml](src/content/events-page.yaml), [CalendarSubscribe.astro](src/components/events/CalendarSubscribe.astro) |
+| Luma | Silicon Swamp registration link | silicon-swamp.yaml |
+
+No page-specific Code Injection on /events; everything was in on-page code blocks.
+
 ## Still to inventory
 
 - Per-page Code Injection on every other page, including Eventbrite widgets, the Google Calendar subscribe button, and the pages that use the HubSpot CTA triggers. Each page will be added here as it is migrated.

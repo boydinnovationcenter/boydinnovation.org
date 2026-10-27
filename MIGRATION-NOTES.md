@@ -191,3 +191,54 @@ Small-screen check: 320, 390, 768, 1024 and 1440px with no horizontal scroll.
 
 10. **Contrast:** the white text on the blue availability tags and the blue office prices (`#0099FF` on light backgrounds, about 2.9:1) fail WCAG AA, the same issue as questions 1 and 9. One decision could cover all three pages: keep brand blue/green for shapes and fills, and use a darker shade for small text on light backgrounds.
 11. **Office availability changes often** ("0/1 Available", "Starting Nov 1"). It's in `space.yaml` now. If it changes weekly, it may belong in the CMS (question 7).
+
+## Events (`/events`)
+
+Reference: live site captured 2026-10-27 at 1440, 768 and 390px. The title (`Events | Boyd Innovation`) and og:image are copied exactly. Anchors `#calendarfeed` and `#newsletter` are kept; the newsletter section on every page now has `id="newsletter"`, as on live.
+
+### Events as content
+
+Each event is one file in `src/content/events/` (title, date label, start/end time, location, description, image, buttons, and section: recurring or upcoming). This replaces two hand-edited Squarespace code blocks of HTML.
+
+**Past events (approved, 2026-10-27):** the live page's script dims an event once it ends and removes it 48 hours later. Two events had malformed dates (`2026-010-10`), so Palmetto Hacks (Oct 10) and Speak Up Lab (Oct 12) were still showing. The rule now applies to every event:
+- At build time, events more than 48 hours past are left out of the HTML.
+- In the browser, a small script dims and removes events that pass after the last build. A section with nothing left disappears.
+- Times are compared as Columbia, SC (Eastern) wall-clock time, as on live.
+- The two past events' files stay in the repo so they can be reused or deleted. Tech on Tap (Oct 22) is also past and hidden; its file needs the next date and Eventbrite event.
+
+The site should be **rebuilt daily** once hosted (a scheduled deploy), so the HTML stays current between edits.
+
+### Fixes
+
+- Image alt text: Palmetto Hacks was labeled "Speak Up Lab" and Startup Sprint "Next Venture Summit". Each now uses its event's name.
+- Hero headline broke as "communit / y" on phones; fixed.
+- Calendar section: the live page reserved a large empty area under the button for the dropdown. It's removed; the menu overlays the content instead.
+- A lone event in a section is capped at two-column width instead of stretching across the page.
+- The calendar dropdown is a disclosure button (`aria-expanded`) with a list of links. Escape closes it and returns focus; a click outside closes it. The live version used `role="menu"` without arrow-key support.
+
+### Eventbrite
+
+- Register buttons for Tech Beans and Tech on Tap open Eventbrite's checkout pop-up, as on live. They are real links to the Eventbrite event page, so they still work before the widget loads or without JavaScript. This replaces the live page's `<noscript>` fallback links.
+- `eb_widgets.js` loads only on pages that have such a button, once the page is idle. On live it loaded synchronously and blocked rendering. This doesn't change tracking: Eventbrite isn't a tracking tag.
+- **Testing note:** Eventbrite's checkout returns a 403 when the page is served from `localhost`. It works under a real hostname (tested with a mapped domain), so test it on the preview deployment.
+
+### Structured data
+
+`BreadcrumbList`, plus an `Event` for each dated event that hasn't happened yet: name, description, image, start and end with the Eastern UTC offset, in-person, scheduled. Location is the BIC `Place`, or the named venue. Recurring events without a date get no `Event`.
+
+### Performance (Lighthouse, mobile, 2026-10-27)
+
+| | Live | Astro (local preview) |
+|---|---|---|
+| Performance | 55 / 55 | 92–93 (one cold run at 76) |
+| LCP | 30.9–31.2 s | 2.9 s |
+| FCP | 3.7 s | 0.9 s |
+| Accessibility | 96 | 96 (blue date labels, open question 10) |
+| Page weight | 8.0–8.2 MB | 1.9 MB |
+
+What's left of the LCP time is render delay from the site-wide third-party scripts (HubSpot analytics, reCAPTCHA, Google tag).
+
+### Open questions
+
+12. **Meta description is empty** on the live Events page. AGENTS.md says to keep meta tags exactly, so it's empty here too, but this is the one page where writing one would clearly help SEO. Want me to draft one for approval?
+13. **Tech on Tap** needs its next date and Eventbrite event; until then it doesn't show (its Oct 22 date has passed).

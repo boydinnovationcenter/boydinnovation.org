@@ -1,0 +1,130 @@
+---
+import { Image } from 'astro:assets';
+import flywheel from '../../assets/images/brand/flywheel.png';
+import CtaButton from '../CtaButton.astro';
+
+interface Props {
+	heading: string;
+	intro: string;
+	image: ImageMetadata;
+	actions: { label: string; href: string }[];
+}
+
+const { heading, intro, image, actions } = Astro.props;
+---
+
+<section class="events-hero" aria-labelledby="events-title">
+	<Image
+		class="events-hero__bg"
+		src={image}
+		alt=""
+		widths={[640, 1024, 1600]}
+		sizes="100vw"
+		loading="eager"
+		fetchpriority="high"
+	/>
+	<div class="events-hero__inner">
+		<div class="events-hero__panel">
+			<h1 id="events-title">{heading}</h1>
+			<p>{intro}</p>
+		</div>
+		<Image class="events-hero__flywheel" src={flywheel} alt="" width={100} densities={[1, 2, 3]} loading="eager" />
+		<div class="events-hero__actions">
+			{actions.map((action) => <CtaButton variant="glass" label={action.label} href={action.href} />)}
+		</div>
+	</div>
+</section>
+
+<style>
+	.events-hero {
+		position: relative;
+		isolation: isolate;
+		padding: calc(var(--header-height) + 2.5rem) var(--gutter) var(--space-5);
+		overflow: hidden;
+		color: var(--color-text-on-dark);
+	}
+
+	.events-hero__bg {
+		position: absolute;
+		inset: 0;
+		z-index: -2;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.events-hero::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: rgb(4 30 52 / 0.7);
+	}
+
+	.events-hero__inner {
+		display: grid;
+		grid-template-areas: 'flywheel' 'panel' 'actions';
+		gap: var(--space-4);
+	}
+
+	.events-hero__panel {
+		grid-area: panel;
+		display: grid;
+		gap: var(--space-4);
+		padding: 0.6rem;
+		border-radius: var(--radius);
+		background: rgb(238 247 243 / 0.22);
+	}
+
+	h1 {
+		font-size: clamp(2.3rem, 0.9rem + 4.65vw, 5.07rem);
+		font-weight: 700;
+		line-height: 1.09;
+		overflow-wrap: normal;
+		hyphens: manual;
+	}
+
+	.events-hero__panel p {
+		font-size: clamp(1.1rem, 1rem + 0.4vw, 1.4rem);
+		line-height: 1.8;
+	}
+
+	.events-hero__flywheel {
+		grid-area: flywheel;
+		justify-self: end;
+		width: clamp(3.5rem, 7vw, 6.25rem);
+	}
+
+	.events-hero__actions {
+		grid-area: actions;
+		display: grid;
+		gap: 0.6rem;
+		align-content: end;
+	}
+
+	.events-hero__actions :global(.btn) {
+		min-height: 2.9rem;
+		border-radius: var(--radius);
+		font-size: 0.875rem;
+		line-height: 1.3;
+		text-align: center;
+	}
+
+	@media (min-width: 64rem) {
+		.events-hero {
+			padding-block: 10.9rem 5.4rem;
+		}
+
+		.events-hero__inner {
+			grid-template-columns: minmax(0, 1fr) 13.25rem;
+			grid-template-areas: 'panel flywheel' 'panel actions';
+			grid-template-rows: auto 1fr;
+			column-gap: 2.9rem;
+		}
+
+		.events-hero__actions :global(.btn) {
+			min-height: 4.25rem;
+			font-size: var(--text-base);
+		}
+	}
+</style>

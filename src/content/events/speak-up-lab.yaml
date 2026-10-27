@@ -1,0 +1,10 @@
+title: "Speak Up Lab"
+section: upcoming
+dateLabel: "Mon · OCT 12, 2026 · 6:00 PM"
+start: "2026-10-12T18:00"
+location: "The Boyd Innovation Center"
+description: "A monthly community for professionals to practice, refine, and strengthen the messages that matter. Five featured speakers share works in progress and get supportive feedback. No experience required."
+image: ../../assets/images/events/speak-up-lab.jpg
+imageAlt: "Speak Up Lab"
+actions:
+  - { label: "Register", href: "https://www.eventbrite.com/e/speak-up-lab-where-powerful-messages-take-shape-tickets-2001060752578?aff=erelpanelorg" }

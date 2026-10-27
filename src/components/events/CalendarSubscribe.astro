@@ -1,0 +1,145 @@
+---
+/**
+ * "Subscribe to our calendar" button that reveals links for adding the BIC
+ * Google Calendar to Google, Apple, Outlook.com or Office 365.
+ * A disclosure (button + list of links): Escape or a click outside closes it.
+ */
+interface Props {
+	heading: string;
+	intro: string;
+	buttonLabel: string;
+	links: { label: string; href: string }[];
+}
+
+const { heading, intro, buttonLabel, links } = Astro.props;
+---
+
+<section class="calendar" id="calendarfeed" aria-labelledby="calendar-heading">
+	<div class="container">
+		<h2 id="calendar-heading">{heading}</h2>
+		<p>{intro}</p>
+		<div class="cal-subscribe">
+			<button type="button" class="cal-subscribe__btn" aria-expanded="false" aria-controls="calendar-options">
+				{buttonLabel}
+				<span class="cal-subscribe__caret" aria-hidden="true">▾</span>
+			</button>
+			<ul class="cal-subscribe__menu" id="calendar-options" role="list" hidden>
+				{
+					links.map((link) => {
+						const external = link.href.startsWith('http');
+						return (
+							<li>
+								<a href={link.href} {...(external ? { target: '_blank', rel: 'noopener' } : {})}>
+									{link.label}
+									{external && <span class="visually-hidden"> (opens in a new tab)</span>}
+								</a>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</div>
+	</div>
+</section>
+
+<script>
+	document.querySelectorAll<HTMLElement>('.cal-subscribe').forEach((wrap) => {
+		const button = wrap.querySelector('button')!;
+		const menu = wrap.querySelector<HTMLElement>('.cal-subscribe__menu')!;
+		const setOpen = (open: boolean) => {
+			button.setAttribute('aria-expanded', String(open));
+			menu.hidden = !open;
+		};
+
+		button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
+		document.addEventListener('click', (e) => {
+			if (!wrap.contains(e.target as Node)) setOpen(false);
+		});
+		wrap.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && !menu.hidden) {
+				setOpen(false);
+				button.focus();
+			}
+		});
+	});
+</script>
+
+<style>
+	.calendar {
+		padding-block: 5.5rem 6rem;
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+		text-align: center;
+	}
+
+	h2 {
+		color: var(--color-accent);
+	}
+
+	.calendar p {
+		max-width: 48rem;
+		margin: var(--space-3) auto var(--space-5);
+	}
+
+	.cal-subscribe {
+		position: relative;
+		display: inline-block;
+		text-align: start;
+	}
+
+	.cal-subscribe__btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		max-width: 100%;
+		padding: 0.75rem 1.5rem;
+		border: 0;
+		border-radius: 4px;
+		background: var(--color-green);
+		color: var(--color-black);
+		font-weight: 600;
+		cursor: pointer;
+		transition: opacity 0.2s ease;
+	}
+
+	.cal-subscribe__btn:hover {
+		opacity: 0.85;
+	}
+
+	.cal-subscribe__caret {
+		font-size: 0.8em;
+		transition: transform 0.2s ease;
+	}
+
+	[aria-expanded='true'] .cal-subscribe__caret {
+		transform: rotate(180deg);
+	}
+
+	.cal-subscribe__menu {
+		position: absolute;
+		top: calc(100% + 6px);
+		left: 0;
+		z-index: 5;
+		min-width: 100%;
+		padding: 0;
+		overflow: hidden;
+		list-style: none;
+		border-radius: 4px;
+		background: #fff;
+		box-shadow: 0 4px 16px rgb(0 3 31 / 0.18);
+	}
+
+	.cal-subscribe__menu a {
+		display: block;
+		padding: 0.7rem 1.1rem;
+		color: var(--color-black);
+		font-size: 0.95rem;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+
+	.cal-subscribe__menu a:hover,
+	.cal-subscribe__menu a:focus-visible {
+		background: var(--color-mint);
+	}
+</style>

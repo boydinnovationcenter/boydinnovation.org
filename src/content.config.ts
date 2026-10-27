@@ -1,5 +1,5 @@
 import { defineCollection } from 'astro:content';
-import { file } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 const link = z.object({
@@ -245,4 +245,68 @@ const space = defineCollection({
 	},
 });
 
-export const collections = { home, programs, members, space };
+/** Eastern (Columbia, SC) local time: "2026-11-12T18:00", or a date alone, "2026-11-13". */
+const localDateTime = z
+	.string()
+	.regex(/^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?$/, 'Use YYYY-MM-DD or YYYY-MM-DDTHH:MM, e.g. 2026-11-12T18:00');
+
+/**
+ * Events shown on /events, one YAML file each in src/content/events/.
+ * Dated events dim after they end and disappear 48 hours later.
+ */
+const events = defineCollection({
+	loader: glob({ pattern: '*.yaml', base: './src/content/events' }),
+	schema: ({ image }) =>
+		z.object({
+			title: z.string(),
+			/** "recurring" (Recurring Networking Events) or "upcoming" (Startup Workshops and Founder Networking Events). */
+			section: z.enum(['recurring', 'upcoming']),
+			/** Date and time as shown on the card, e.g. "Thu · Nov 12, 2026 · 6:00 PM". */
+			dateLabel: z.string(),
+			/** When it starts. Leave out for recurring events with no single date. */
+			start: localDateTime.optional(),
+			/** When it ends, for multi-day events. Defaults to `start`. */
+			end: localDateTime.optional(),
+			location: z.string(),
+			description: z.string(),
+			image: image(),
+			imageAlt: z.string(),
+			/** Order within its section when events have no date (lowest first). */
+			order: z.number().default(0),
+			actions: z
+				.array(
+					z.union([
+						z.object({ label: z.string(), href: z.string() }),
+						/** Opens Eventbrite's checkout pop-up; `url` is the fallback without JavaScript. */
+						z.object({ label: z.string(), eventbrite: z.object({ id: z.string(), url: z.url() }) }),
+					]),
+				)
+				.default([]),
+		}),
+});
+
+/** Events page copy (the events themselves are in src/content/events/). */
+const eventsPage = defineCollection({
+	loader: file('src/content/events-page.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+			hero: z.object({
+				heading: z.string(),
+				intro: z.string(),
+				image: image(),
+				actions: z.array(link),
+			}),
+			recurringHeading: z.string(),
+			upcomingHeading: z.string(),
+			calendar: z.object({
+				heading: z.string(),
+				intro: z.string(),
+				buttonLabel: z.string(),
+				links: z.array(link),
+			}),
+			photos: z.array(z.object({ image: image(), alt: z.string() })),
+		}),
+});
+
+export const collections = { home, programs, members, space, events, eventsPage };

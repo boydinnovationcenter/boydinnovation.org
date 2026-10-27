@@ -1,0 +1,47 @@
+# Events page copy (https://boydinnovation.org/events).
+# The event cards themselves are in src/content/events/ (one file per event). See CONTENT.md.
+
+eventsPage:
+  seo:
+    title: "Events | Boyd Innovation"
+    # Empty on the live site; worth writing one (see MIGRATION-NOTES.md).
+    description: ""
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+
+  hero:
+    heading: "Become part of Columbia’s tech startup community"
+    intro: "Find free networking events, learn from people who have built companies in the Midlands, and get plugged into the tech community near you in Columbia, SC."
+    image: ../assets/images/events/hero.jpg
+    actions:
+      - { label: "SUBSCRIBE TO OUR CALENDAR", href: "#calendarfeed" }
+      - { label: "EVENT RENTALS", href: /space#eventspace }
+
+  recurringHeading: "Recurring Networking Events"
+  upcomingHeading: "Startup Workshops and Founder Networking Events around Columbia, SC"
+
+  calendar:
+    heading: "Sign Up for Our Calendar Feed"
+    intro: "Stay up to date with the latest Boyd Innovation Center community events and updates by adding our calendar feed to your Google, Apple, or Outlook calendar."
+    buttonLabel: "SUBSCRIBE TO OUR CALENDAR"
+    links:
+      - label: "Google Calendar"
+        href: "https://calendar.google.com/calendar/r?cid=Y181NDMyZjI3ZGRjNWY3MGNjYjNkM2Y0ZTM2YWUyNDdjMTVmZWVjOGUyYWI1OThlMjRlOTgyOGQ4NmQ0YjQwNjgxQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20"
+      - label: "Apple Calendar"
+        href: "webcal://calendar.google.com/calendar/ical/c_5432f27ddc5f70ccb3d3f4e36ae247c15feec8e2ab598e24e9828d86d4b40681%40group.calendar.google.com/public/basic.ics"
+      - label: "Outlook.com"
+        href: "https://outlook.live.com/calendar/0/addfromweb/?url=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fc_5432f27ddc5f70ccb3d3f4e36ae247c15feec8e2ab598e24e9828d86d4b40681%2540group.calendar.google.com%2Fpublic%2Fbasic.ics&name=Boyd%20Innovation%20Center%20Events"
+      - label: "Office 365"
+        href: "https://outlook.office.com/calendar/0/addfromweb/?url=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fc_5432f27ddc5f70ccb3d3f4e36ae247c15feec8e2ab598e24e9828d86d4b40681%2540group.calendar.google.com%2Fpublic%2Fbasic.ics&name=Boyd%20Innovation%20Center%20Events"
+
+  # Full-width photo strip, left to right.
+  photos:
+    - image: ../assets/images/space/event-lounge.jpg
+      alt: "Founders and guests networking at a catered startup event at the Boyd Innovation Center venue in Columbia, SC"
+    - image: ../assets/images/events/strip-founders.jpg
+      alt: "Four women founders smiling together at a Boyd Innovation Center networking event in Columbia, SC"
+    - image: ../assets/images/programs/strip-1-tech-on-tap.jpg
+      alt: "Founders and tech community members networking at a Tech on Tap event at Boyd Innovation Center in Columbia, SC"
+    - image: ../assets/images/programs/strip-4-cohort.jpg
+      alt: "Startup Sprint cohort founders and mentors gathered at Boyd Innovation Center in Columbia, SC for a founder networking event"
+    - image: ../assets/images/programs/strip-5-networking.jpg
+      alt: "Founders and mentors networking at a Boyd Innovation Center startup event in Columbia, SC, under warm string lights"

@@ -1,0 +1,72 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import { getImage } from 'astro:assets';
+import CalendarSubscribe from '../components/events/CalendarSubscribe.astro';
+import EventGrid from '../components/events/EventGrid.astro';
+import EventsHero from '../components/events/EventsHero.astro';
+import PhotoStrip from '../components/PhotoStrip.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { eventStatus, toEasternIso } from '../lib/event-dates';
+
+const entry = await getEntry('eventsPage', 'eventsPage');
+if (!entry) throw new Error('Missing Events page content: src/content/events-page.yaml');
+const { seo, hero, recurringHeading, upcomingHeading, calendar, photos } = entry.data;
+
+const events = await getCollection('events');
+const bySection = (section: 'recurring' | 'upcoming') => events.filter((e) => e.data.section === section);
+
+const pageUrl = `${site.url}/events`;
+
+// Event structured data for dated events that haven't happened yet.
+// Times are Columbia, SC local time, written with their Eastern UTC offset.
+const datedEvents = await Promise.all(
+	events
+		.filter((e) => e.data.start && eventStatus(e.data.end ?? e.data.start) === 'upcoming')
+		.map(async ({ data }) => {
+			const image = await getImage({ src: data.image, width: 1200, format: 'jpeg' });
+			const atBic = /boyd innovation center/i.test(data.location);
+			const register = data.actions[0];
+			return {
+				'@type': 'Event',
+				name: data.title,
+				description: data.description,
+				startDate: toEasternIso(data.start!),
+				...(data.end && { endDate: toEasternIso(data.end) }),
+				eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+				eventStatus: 'https://schema.org/EventScheduled',
+				image: new URL(image.src, site.url).href,
+				location: atBic
+					? { '@id': `${site.url}/#place` }
+					: { '@type': 'Place', name: data.location, address: data.location },
+				...(atBic && { organizer: { '@id': `${site.url}/#organization` } }),
+				...(register && {
+					url: new URL('eventbrite' in register ? register.eventbrite.url : register.href, pageUrl).href,
+				}),
+			};
+		}),
+);
+
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+				{ '@type': 'ListItem', position: 2, name: 'Events', item: pageUrl },
+			],
+		},
+		...datedEvents,
+	],
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	<EventsHero {...hero} />
+	<EventGrid id="recurring" heading={recurringHeading} events={bySection('recurring')} />
+	<EventGrid id="upcoming" heading={upcomingHeading} events={bySection('upcoming')} />
+	<CalendarSubscribe {...calendar} />
+	<PhotoStrip photos={photos} />
+</BaseLayout>

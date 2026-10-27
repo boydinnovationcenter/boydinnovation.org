@@ -1,0 +1,12 @@
+title: "Silicon Swamp"
+section: recurring
+order: 2
+dateLabel: "Thu · Nov 12, 2026 · 6:00 PM"
+start: "2026-11-12T18:00"
+location: "The Boyd Innovation Center"
+description: "An evening of technical discussions and networking where technologists and the tech-curious dig into new developments, technologies, and techniques."
+image: ../../assets/images/events/silicon-swamp.png
+imageAlt: "Silicon Swamp"
+actions:
+  - { label: "Register", href: "https://luma.com/siliconswamp" }
+  - { label: "Learn More", href: "https://siliconswamp.org/" }
