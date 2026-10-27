@@ -1,0 +1,235 @@
+---
+import { getImage } from 'astro:assets';
+import swirl from '../../assets/images/brand/texture-swirl.jpg';
+
+type Program = { title: string; linkText?: string; href: string; description: string };
+
+interface Props {
+	heading: string;
+	cta: { label: string; href: string };
+	stages: { label: string; color: 'green' | 'blue' | 'navy' | 'black'; programs: Program[] }[];
+}
+
+const { heading, cta, stages } = Astro.props;
+const ctaBackground = await getImage({ src: swirl, width: 480, format: 'webp' });
+
+// Split a title into the linked part and any trailing unlinked text.
+const splitTitle = ({ title, linkText }: Program) =>
+	linkText && title.startsWith(linkText) ? [linkText, title.slice(linkText.length)] : [title, ''];
+---
+
+<section class="programs" aria-labelledby="programs-heading">
+	<div class="container programs__grid">
+		<h2 id="programs-heading" class="programs__heading">{heading}</h2>
+		<a class="btn btn--glass programs__cta" href={cta.href} style={`--cta-bg: url(${ctaBackground.src})`}>
+			{cta.label}<span class="visually-hidden"> about our programs</span>
+		</a>
+
+		<ol class="stages" role="list">
+			{
+				stages.map((stage) => (
+					<li class={`stage stage--${stage.color}`}>
+						<p class="stage__label">{stage.label}</p>
+						<div class="stage__box">
+							{stage.programs.map((program) => {
+								const [linked, rest] = splitTitle(program);
+								return (
+									<>
+										<h3>
+											<a href={program.href}>{linked}</a>
+											{rest}
+										</h3>
+										<p class="text-sm">{program.description}</p>
+									</>
+								);
+							})}
+						</div>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>
+
+<style>
+	.programs {
+		padding-block: var(--space-6) var(--space-5);
+	}
+
+	.programs__grid {
+		display: grid;
+		gap: var(--space-4);
+	}
+
+	.programs__heading {
+		width: fit-content;
+	}
+
+	/* Gradient rule under the heading (an image on the live site). */
+	.programs__heading::after {
+		content: '';
+		display: block;
+		height: 5px;
+		margin-top: 0.35rem;
+		border-radius: 3px;
+		background: linear-gradient(
+			to right,
+			var(--color-green),
+			var(--color-blue) 33%,
+			var(--color-navy) 66%,
+			var(--color-black)
+		);
+	}
+
+	.programs__cta {
+		order: 1;
+		justify-self: center;
+		width: min(100%, 18.7rem);
+		min-height: 3.7rem;
+		border-radius: var(--radius);
+		background: var(--cta-bg) center / cover;
+		font-size: var(--text-base);
+		text-transform: none;
+		transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.programs__cta:hover {
+			transform: scale(1.1);
+		}
+	}
+
+	.stages {
+		display: grid;
+		gap: var(--space-3);
+		padding: 0;
+		list-style: none;
+	}
+
+	.stage {
+		display: grid;
+		grid-template-columns: 1.75rem 1fr;
+		column-gap: 1rem;
+		row-gap: 0.7rem;
+	}
+
+	.stage::before {
+		content: '';
+		width: 1.75rem;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: var(--stage-dot);
+	}
+
+	.stage__label {
+		align-self: center;
+		font-size: var(--text-sm);
+		font-weight: 700;
+		color: var(--stage-label);
+	}
+
+	.stage--green {
+		--stage-dot: var(--color-green);
+		--stage-label: var(--color-green);
+	}
+
+	.stage--blue {
+		--stage-dot: var(--color-blue);
+		--stage-label: var(--color-blue);
+	}
+
+	.stage--navy {
+		--stage-dot: var(--color-navy);
+		--stage-label: var(--color-navy-deep);
+	}
+
+	.stage--black {
+		--stage-dot: var(--color-black);
+		--stage-label: var(--color-black);
+	}
+
+	.stage__box {
+		grid-column: 2;
+		padding: 0.9rem 0.9rem 1.2rem;
+		border: 1px solid var(--color-navy);
+		border-radius: var(--radius);
+	}
+
+	.stage__box h3 {
+		font-weight: 700;
+		color: var(--color-text);
+	}
+
+	.stage__box h3 a {
+		color: var(--color-text-strong);
+		text-decoration: underline;
+	}
+
+	.stage__box p {
+		margin-block: var(--space-5) var(--space-5);
+		color: var(--color-text-strong);
+	}
+
+	.stage__box p:last-child {
+		margin-bottom: 0;
+	}
+
+	@media (min-width: 48rem) {
+		.programs {
+			padding-block: var(--space-6) var(--space-7);
+		}
+
+		.programs__grid {
+			grid-template-columns: 1fr auto;
+			align-items: start;
+			column-gap: var(--space-5);
+		}
+
+		.programs__cta {
+			order: 0;
+			justify-self: end;
+			width: 13.25rem;
+			min-height: 4.25rem;
+		}
+
+		.stages {
+			grid-column: 1 / -1;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: var(--space-5) var(--space-4);
+			margin-top: var(--space-4);
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.stages {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			column-gap: clamp(1rem, 2.6vw, 2.2rem);
+			padding-inline: clamp(0rem, 8.6vw - 4.5rem, 3.5rem);
+		}
+
+		/* Staircase: each stage starts a step lower. Boxes keep equal heights. */
+		.stage {
+			--step: 2.45rem;
+			grid-template-rows: auto 1fr;
+			padding-top: calc(var(--i) * var(--step));
+			padding-bottom: calc((3 - var(--i)) * var(--step));
+		}
+
+		.stage:nth-child(1) {
+			--i: 0;
+		}
+		.stage:nth-child(2) {
+			--i: 1;
+		}
+		.stage:nth-child(3) {
+			--i: 2;
+		}
+		.stage:nth-child(4) {
+			--i: 3;
+		}
+
+		.stage__box {
+			min-height: 38.8rem;
+		}
+	}
+</style>

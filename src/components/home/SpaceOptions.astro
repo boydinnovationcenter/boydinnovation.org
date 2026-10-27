@@ -1,0 +1,186 @@
+---
+import { Image } from 'astro:assets';
+
+type Link = { label: string; href: string };
+
+interface Props {
+	heading: string;
+	options: { title: string; description: string; icon: ImageMetadata; iconAlt: string; link: Link }[];
+	dayPass: { title: string; description: string; link: Link; mobileLinkLabel: string };
+}
+
+const { heading, options, dayPass } = Astro.props;
+const isExternal = (href: string) => href.startsWith('http');
+---
+
+<section class="spaces" aria-labelledby="spaces-heading">
+	<div class="container spaces__grid">
+		<div class="spaces__head">
+			<h2 id="spaces-heading">{heading}</h2>
+			<!-- Phones show this link instead of the Day Pass card, as on the live site. -->
+			<a class="text-link spaces__daypass-link" href={dayPass.link.href} target="_blank" rel="noopener">
+				{dayPass.mobileLinkLabel}<span class="visually-hidden"> (opens in a new tab)</span>
+			</a>
+		</div>
+
+		<ul class="spaces__list" role="list">
+			{
+				options.map((option) => (
+					<li class="space-option">
+						<Image class="space-option__icon" src={option.icon} alt={option.iconAlt} width={128} />
+						<div class="space-option__body">
+							<h3>{option.title}</h3>
+							<p class="text-sm">{option.description}</p>
+						</div>
+						<a class="text-link space-option__link" href={option.link.href}>
+							{option.link.label}
+							<span class="visually-hidden"> about {option.title}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+
+		<aside class="day-pass" aria-labelledby="day-pass-heading">
+			<h3 id="day-pass-heading">{dayPass.title}</h3>
+			<p class="text-sm">{dayPass.description}</p>
+			<a
+				class="text-link day-pass__link"
+				href={dayPass.link.href}
+				{...isExternal(dayPass.link.href) && { target: '_blank', rel: 'noopener' }}
+			>
+				{dayPass.link.label}
+				{isExternal(dayPass.link.href) && <span class="visually-hidden"> (opens in a new tab)</span>}
+			</a>
+		</aside>
+	</div>
+</section>
+
+<style>
+	.spaces {
+		padding-block: 0 var(--space-8);
+	}
+
+	.spaces__grid {
+		display: grid;
+		gap: var(--space-5);
+	}
+
+	.spaces__head {
+		display: grid;
+		gap: var(--space-2);
+		justify-items: start;
+	}
+
+	.spaces__list {
+		display: grid;
+		gap: var(--space-5);
+		padding: 0;
+		list-style: none;
+	}
+
+	.space-option {
+		display: grid;
+		grid-template-columns: 8rem 1fr;
+		grid-template-areas:
+			'icon body'
+			'icon link';
+		align-items: center;
+		align-content: center;
+		column-gap: 0;
+		min-height: 13.75rem;
+		padding: var(--space-4) var(--space-2) var(--space-4) 0;
+		border: var(--border);
+		border-radius: var(--radius);
+	}
+
+	.space-option__icon {
+		grid-area: icon;
+		justify-self: center;
+		width: 4.5rem;
+	}
+
+	.space-option__body {
+		grid-area: body;
+	}
+
+	.space-option h3 {
+		margin-bottom: var(--space-1);
+		line-height: 1.25;
+	}
+
+	.space-option p {
+		color: var(--color-text-strong);
+	}
+
+	.space-option__link {
+		grid-area: link;
+		justify-self: start;
+	}
+
+	.day-pass {
+		display: none;
+		padding: 1.35rem 1.65rem 1.35rem;
+		border: var(--border);
+		border-radius: var(--radius);
+		align-self: start;
+	}
+
+	.day-pass h3 {
+		margin-bottom: var(--space-5);
+		font-weight: 700;
+	}
+
+	.day-pass p {
+		color: var(--color-text-strong);
+	}
+
+	.day-pass__link {
+		display: table;
+		margin: var(--space-3) auto 0;
+	}
+
+	@media (min-width: 48rem) {
+		.spaces__daypass-link {
+			display: none;
+		}
+
+		.spaces__list {
+			gap: 1.75rem;
+		}
+
+		.space-option {
+			grid-template-columns: 6.9rem 1fr auto;
+			grid-template-areas: 'icon body link';
+			align-items: start;
+			min-height: 0;
+			padding: 1.75rem 0.95rem 1.75rem 0;
+		}
+
+		.space-option__icon {
+			width: 3.6rem;
+		}
+
+		.space-option__link {
+			align-self: start;
+			margin-top: 1.8rem;
+			padding-left: var(--space-3);
+		}
+
+		.day-pass {
+			display: block;
+		}
+	}
+
+	/* Day Pass card moves beside the list once there's room for both. */
+	@media (min-width: 64rem) {
+		.spaces__grid {
+			grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr);
+			column-gap: clamp(1.5rem, 3.8vw, 3.45rem);
+		}
+
+		.spaces__head {
+			grid-column: 1 / -1;
+		}
+	}
+</style>

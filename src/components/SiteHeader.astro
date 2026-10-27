@@ -1,0 +1,280 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/images/brand/logo-wide.png';
+import { headerCta, mainNav } from '../config/site';
+---
+
+<header class="site-header">
+	<a class="skip-link" href="#main">Skip to content</a>
+	<div class="site-header__inner">
+		<a class="site-header__logo" href="/">
+			<Image
+				src={logo}
+				alt="Boyd Innovation"
+				width={224}
+				densities={[1, 2, 3]}
+				quality={90}
+				loading="eager"
+				fetchpriority="high"
+			/>
+		</a>
+
+		<nav class="site-nav" aria-label="Main">
+			<ul class="site-nav__list" role="list">
+				{
+					mainNav.map((item) => (
+						<li>
+							<a href={item.href}>{item.label}</a>
+						</li>
+					))
+				}
+			</ul>
+			<a class="btn btn--primary site-nav__cta" href={headerCta.href}>{headerCta.label}</a>
+		</nav>
+
+		<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+			<span class="visually-hidden">Menu</span>
+			<span class="menu-toggle__bars" aria-hidden="true"></span>
+		</button>
+	</div>
+
+	<div class="mobile-menu" id="mobile-menu" hidden>
+		<nav aria-label="Main">
+			<ul class="mobile-menu__list" role="list">
+				{
+					mainNav.map((item) => (
+						<li>
+							<a href={item.href}>{item.label}</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+		<a class="btn btn--primary mobile-menu__cta" href={headerCta.href}>{headerCta.label}</a>
+	</div>
+</header>
+
+<script>
+	// Mobile menu: open/close with the toggle button or Escape, keep focus inside while open.
+	const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+	const menu = document.getElementById('mobile-menu');
+
+	if (toggle && menu) {
+		const focusable = () => [toggle, ...menu.querySelectorAll<HTMLElement>('a')];
+
+		const setOpen = (open: boolean) => {
+			toggle.setAttribute('aria-expanded', String(open));
+			menu.hidden = !open;
+			document.documentElement.classList.toggle('menu-open', open);
+			if (open) menu.querySelector('a')?.focus();
+		};
+
+		toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+
+		document.addEventListener('keydown', (event) => {
+			if (menu.hidden) return;
+			if (event.key === 'Escape') {
+				setOpen(false);
+				toggle.focus();
+			} else if (event.key === 'Tab') {
+				const items = focusable();
+				const first = items[0];
+				const last = items[items.length - 1];
+				if (event.shiftKey && document.activeElement === first) {
+					event.preventDefault();
+					last.focus();
+				} else if (!event.shiftKey && document.activeElement === last) {
+					event.preventDefault();
+					first.focus();
+				}
+			}
+		});
+
+		// Close if the viewport grows past the mobile breakpoint while open.
+		matchMedia('(min-width: 64rem)').addEventListener('change', (e) => e.matches && setOpen(false));
+	}
+</script>
+
+<style>
+	.site-header {
+		position: absolute;
+		inset: 0 0 auto;
+		z-index: 20;
+		color: var(--color-text-on-dark);
+	}
+
+	.skip-link {
+		position: absolute;
+		left: var(--gutter);
+		top: -4rem;
+		z-index: 30;
+		padding: var(--space-2) var(--space-3);
+		background: var(--color-paper);
+		color: var(--color-black);
+		border-radius: var(--radius);
+	}
+
+	.skip-link:focus {
+		top: var(--space-2);
+	}
+
+	.site-header__inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-4);
+		min-height: var(--header-height);
+		padding: 0.54rem var(--gutter);
+	}
+
+	.site-header__logo {
+		position: relative;
+		z-index: 2;
+		flex: none;
+	}
+
+	.site-header__logo img {
+		width: clamp(7.875rem, 5.6rem + 9.33vw, 14rem);
+	}
+
+	.site-nav {
+		display: none;
+		align-items: center;
+		gap: 2.2rem;
+	}
+
+	.site-nav__list {
+		display: flex;
+		gap: 1.6rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.site-nav__list a {
+		display: inline-block;
+		padding-block: 0.4rem;
+		font-size: var(--text-xs);
+		font-weight: 500;
+		text-decoration: none;
+		text-transform: uppercase;
+	}
+
+	.site-nav__list a:hover {
+		text-decoration: underline;
+	}
+
+	.menu-toggle {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		padding: 0;
+		background: none;
+		border: 0;
+		color: inherit;
+		cursor: pointer;
+	}
+
+	.menu-toggle__bars,
+	.menu-toggle__bars::before,
+	.menu-toggle__bars::after {
+		display: block;
+		width: 1.75rem;
+		height: 1px;
+		background: currentColor;
+		transition:
+			transform 0.25s ease,
+			background-color 0.25s ease;
+	}
+
+	.menu-toggle__bars {
+		position: relative;
+	}
+
+	.menu-toggle__bars::before,
+	.menu-toggle__bars::after {
+		content: '';
+		position: absolute;
+		left: 0;
+	}
+
+	.menu-toggle__bars::before {
+		transform: translateY(-0.5rem);
+	}
+
+	.menu-toggle__bars::after {
+		transform: translateY(0.5rem);
+	}
+
+	[aria-expanded='true'] .menu-toggle__bars {
+		background: transparent;
+	}
+
+	[aria-expanded='true'] .menu-toggle__bars::before {
+		transform: rotate(45deg);
+	}
+
+	[aria-expanded='true'] .menu-toggle__bars::after {
+		transform: rotate(-45deg);
+	}
+
+	.mobile-menu {
+		position: fixed;
+		inset: 0;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: calc(var(--header-height) + var(--space-3)) var(--gutter) var(--space-5);
+		overflow-y: auto;
+		background: var(--color-navy-deep);
+	}
+
+	.mobile-menu[hidden] {
+		display: none;
+	}
+
+	.mobile-menu nav {
+		flex: 1;
+		display: flex;
+		align-items: center;
+	}
+
+	.mobile-menu__list {
+		padding: 0;
+		list-style: none;
+		text-align: center;
+	}
+
+	.mobile-menu__list a {
+		display: inline-block;
+		font-size: clamp(1.75rem, 1.2rem + 2.5vw, 2.1rem);
+		font-weight: 500;
+		line-height: 1.7;
+		text-decoration: none;
+		text-transform: uppercase;
+	}
+
+	.mobile-menu__cta {
+		width: min(100%, 13.125rem);
+		min-height: 2.4rem;
+		font-size: 0.875rem;
+	}
+
+	:global(.menu-open) {
+		overflow: hidden;
+	}
+
+	@media (min-width: 64rem) {
+		.site-nav {
+			display: flex;
+		}
+
+		.menu-toggle,
+		.mobile-menu {
+			display: none;
+		}
+	}
+</style>

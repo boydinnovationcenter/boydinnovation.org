@@ -1,0 +1,64 @@
+---
+/**
+ * Newsletter sign-up panel shown above the footer on every page.
+ * The form itself is a HubSpot embed; the Google Ads conversion for it
+ * is wired up in Analytics.astro.
+ */
+import { getImage } from 'astro:assets';
+import swirl from '../assets/images/brand/texture-swirl.jpg';
+import { tracking } from '../config/site';
+
+const background = await getImage({ src: swirl, width: 1600, format: 'webp' });
+---
+
+<section class="newsletter" aria-labelledby="newsletter-heading">
+	<div class="newsletter__panel" style={`--newsletter-bg: url(${background.src})`}>
+		<h2 id="newsletter-heading">Join Our Newsletter</h2>
+		<p class="newsletter__intro">Monthly updates on events, programs, and what Columbia's founders are building.</p>
+		<div
+			class="hs-form-frame newsletter__form"
+			data-region="na1"
+			data-form-id={tracking.hubspotNewsletterFormId}
+			data-portal-id={tracking.hubspotPortalId}
+		>
+		</div>
+	</div>
+</section>
+
+<script is:inline src={`https://js.hsforms.net/forms/embed/${tracking.hubspotPortalId}.js`} defer></script>
+
+<style>
+	.newsletter {
+		padding: var(--space-6) var(--gutter) var(--space-7);
+	}
+
+	.newsletter__panel {
+		width: min(100%, 62rem);
+		min-height: 37.4rem;
+		margin-inline: auto;
+		padding: clamp(2rem, 4vw, 3.5rem) clamp(1rem, 4vw, 3.5rem);
+		border-radius: 10px;
+		background: var(--color-black) var(--newsletter-bg) center / cover no-repeat;
+		color: #fff;
+		text-align: center;
+	}
+
+	h2 {
+		margin-bottom: var(--space-4);
+	}
+
+	.newsletter__intro {
+		max-width: 48rem;
+		margin-inline: auto;
+		font-size: var(--text-h3);
+		font-weight: 500;
+		line-height: var(--leading-tight);
+	}
+
+	.newsletter__form {
+		max-width: 41rem;
+		min-height: 25rem; /* rendered HubSpot form height; avoids layout shift */
+		margin: var(--space-4) auto 0;
+		text-align: start;
+	}
+</style>

@@ -1,0 +1,43 @@
+---
+/**
+ * Site-wide JSON-LD. Only facts visible on the site belong here.
+ */
+import { site, socialLinks } from '../config/site';
+
+const organizationId = `${site.url}/#organization`;
+
+const graph = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'NGO',
+			'@id': organizationId,
+			name: site.name,
+			alternateName: site.alternateName,
+			legalName: site.legalName,
+			nonprofitStatus: 'Nonprofit501c3',
+			url: site.url,
+			logo: `${site.url}/logo.png`,
+			telephone: site.telephone,
+			address: { '@type': 'PostalAddress', ...site.address },
+			sameAs: socialLinks.map((s) => s.href),
+		},
+		{
+			'@type': 'Place',
+			'@id': `${site.url}/#place`,
+			name: site.name,
+			address: { '@type': 'PostalAddress', ...site.address },
+			containedInPlace: { '@type': 'Place', name: 'Five Points, Columbia, SC' },
+		},
+		{
+			'@type': 'WebSite',
+			'@id': `${site.url}/#website`,
+			url: site.url,
+			name: site.name,
+			publisher: { '@id': organizationId },
+		},
+	],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(graph)} />

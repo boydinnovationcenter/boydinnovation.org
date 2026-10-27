@@ -1,0 +1,62 @@
+/*
+ * Design tokens: the single source of truth for brand colors, type scale and
+ * spacing. Values were measured from the live Squarespace site at 1440px and
+ * scale fluidly down to 320px.
+ */
+:root {
+	/* Brand palette */
+	--color-black: #00031f;
+	--color-navy-deep: #041e33;
+	--color-navy: #03304d;
+	--color-blue: #0099ff;
+	--color-green: #59ff66;
+	--color-mint: #def0ea;
+	--color-paper: #ecf6f2;
+
+	/* Semantic roles */
+	--color-bg: var(--color-paper);
+	--color-text: var(--color-navy-deep);
+	--color-text-strong: var(--color-black);
+	--color-text-on-dark: var(--color-paper);
+	--color-accent: var(--color-green);
+	--color-border: var(--color-navy-deep);
+
+	/* Typography */
+	--font-body: var(--font-sans), sans-serif;
+	--font-display: var(--font-mono), monospace;
+
+	--text-xs: clamp(0.75rem, 0.72rem + 0.12vw, 0.8rem); /* nav, small links: 12.5px @1440 */
+	--text-sm: clamp(0.784rem, 0.895rem - 0.124vw, 0.865rem); /* Squarespace "small": 13.8px @390 → 12.5px @1440 */
+	--text-base: 1rem;
+	--text-h4: clamp(1.5rem, 1.3rem + 0.6vw, 1.8rem); /* 29px @1440 */
+	--text-h3: clamp(1.1rem, 1.07rem + 0.1vw, 1.2rem); /* 19.3px @1440 */
+	--text-h2: clamp(1.55rem, 1.33rem + 0.55vw, 2.02rem); /* 32.3px @1440 */
+	/* Hero headline: 59px on phones (as live), 53px @768 → 81px @1440. */
+	--text-hero: clamp(2.6rem, 15vw, 3.7rem);
+
+	--leading-tight: 1.25;
+	--leading-body: 1.8;
+
+	/* Spacing and layout */
+	--space-1: 0.25rem;
+	--space-2: 0.5rem;
+	--space-3: 1rem;
+	--space-4: 1.5rem;
+	--space-5: 2rem;
+	--space-6: 3rem;
+	--space-7: 4rem;
+	--space-8: 6rem;
+
+	--gutter: clamp(1rem, 4vw, 3.6rem);
+	--content-max: 76rem; /* 1214px content column @1440 */
+	--radius: 5px;
+	--border: 1px solid var(--color-border);
+
+	--header-height: 5.5rem;
+}
+
+@media (min-width: 48rem) {
+	:root {
+		--text-hero: clamp(3.3rem, 1.3rem + 4.18vw, 5.07rem);
+	}
+}

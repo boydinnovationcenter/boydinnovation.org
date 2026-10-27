@@ -1,0 +1,155 @@
+---
+import { Image } from 'astro:assets';
+
+type Link = { label: string; href: string };
+
+interface Props {
+	heading: string;
+	tagline: string;
+	paragraphs: string[];
+	cta: Link;
+	series: { title: string; description: string; image: ImageMetadata; alt: string; link: Link }[];
+}
+
+const { heading, tagline, paragraphs, cta, series } = Astro.props;
+---
+
+<section class="events" aria-labelledby="events-heading">
+	<div class="container events__grid">
+		<div class="events__intro">
+			<h2 id="events-heading">{heading}</h2>
+			<p class="events__tagline">{tagline}</p>
+			{paragraphs.map((text) => <p>{text}</p>)}
+			<a class="btn btn--primary events__cta" href={cta.href}>{cta.label}</a>
+		</div>
+
+		<ul class="events__series" role="list">
+			{
+				series.map((item) => (
+					<li class="event-series">
+						<Image src={item.image} alt={item.alt} widths={[280, 440, 560]} sizes="(min-width: 768px) 14rem, 14rem" />
+						<h3>{item.title}</h3>
+						<p class="text-sm">{item.description}</p>
+						<a class="btn btn--glass event-series__link" href={item.link.href}>
+							{item.link.label}
+							<span class="visually-hidden"> about {item.title}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.events {
+		padding-block: var(--space-5) var(--space-6);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.events__grid {
+		display: grid;
+		gap: var(--space-4);
+	}
+
+	.events__intro,
+	.events__series {
+		border: 1px solid var(--color-paper);
+		border-radius: var(--radius);
+	}
+
+	.events__intro {
+		padding: var(--space-3) 1.3rem var(--space-4);
+	}
+
+	.events__intro h2 {
+		margin-bottom: var(--space-5);
+		color: var(--color-accent);
+	}
+
+	.events__tagline {
+		margin-bottom: var(--space-5);
+		font-size: var(--text-h3);
+		font-weight: 700;
+		line-height: var(--leading-tight);
+	}
+
+	.events__intro p + p {
+		margin-top: var(--space-3);
+	}
+
+	.events__cta {
+		margin-top: var(--space-6);
+	}
+
+	.events__series {
+		display: grid;
+		gap: var(--space-8);
+		padding: var(--space-4) clamp(1.5rem, 8vw, 2.7rem) var(--space-5);
+		list-style: none;
+	}
+
+	.event-series {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.event-series img {
+		width: min(100%, 13.4rem);
+		aspect-ratio: 1.29;
+		object-fit: cover;
+	}
+
+	.event-series h3 {
+		margin-block: var(--space-4) var(--space-4);
+		font-size: var(--text-h4);
+		line-height: 1;
+	}
+
+	.event-series p {
+		flex: 1;
+	}
+
+	.event-series__link {
+		width: 100%;
+		margin-top: var(--space-3);
+		min-height: 2.9rem;
+		border-radius: var(--radius);
+		font-size: 0.875rem;
+	}
+
+	@media (min-width: 48rem) {
+		.events {
+			padding-block: 5.3rem;
+		}
+
+		.events__intro {
+			padding: 3.55rem 1.3rem var(--space-5);
+		}
+
+		.events__series {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: clamp(1.5rem, 3.8vw, 3.45rem);
+			padding: 3.55rem clamp(1.5rem, 3.8vw, 3.45rem) var(--space-7);
+		}
+
+		.event-series img {
+			width: 100%;
+		}
+
+		.event-series__link {
+			min-height: 1.75rem;
+			padding-block: 0.25rem;
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.events__grid {
+			grid-template-columns: minmax(0, 31rem) minmax(0, 38rem);
+			justify-content: space-between;
+			gap: var(--space-5);
+		}
+	}
+</style>

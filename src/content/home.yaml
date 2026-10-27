@@ -1,0 +1,128 @@
+# Homepage content (https://boydinnovation.org).
+# See CONTENT.md for editing instructions. Image paths are relative to this file.
+
+home:
+  seo:
+    title: "Coworking Space & Tech Startup Hub | Columbia, SC | Boyd Innovation Center"
+    description: "Columbia's tech startup hub. Coworking space in Columbia, SC with flexible plans, private offices, and programs built for founders. Come build here."
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+
+  hero:
+    # Leading spaces indent a line (the headline uses a monospace font).
+    # Letters in [brackets] are shown in green.
+    headline:
+      - "THE"
+      - "COLUM[BI]A"
+      - "    TE[C]H"
+      - "STARTUP"
+      - "     HUB"
+    poster: ../assets/images/home/hero-poster.jpg
+
+  explore:
+    heading: "What are you looking for?"
+    cards:
+      - title: "Programs"
+        href: /programs
+        image: ../assets/images/home/programs.jpg
+        alt: "Diverse group of founders and entrepreneurs engaged in a startup workshop at Boyd Innovation Center, a tech incubator in Columbia, SC"
+      - title: "Space"
+        href: /space
+        image: ../assets/images/home/space.jpg
+        alt: "Glass-walled meeting rooms named Bold Ideas Collective and Breaking Inner Ceilings inside Boyd Innovation Center coworking space in Columbia SC"
+      - title: "Events"
+        href: /events
+        image: ../assets/images/home/events.jpg
+        alt: "Diverse crowd applauding at a Boyd Innovation Center startup pitch night event in Columbia, SC, under string lights in a loft-style coworking space"
+
+  spaces:
+    heading: "Coworking, Office, & Event Space in Columbia"
+    options:
+      - title: "Coworking Memberships"
+        description: "Shared or dedicated desks and communal space for tech founders and startup teams. Starting at $50/month"
+        icon: ../assets/images/icons/coworking.png
+        iconAlt: "Coworking space icon showing shared desk with chairs and overhead lighting — Boyd Innovation Center, Columbia SC"
+        link: { label: "LEARN MORE ▶", href: "/space#coworkingplans" }
+      - title: "Office Space"
+        description: "Private offices for startup teams of 1–12 people with no long-term commitment. Starting at $600/month"
+        icon: ../assets/images/icons/office.png
+        iconAlt: "Coworking workspace icon with desktop monitor, laptop, and desk — tech startup hub at Boyd Innovation Center, Columbia SC"
+        link: { label: "LEARN MORE ▶", href: "/space#officerentals" }
+      - title: "Conference Room Rentals"
+        description: "Professional meeting rooms for up to 16 people. Starting at $50/hour."
+        icon: ../assets/images/icons/conference-room.png
+        iconAlt: "Coworking space icon showing desks, office chairs, and presentation board — startup hub in Columbia, SC"
+        link: { label: "LEARN MORE ▶", href: "/space#conferencerooms" }
+      - title: "Event Space"
+        description: "Configurable venue for workshops, receptions, and large gatherings. Starting at $150/hour."
+        icon: ../assets/images/icons/event-space.png
+        iconAlt: "Calendar icon with a starred event date marking upcoming startup events at Boyd Innovation Center Columbia SC"
+        link: { label: "LEARN MORE ▶", href: "/space#eventspace" }
+    dayPass:
+      title: "Day Pass"
+      description: "Flexible single-day access to all Boyd Innovation Center shared spaces, 9am–5pm. Come see the space, explore coworking options, try out one of our soundproof phone booths, and discover why BIC is the place to build a tech startup in the Midlands."
+      link: { label: "BUY A DAY PASS ▶", href: "https://boydinnovation.coworksapp.com/day-pass-signup/429?plan=8033" }
+      mobileLinkLabel: "BOOK A DAY PASS ▶"
+
+  events:
+    heading: "Tech Startup Events"
+    tagline: "Connect. Learn. Build."
+    paragraphs:
+      - "Whether you're exploring your first startup idea or scaling an existing tech business, our events provide the connections, knowledge, and support you need to succeed."
+      - "You'll find our coworking space in Columbia, SC in the heart of Five Points, minutes from downtown and easy to reach. Surrounded by various parking options, coffee shops, and restaurants it's a lively, walkable pocket of the Midlands, and a natural spot to build a tech startup."
+    cta: { label: "See all events", href: "/events" }
+    series:
+      - title: "Tech on Tap"
+        description: "Join us every third Thursday evening for expert insights on the challenges that can make or break your tech startup—from incorporation decisions to scaling strategies."
+        image: ../assets/images/home/tech-on-tap.png
+        alt: ""
+        link: { label: "Learn more", href: "/tech-on-tap" }
+      - title: "Tech Beans"
+        description: "Coffee and casual conversation centered around building scalable, high-growth startups in Columbia."
+        image: ../assets/images/home/tech-beans.png
+        alt: "Tech Beans networking event at Boyd Innovation Center, Columbia SC's tech startup hub and coworking space"
+        # Matches the live site, which links Tech Beans to /tech-on-tap.
+        link: { label: "Learn more", href: "/tech-on-tap" }
+
+  programs:
+    heading: "Programs for Columbia’s Tech Founders At All Stages"
+    cta: { label: "Learn more", href: "/programs" }
+    stages:
+      - label: "ECOSYSTEM ENGAGEMENT"
+        color: green
+        programs:
+          - title: "Tech Beans"
+            href: /events
+            description: "Coffee and conversation centered around building scalable, high-growth startups in Columbia."
+          - title: "Tech on Tap"
+            href: /events
+            description: "A monthly meetup connecting Columbia's tech community with experts who've built, scaled, and exited successful startups."
+      - label: "IDEATION"
+        color: blue
+        programs:
+          - title: "Startup Sprint"
+            href: /programs
+            description: "Startup Sprint is a fast-paced, 24-hour event where aspiring entrepreneurs, developers, designers, and innovators come together to experience what it takes to build a startup."
+          - title: "Deep Dive Workshops"
+            href: /programs
+            description: "We host a regular workshop series of 1-2 hour workshops diving deep into specific tech founder topics, including finance, legal, fundraising, and more."
+      - label: "LAUNCH"
+        color: navy
+        programs:
+          - title: "Product Jam"
+            # The live site links only the word "Product".
+            linkText: "Product"
+            href: /programs
+            description: "All-day founder working session brings founders, mentors, experts, and AI to take your product to the next level."
+          - title: "Customer Discovery"
+            href: /programs
+            description: "Customer Discovery is a 6-week cohort program to master structured interviews and ensure you’re building what the market will buy."
+      - label: "TRACTION"
+        color: black
+        programs:
+          - title: "Growth Jam"
+            linkText: "Growth"
+            href: /programs
+            description: "All-day session puts AI tools in your hands to tackle customer acquisition head-on."
+          - title: "Traction Stage Accelerator Cohort"
+            href: /programs
+            description: "More info coming soon! Please reach out if you are interested in applying."
