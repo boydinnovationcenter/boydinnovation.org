@@ -1,0 +1,67 @@
+---
+/**
+ * Edge-to-edge row of five photos (narrow, wide, wide, wide, narrow).
+ * On phones it becomes a two-column collage.
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+	photos: { image: ImageMetadata; alt: string }[];
+}
+
+const { photos } = Astro.props;
+---
+
+<ul class="photo-strip" role="list">
+	{
+		photos.map((photo) => (
+			<li>
+				<Image src={photo.image} alt={photo.alt} widths={[320, 480, 720]} sizes="(min-width: 48rem) 23vw, 50vw" />
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.photo-strip {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		padding: 0;
+		list-style: none;
+	}
+
+	.photo-strip li:last-child {
+		grid-column: 1 / -1;
+	}
+
+	.photo-strip img {
+		width: 100%;
+		height: 100%;
+		aspect-ratio: 3 / 4;
+		object-fit: cover;
+	}
+
+	.photo-strip li:last-child img {
+		aspect-ratio: 3 / 2;
+	}
+
+	@media (min-width: 48rem) {
+		.photo-strip {
+			grid-template-columns: 2fr 3fr 3fr 3fr 2fr;
+			grid-template-rows: clamp(16rem, 27.7vw, 30rem);
+		}
+
+		.photo-strip li {
+			min-height: 0;
+		}
+
+		.photo-strip li:last-child {
+			grid-column: auto;
+		}
+
+		.photo-strip img,
+		.photo-strip li:last-child img {
+			aspect-ratio: auto;
+		}
+	}
+</style>

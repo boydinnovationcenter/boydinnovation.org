@@ -1,0 +1,54 @@
+---
+import { getEntry } from 'astro:content';
+import PhotoStrip from '../components/PhotoStrip.astro';
+import ProgramsClosing from '../components/programs/ProgramsClosing.astro';
+import ProgramsHero from '../components/programs/ProgramsHero.astro';
+import ProgramTimeline from '../components/programs/ProgramTimeline.astro';
+import RecurringPrograms from '../components/programs/RecurringPrograms.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const entry = await getEntry('programs', 'programs');
+if (!entry) throw new Error('Missing Programs content: src/content/programs.yaml');
+const { seo, hero, stages, recurring, photos, closing } = entry.data;
+
+const pageUrl = `${site.url}/programs`;
+const plain = (text: string) => text.replace(/\*+/g, '');
+
+// Breadcrumb plus the list of programs as shown on the page.
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+				{ '@type': 'ListItem', position: 2, name: 'Programs', item: pageUrl },
+			],
+		},
+		{
+			'@type': 'ItemList',
+			name: hero.heading,
+			url: pageUrl,
+			itemListElement: stages
+				.flatMap((stage) => stage.programs.map((program) => ({ stage, program })))
+				.map(({ stage, program }, i) => ({
+					'@type': 'ListItem',
+					position: i + 1,
+					name: program.title,
+					description: plain(program.description.join(' ')),
+					url: `${pageUrl}#${stage.id}`,
+				})),
+		},
+	],
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	<ProgramsHero {...hero} stages={stages} />
+	<ProgramTimeline stages={stages} />
+	<RecurringPrograms {...recurring} />
+	<PhotoStrip photos={photos} />
+	<ProgramsClosing {...closing} />
+</BaseLayout>

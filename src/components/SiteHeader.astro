@@ -2,6 +2,10 @@
 import { Image } from 'astro:assets';
 import logo from '../assets/images/brand/logo-wide.png';
 import { headerCta, mainNav } from '../config/site';
+
+// Build output uses /programs.html; links use /programs.
+const path = Astro.url.pathname.replace(/(\.html|\/)$/, '');
+const current = (href: string) => (path === href ? 'page' : undefined);
 ---
 
 <header class="site-header">
@@ -24,7 +28,9 @@ import { headerCta, mainNav } from '../config/site';
 				{
 					mainNav.map((item) => (
 						<li>
-							<a href={item.href}>{item.label}</a>
+							<a href={item.href} aria-current={current(item.href)}>
+								{item.label}
+							</a>
 						</li>
 					))
 				}
@@ -44,7 +50,9 @@ import { headerCta, mainNav } from '../config/site';
 				{
 					mainNav.map((item) => (
 						<li>
-							<a href={item.href}>{item.label}</a>
+							<a href={item.href} aria-current={current(item.href)}>
+								{item.label}
+							</a>
 						</li>
 					))
 				}
@@ -159,7 +167,8 @@ import { headerCta, mainNav } from '../config/site';
 		text-transform: uppercase;
 	}
 
-	.site-nav__list a:hover {
+	.site-nav__list a:hover,
+	.site-nav__list a[aria-current='page'] {
 		text-decoration: underline;
 	}
 
@@ -255,6 +264,11 @@ import { headerCta, mainNav } from '../config/site';
 		line-height: 1.7;
 		text-decoration: none;
 		text-transform: uppercase;
+	}
+
+	.mobile-menu__list a[aria-current='page'] {
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
 	}
 
 	.mobile-menu__cta {

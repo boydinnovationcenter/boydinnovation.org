@@ -78,5 +78,14 @@ export const tracking = {
 	newsletterConversion: 'AW-18304813097/hQMsCNu--OMcEKmQtZhE',
 	hubspotPortalId: '50188189',
 	hubspotNewsletterFormId: 'ff76cdbb-e8b9-45fc-aae5-51f52e8ce847',
+	/**
+	 * HubSpot CTA pop-ups, opened by any element with the class
+	 * `hs-cta-trigger-button-<id>` (see CtaButton.astro).
+	 */
+	hubspotCtas: {
+		programInterest: '217138433433',
+		eventSpaceInquiry: '217149021356',
+		carolinaVenturesApplication: '218290064008',
+	},
 	linkedinPartnerIds: ['7841314', '7872946'],
 };

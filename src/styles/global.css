@@ -151,6 +151,16 @@ a {
 	opacity: 0.85;
 }
 
+.btn--outline {
+	background: transparent;
+	color: var(--color-text);
+	border: 1px solid var(--color-text);
+}
+
+.btn--outline:hover {
+	background: rgb(0 3 31 / 0.06);
+}
+
 /* Squarespace "secondary" button as restyled in the site's custom CSS:
    frosted glass on a dark background. */
 .btn--glass {

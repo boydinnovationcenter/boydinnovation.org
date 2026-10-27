@@ -1,6 +1,5 @@
 ---
-import { getImage } from 'astro:assets';
-import swirl from '../../assets/images/brand/texture-swirl.jpg';
+import CtaButton from '../CtaButton.astro';
 
 type Program = { title: string; linkText?: string; href: string; description: string };
 
@@ -11,7 +10,6 @@ interface Props {
 }
 
 const { heading, cta, stages } = Astro.props;
-const ctaBackground = await getImage({ src: swirl, width: 480, format: 'webp' });
 
 // Split a title into the linked part and any trailing unlinked text.
 const splitTitle = ({ title, linkText }: Program) =>
@@ -21,9 +19,7 @@ const splitTitle = ({ title, linkText }: Program) =>
 <section class="programs" aria-labelledby="programs-heading">
 	<div class="container programs__grid">
 		<h2 id="programs-heading" class="programs__heading">{heading}</h2>
-		<a class="btn btn--glass programs__cta" href={cta.href} style={`--cta-bg: url(${ctaBackground.src})`}>
-			{cta.label}<span class="visually-hidden"> about our programs</span>
-		</a>
+		<CtaButton class="programs__cta" variant="texture" label={cta.label} href={cta.href} srContext="about our programs" />
 
 		<ol class="stages" role="list">
 			{
@@ -81,22 +77,11 @@ const splitTitle = ({ title, linkText }: Program) =>
 		);
 	}
 
-	.programs__cta {
+	.programs__grid :global(.programs__cta) {
 		order: 1;
 		justify-self: center;
 		width: min(100%, 18.7rem);
 		min-height: 3.7rem;
-		border-radius: var(--radius);
-		background: var(--cta-bg) center / cover;
-		font-size: var(--text-base);
-		text-transform: none;
-		transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.programs__cta:hover {
-			transform: scale(1.1);
-		}
 	}
 
 	.stages {
@@ -185,7 +170,7 @@ const splitTitle = ({ title, linkText }: Program) =>
 			column-gap: var(--space-5);
 		}
 
-		.programs__cta {
+		.programs__grid :global(.programs__cta) {
 			order: 0;
 			justify-self: end;
 			width: 13.25rem;

@@ -1,0 +1,66 @@
+---
+/**
+ * A call-to-action that is either a link or a button that opens a HubSpot
+ * CTA pop-up. HubSpot's tracking script (Analytics.astro) opens the pop-up
+ * for any element with the class `hs-cta-trigger-button-<id>`, so no script
+ * of our own is needed.
+ */
+import { getImage } from 'astro:assets';
+import swirl from '../assets/images/brand/texture-swirl.jpg';
+
+interface Props {
+	label: string;
+	/** Link target. Ignored when `hubspotCta` is set. */
+	href?: string;
+	/** HubSpot CTA id to open as a pop-up instead of following a link. */
+	hubspotCta?: string;
+	variant?: 'primary' | 'outline' | 'glass' | 'texture';
+	/** Extra words for screen readers, e.g. which program a generic "Apply" is for. */
+	srContext?: string;
+	class?: string;
+}
+
+const { label, href, hubspotCta, variant = 'primary', srContext, class: className } = Astro.props;
+const external = !!href?.startsWith('http');
+
+// The texture variant is the swirl-background button used for page-level CTAs.
+const texture = variant === 'texture' ? await getImage({ src: swirl, width: 480, format: 'webp' }) : undefined;
+const classes = [
+	'btn',
+	variant === 'texture' ? 'btn--glass btn--texture' : `btn--${variant}`,
+	hubspotCta && `hs-cta-trigger-button hs-cta-trigger-button-${hubspotCta}`,
+	className,
+];
+const style = texture ? `--texture: url(${texture.src})` : undefined;
+---
+
+{
+	hubspotCta ? (
+		<button type="button" class:list={classes} style={style} aria-haspopup="dialog">
+			{label}
+			{srContext && <span class="visually-hidden"> {srContext}</span>}
+		</button>
+	) : (
+		<a href={href} class:list={classes} style={style} {...(external && { target: '_blank', rel: 'noopener' })}>
+			{label}
+			{srContext && <span class="visually-hidden"> {srContext}</span>}
+			{external && <span class="visually-hidden"> (opens in a new tab)</span>}
+		</a>
+	)
+}
+
+<style>
+	.btn--texture {
+		border-radius: var(--radius);
+		background: var(--texture) center / cover;
+		font-size: var(--text-base);
+		text-transform: none;
+		transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.btn--texture:hover {
+			transform: scale(1.1);
+		}
+	}
+</style>

@@ -1,0 +1,187 @@
+---
+import { getImage, Image } from 'astro:assets';
+import flywheel from '../../assets/images/brand/flywheel.png';
+import swirl from '../../assets/images/brand/texture-swirl.jpg';
+import CtaButton from '../CtaButton.astro';
+import { tracking } from '../../config/site';
+
+type Action = { label: string; href?: string; hubspotCta?: keyof typeof tracking.hubspotCtas };
+
+interface Props {
+	eyebrow: string;
+	heading: string;
+	cta: Action;
+	image: ImageMetadata;
+	alt: string;
+	stages: { id: string; name: string; tagline: string }[];
+}
+
+const { eyebrow, heading, cta, image, alt, stages } = Astro.props;
+// Smaller texture on phones so it doesn't compete with the hero photo (the LCP image).
+const background = await getImage({ src: swirl, width: 1920, format: 'webp' });
+const backgroundSmall = await getImage({ src: swirl, width: 800, format: 'webp' });
+---
+
+<section class="programs-hero" style={`--hero-bg: url(${background.src}); --hero-bg-small: url(${backgroundSmall.src})`} aria-labelledby="programs-title">
+	<div class="container programs-hero__grid">
+		<div class="programs-hero__intro">
+			<p class="programs-hero__eyebrow">{eyebrow}</p>
+			<h1 id="programs-title">{heading}</h1>
+			<CtaButton
+				label={cta.label}
+				href={cta.href}
+				hubspotCta={cta.hubspotCta && tracking.hubspotCtas[cta.hubspotCta]}
+			/>
+		</div>
+		<Image
+			class="programs-hero__image"
+			src={image}
+			alt={alt}
+			widths={[480, 760, 1024]}
+			sizes="(min-width: 64rem) 34rem, 100vw"
+			loading="eager"
+			fetchpriority="high"
+		/>
+	</div>
+
+	<nav class="container stage-links" aria-label="Program stages">
+		<ol role="list">
+			{
+				stages.map((stage, i) => (
+					<li>
+						<a class="stage-link" href={`#${stage.id}`}>
+							<Image class="stage-link__icon" src={flywheel} alt="" width={20} densities={[1, 2, 3]} />
+							<span class="stage-link__number">STAGE {String(i + 1).padStart(2, '0')}</span>
+							<span class="stage-link__name">{stage.name}</span>
+							<span class="stage-link__tagline">{stage.tagline}</span>
+						</a>
+					</li>
+				))
+			}
+		</ol>
+	</nav>
+</section>
+
+<style>
+	.programs-hero {
+		padding-block: calc(var(--header-height) + 3rem) var(--space-6);
+		background: var(--color-navy-deep) var(--hero-bg-small) center / cover no-repeat;
+		color: var(--color-text-on-dark);
+	}
+
+	@media (min-width: 48rem) {
+		.programs-hero {
+			background-image: var(--hero-bg);
+		}
+	}
+
+	.programs-hero__grid {
+		display: grid;
+		gap: var(--space-5);
+		align-items: center;
+	}
+
+	.programs-hero__intro {
+		display: grid;
+		justify-items: start;
+		gap: var(--space-3);
+	}
+
+	.programs-hero__eyebrow {
+		font-size: clamp(1.1rem, 1rem + 0.4vw, 1.4rem);
+		font-weight: 700;
+		line-height: 1.4;
+		color: var(--color-accent);
+	}
+
+	h1 {
+		font-size: clamp(3rem, 2rem + 4.2vw, 5.07rem);
+		font-weight: 700;
+		line-height: 1.09;
+		margin-bottom: var(--space-2);
+	}
+
+	.programs-hero__image {
+		width: 100%;
+		aspect-ratio: 546 / 384;
+		object-fit: cover;
+		border-radius: 8px;
+	}
+
+	.stage-links {
+		margin-top: var(--space-6);
+	}
+
+	.stage-links ol {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.7rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.stage-link {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		padding: 1.8rem 0.7rem 0.9rem;
+		border: 1px solid var(--color-paper);
+		border-radius: 10px;
+		background: rgb(4 30 52 / 0.93);
+		text-decoration: none;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.stage-link:hover {
+		border-color: var(--color-accent);
+		background: rgb(4 30 52 / 0.75);
+	}
+
+	.stage-link__icon {
+		position: absolute;
+		top: 0.55rem;
+		right: 0.6rem;
+		width: 1.25rem;
+	}
+
+	.stage-link__number {
+		font-size: var(--text-sm);
+		color: var(--color-accent);
+	}
+
+	.stage-link__name {
+		font-weight: 700;
+	}
+
+	.stage-link__tagline {
+		line-height: 1.8;
+	}
+
+	@media (min-width: 48rem) {
+		.stage-links ol {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.programs-hero {
+			padding-block: 10.9rem 5.5rem;
+		}
+
+		.programs-hero__grid {
+			grid-template-columns: 37.5rem minmax(0, 1fr);
+			column-gap: clamp(2rem, 4.6vw, 4.2rem);
+		}
+
+		.stage-links {
+			margin-top: 5.6rem;
+		}
+
+		.stage-links ol {
+			padding-inline: clamp(0rem, 8.6vw - 4.5rem, 3.5rem);
+		}
+	}
+</style>

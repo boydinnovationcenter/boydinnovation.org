@@ -1,0 +1,211 @@
+---
+/**
+ * Programs grouped by founder stage, on a rail that shifts through the stage
+ * colors. Each stage has an id so the hero's stage cards can link to it.
+ */
+import { tracking } from '../../config/site';
+import { inlineMarkdown } from '../../lib/inline-markdown';
+import CtaButton from '../CtaButton.astro';
+
+type Action = { label: string; href?: string; hubspotCta?: keyof typeof tracking.hubspotCtas };
+type Color = 'green' | 'blue' | 'navy' | 'black';
+
+interface Props {
+	stages: {
+		id: string;
+		name: string;
+		color: Color;
+		programs: { title: string; badge?: string; description: string[]; actions: Action[] }[];
+	}[];
+}
+
+const { stages } = Astro.props;
+---
+
+<section class="timeline" aria-label="Programs by stage">
+	<ol class="container timeline__stages" role="list">
+		{
+			stages.map((stage, i) => (
+				<li
+					class="stage"
+					id={stage.id}
+					style={`--stage: var(--stage-${stage.color}); --stage-next: var(--stage-${(stages[i + 1] ?? stage).color}); --stage-label: var(--stage-${stage.color}-label)`}
+					data-color={stage.color}
+				>
+					<h2 class="stage__name">{stage.name}</h2>
+					<ul class="stage__programs" role="list">
+						{stage.programs.map((program) => (
+							<li class="program">
+								<div class="program__head">
+									<h3>{program.title}</h3>
+									{program.badge && <p class="program__badge">{program.badge}</p>}
+								</div>
+								<div class="program__body text-sm">
+									{program.description.map((text) => (
+										<p set:html={inlineMarkdown(text)} />
+									))}
+								</div>
+								{program.actions.length > 0 && (
+									<div class="program__actions">
+										{program.actions.map((action) => (
+											<CtaButton
+												label={action.label}
+												href={action.href}
+												hubspotCta={action.hubspotCta && tracking.hubspotCtas[action.hubspotCta]}
+												variant={/^apply/i.test(action.label) ? 'primary' : 'outline'}
+												srContext={`for ${program.title}`}
+											/>
+										))}
+									</div>
+								)}
+							</li>
+						))}
+					</ul>
+				</li>
+			))
+		}
+	</ol>
+</section>
+
+<style>
+	.timeline {
+		--stage-green: var(--color-green);
+		--stage-blue: var(--color-blue);
+		--stage-navy: var(--color-navy);
+		--stage-black: var(--color-black);
+		--stage-green-label: var(--color-green);
+		--stage-blue-label: var(--color-blue);
+		--stage-navy-label: var(--color-navy-deep);
+		--stage-black-label: var(--color-black);
+		--rail: 2.25rem; /* column holding the dot and line */
+		--dot: 1.8rem;
+		--stage-gap: var(--space-5);
+
+		padding-block: 5.5rem 6rem;
+	}
+
+	.timeline__stages {
+		display: grid;
+		gap: var(--stage-gap);
+		padding: 0;
+		list-style: none;
+	}
+
+	.stage {
+		position: relative;
+		isolation: isolate;
+		display: grid;
+		gap: 0.75rem;
+		padding-left: calc(var(--rail) + 0.75rem);
+		scroll-margin-top: var(--space-5);
+	}
+
+	/* Dot beside the stage name */
+	.stage::before {
+		content: '';
+		position: absolute;
+		left: calc((var(--rail) - var(--dot)) / 2);
+		top: 0;
+		width: var(--dot);
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: var(--stage);
+	}
+
+	/* Line from this dot to the next, fading into the next stage's color */
+	.stage::after {
+		content: '';
+		position: absolute;
+		left: calc(var(--rail) / 2 - 4px);
+		top: calc(var(--dot) / 2);
+		bottom: calc(-1 * var(--stage-gap) - var(--dot) / 2);
+		width: 8px;
+		z-index: -1;
+		background: linear-gradient(var(--stage), var(--stage-next));
+	}
+
+	.stage:last-child::after {
+		bottom: 0;
+		border-radius: 0 0 4px 4px;
+	}
+
+	.stage__name {
+		min-height: var(--dot);
+		display: flex;
+		align-items: center;
+		font-size: clamp(1.35rem, 1.2rem + 0.45vw, 1.6rem);
+		font-weight: 700;
+		line-height: 1;
+		color: var(--stage-label);
+		text-transform: uppercase;
+	}
+
+	.stage__programs {
+		display: grid;
+		gap: 0.75rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.program {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-3);
+		padding: 0 1.25rem 1.25rem;
+		border: 1px solid var(--color-black);
+		border-radius: var(--radius);
+		background: var(--color-paper);
+	}
+
+	/* Title and badge share the top row; the badge is a tab in the corner. */
+	.program__head {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--space-3);
+		margin-right: -1.25rem;
+	}
+
+	.program__head h3 {
+		flex: 1;
+		padding-top: 1.25rem;
+	}
+
+	.program__badge {
+		flex: none;
+		max-width: 60%;
+		margin: -1px -1px 0 0;
+		padding: 0.3rem 0.75rem;
+		border: 1px solid var(--color-black);
+		border-radius: 0 var(--radius) 0 0;
+		background: var(--stage);
+		color: #fff;
+		font-size: var(--text-sm);
+		font-weight: 700;
+		line-height: 1.5;
+		text-align: center;
+	}
+
+	[data-color='green'] .program__badge {
+		color: var(--color-black);
+	}
+
+	.program__body {
+		flex: 1;
+		display: grid;
+		align-content: start;
+		gap: 0.75rem;
+		color: var(--color-text-strong);
+	}
+
+	.program__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+	}
+
+	@media (min-width: 48rem) {
+		.stage__programs {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+</style>

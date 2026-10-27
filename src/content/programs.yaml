@@ -1,0 +1,125 @@
+# Programs page content (https://boydinnovation.org/programs).
+# See CONTENT.md for editing instructions. Image paths are relative to this file.
+#
+# Buttons ("actions") use either:
+#   href: /some-page                  -> a normal link
+#   hubspotCta: programInterest       -> opens the HubSpot "Program Interest" pop-up form
+# (other pop-ups: eventSpaceInquiry, carolinaVenturesApplication)
+
+programs:
+  seo:
+    title: "Tech Startup Programs Columbia SC | Boyd Innovation"
+    description: "Get real tech startup support at every stage. From 24-hour sprints to 6-week cohorts, BIC's programs connect Columbia founders. Apply now."
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+
+  hero:
+    eyebrow: "PROGRAMS AT THE BIC"
+    heading: "Programs for Columbia tech founders at all stages."
+    cta: { label: "BOOK A TOUR", href: /book-a-tour }
+    image: ../assets/images/programs/hero.jpg
+    alt: "Founders listening to a speaker at a program session at Boyd Innovation Center in Columbia, SC"
+
+  # Each stage appears in the hero (as a card) and in the program timeline.
+  stages:
+    - id: ecosystem-engagement
+      name: "Ecosystem Engagement"
+      tagline: "Big things start with showing up."
+      color: green
+      programs:
+        - title: "Tech on Tap"
+          badge: "MONTHLY"
+          description:
+            - "***Tech on Tap is a monthly community gathering to connect with Columbia’s tech scene and learn from pros who have built, scaled, and exited successful companies.***"
+            - "Every third Thursday evening we bring in an expert to share insights on the challenges that can make or break your tech startup—from incorporation decisions to scaling strategies."
+          actions:
+            - { label: "LEARN MORE", href: /events }
+        - title: "Tech Beans"
+          badge: "WEEKLY"
+          description:
+            - "Coffee and conversation centered around building scalable, high-growth startups in Columbia. Whether you're in the early stages of an idea, a growth-stage founder, or just curious to be around people who are building things, come on out."
+            - "**Bring a friend, make a new connection, and see where things go. We hope to see you there!**"
+          actions:
+            - { label: "LEARN MORE", href: /events }
+
+    - id: ideation
+      name: "Ideation"
+      tagline: "Pressure-test your idea before the market does."
+      color: blue
+      programs:
+        - title: "Startup Sprint"
+          badge: "NOV 13–14"
+          description:
+            - "Startup Sprint is a fast-paced, 24-hour event where aspiring entrepreneurs, developers, designers, and innovators come together to experience what it takes to build a startup."
+          actions:
+            - { label: "APPLY", href: /startup-sprint#application }
+            - { label: "LEARN MORE", href: /startup-sprint }
+        - title: "Deep Dive Workshops"
+          badge: "MONTHLY"
+          description:
+            - "We host a regular workshop series diving deep into specific tech founder topics, including finance, legal, fundraising, and more."
+            - "They are modular in nature but flow together and build on one another. Come to the one you need right now, or collect them all!"
+          actions:
+            - { label: "APPLY", hubspotCta: programInterest }
+            - { label: "LEARN MORE", href: /deep-dive-workshops }
+
+    - id: launch
+      name: "Launch"
+      tagline: "Take the leap from prototype to paying customer."
+      color: navy
+      programs:
+        - title: "Customer Discovery"
+          badge: "NEXT COHORT: SPRING 2027"
+          description:
+            - "The most successful startups don’t begin with the product — they begin with the customer. Customer Discovery is a 6-week cohort program that helps early-stage founders validate their ideas, test assumptions, and build a business model rooted in real customer needs."
+          actions:
+            - { label: "APPLY", hubspotCta: programInterest }
+        - title: "Product Jam"
+          badge: "FALL 2026"
+          description:
+            - "We’ll bring together founders, designers, and product leaders to go from concept to working prototype using AI-powered development tools. You will use platforms like Claude and Lovable to move at a pace that was not possible two years ago, turning business ideas into testable prototypes before the day is over."
+          actions:
+            - { label: "APPLY", hubspotCta: programInterest }
+
+    - id: traction
+      name: "Traction"
+      tagline: "Scale your startup here in Columbia."
+      color: black
+      programs:
+        - title: "Growth Jam"
+          badge: "FALL 2026"
+          description:
+            - "Put AI tools in your hands to tackle customer acquisition head-on. Working alongside growth marketers, sales leaders, and AI practitioners, you will use Claude and purpose-built AI skills packs to research markets, generate campaigns, build landing pages, and validate strategies, all in a single day."
+          actions:
+            - { label: "APPLY", hubspotCta: programInterest }
+        - title: "Traction Stage Accelerator Cohort"
+          badge: "COMING SOON"
+          description:
+            - "Join a part-time accelerator cohort designed for early stage founders in the launch and early traction stage, with mentorship and a structured curriculum to get you from MVP to capital ready."
+          actions:
+            - { label: "APPLY", hubspotCta: programInterest }
+
+  recurring:
+    eyebrow: "MEMBERS ONLY"
+    heading: "Recurring Programs"
+    items:
+      - title: "Advisor Fridays"
+        description: "When you're building a startup, the right conversation at the right time can change everything. Advisor Fridays brings a rotating group of experienced founders, operators, and domain experts into the BIC so our members can get direct access for informal conversation, advice, and mentorship."
+      - title: "Stage Based Peer Groups"
+        description: "Groups meet weekly to connect, share honestly about what's working and what isn't, and grow alongside people who genuinely understand what they're going through. Because every member is at a comparable stage, conversations stay relevant and practical: the questions you're wrestling with this week are likely the same ones the founder sitting across from you faced last month."
+
+  # Full-width photo strip, left to right.
+  photos:
+    - image: ../assets/images/programs/strip-1-tech-on-tap.jpg
+      alt: "Founders and tech community members networking at a Tech on Tap event at Boyd Innovation Center in Columbia, SC"
+    - image: ../assets/images/programs/strip-2-mentorship.jpg
+      alt: "Founders in a small group discussion during a startup mentorship program session at Boyd Innovation Center"
+    - image: ../assets/images/programs/strip-3-audience.jpg
+      alt: "Diverse group of founders and entrepreneurs attending a startup event at Boyd Innovation Center in Columbia, SC"
+    - image: ../assets/images/programs/strip-4-cohort.jpg
+      alt: "Startup Sprint cohort founders and mentors gathered at Boyd Innovation Center in Columbia, SC for a founder networking event"
+    - image: ../assets/images/programs/strip-5-networking.jpg
+      alt: "Founders and mentors networking at a Boyd Innovation Center startup event in Columbia, SC, under warm string lights"
+
+  closing:
+    heading: "Interested in upcoming programs at the BIC?"
+    cta: { label: "APPLY NOW", hubspotCta: programInterest }

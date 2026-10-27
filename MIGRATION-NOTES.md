@@ -101,3 +101,47 @@ The Astro numbers come from a local server, so they will shift on real hosting. 
 5. **Hosting:** where will the site be deployed (e.g. Cloudflare Pages, Netlify, Vercel)? This decides how redirects (Squarespace URL Mappings) and trailing-slash handling are configured.
 6. **Tracking:** does GTM already fire GA4 `G-PEHD1QDBW8`? Is LinkedIn partner `7841314` or `7872946` obsolete? (See INTEGRATIONS.md.)
 7. **CMS:** editing `home.yaml` requires Git. If non-technical editors need a web UI, the Git-based options that fit this setup are Decap CMS (free), TinaCMS and CloudCannon. The choice can wait until more pages are migrated.
+
+## Programs (`/programs`)
+
+Reference: live site captured 2026-10-27 at 1440px and 390px. Title, meta description, canonical and social tags are copied exactly.
+
+### Approved redesign of the program timeline (Kennedy, 2026-10-27)
+
+The light "programs by stage" section was rebuilt as a **tidied timeline**. It keeps the same programs, copy, order, stage colors and color rail. What changed:
+
+- Each stage is an even two-column grid with equal card heights. On the live site, card widths changed from row to row and the rows were ragged.
+- Every card has the same layout: title and corner badge on one row, description, then buttons at the bottom. The live site had a large gap above each title and a two-line "Next cohort: Spring 2027" badge.
+- **Apply is the main button** (filled green) and Learn more is outlined beside it. Apply now comes first; on the live site the two were identical outlined buttons stacked with Learn more on top.
+- The rail runs continuously to the end of the Traction cards. On the live site it stopped partway, and it was made of five images; it's now CSS.
+- Card text stays at the live size (about 12.5px), as chosen.
+- **Hero stage cards now link** to their stage (`#ecosystem-engagement`, `#ideation`, `#launch`, `#traction`).
+- **Hero "Book a Tour" fixed:** on the live site it had no link and no pop-up, so it did nothing. It now goes to `/book-a-tour`, like the header button.
+
+### Fixes and technical changes
+
+- **Mobile badge mix-up fixed:** on phones the live site showed Growth Jam as "Coming soon" and the Traction cohort as "Fall 2026", the reverse of desktop. Desktop is correct, and each badge now belongs to its card, so this can't happen again.
+- HubSpot pop-ups are real `<button>`s carrying HubSpot's `hs-cta-trigger-button-<id>` class, set in content (`hubspotCta: programInterest`). The site-wide footer script that added those classes to Squarespace block IDs is no longer needed.
+- Headings: h1 → h2 per stage → h3 per program, then h2 Recurring Programs. "Interested in upcoming programs at the BIC?" stays an h3, as on the live page. Lighthouse flagged a heading-order issue on the live page; the rebuild passes.
+- The hero photo had `alt=""` on the live site; it now has a plain description.
+- "Members only" cards no longer have a fixed height on phones (the live site left a large empty area under the text).
+- Photo strip: same five photos edge to edge on desktop (2:3:3:3:2 widths); a two-column collage on phones.
+- Structured data: `BreadcrumbList` (Home > Programs) and an `ItemList` of the ten programs with their visible descriptions.
+- The hero's texture background is 800px wide on phones and 1920px on larger screens, so it doesn't slow the hero photo.
+
+Small-screen check: 320, 390, 768, 1024 and 1440px with no horizontal scroll.
+
+### Performance (Lighthouse, mobile, 2026-10-27)
+
+| | Live | Astro (local preview) |
+|---|---|---|
+| Performance | 55 / 56 | 98 / 99 / 99 |
+| LCP | 20.4–20.5 s | 1.7 s |
+| FCP | 4.9 s | 0.9 s |
+| Accessibility | 98 | 100 |
+| Page weight | 3.3–4.0 MB | 2.1 MB |
+
+### Open questions
+
+8. **HubSpot "Program Interest" form names don't match the page:** the form offers "Product Seminar", "Growth Seminar", "Stage-Based Mastermind Groups" and "Advisor Office Hours", but the page says Product Jam, Growth Jam, Stage Based Peer Groups and Advisor Fridays. This needs updating in HubSpot.
+9. **Stage label contrast** (see question 1): the green "ECOSYSTEM ENGAGEMENT" heading and the white-on-blue badges have the same contrast issue as the homepage labels.
