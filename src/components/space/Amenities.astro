@@ -1,0 +1,87 @@
+---
+/**
+ * Amenity list with Material Symbols icons (inlined SVG, Apache 2.0).
+ * `icon` is a file name in src/assets/images/icons/amenities.
+ */
+interface Props {
+	heading: string;
+	items: { icon: string; text: string }[];
+}
+
+const { heading, items } = Astro.props;
+
+const icons = import.meta.glob<string>('../../assets/images/icons/amenities/*.svg', {
+	query: '?raw',
+	import: 'default',
+	eager: true,
+});
+
+const iconSvg = (name: string) => {
+	const svg = icons[`../../assets/images/icons/amenities/${name}.svg`];
+	if (!svg) throw new Error(`Unknown amenity icon "${name}" in src/content/space.yaml`);
+	return svg.replace('<svg ', '<svg aria-hidden="true" focusable="false" fill="currentColor" ');
+};
+---
+
+<section class="amenities container" aria-labelledby="amenities-heading">
+	<hr />
+	<h2 id="amenities-heading">{heading}</h2>
+	<ul class="amenities__list" role="list">
+		{
+			items.map((item) => (
+				<li>
+					<span class="amenities__icon" set:html={iconSvg(item.icon)} />
+					{item.text}
+				</li>
+			))
+		}
+	</ul>
+</section>
+
+<style>
+	.amenities {
+		padding-block: var(--space-4) var(--space-7);
+	}
+
+	hr {
+		border: 0;
+		border-top: 1px solid var(--color-black);
+		margin-bottom: var(--space-5);
+	}
+
+	.amenities__list {
+		display: grid;
+		gap: var(--space-3) var(--space-5);
+		margin-top: var(--space-4);
+		padding: 0;
+		list-style: none;
+		color: var(--color-text-strong);
+		line-height: 1.6;
+	}
+
+	.amenities__list li {
+		display: grid;
+		grid-template-columns: 1.75rem 1fr;
+		align-items: start;
+		gap: var(--space-3);
+	}
+
+	.amenities__icon {
+		display: block;
+		color: var(--color-blue);
+	}
+
+	.amenities__icon :global(svg) {
+		width: 1.6rem;
+		height: 1.6rem;
+	}
+
+	@media (min-width: 48rem) {
+		.amenities__list {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-auto-flow: column;
+			grid-template-rows: repeat(6, auto);
+			padding-inline: clamp(0rem, 8.6vw - 2rem, 5.5rem);
+		}
+	}
+</style>

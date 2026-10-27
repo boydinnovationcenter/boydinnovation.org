@@ -1,0 +1,160 @@
+---
+/**
+ * Event venue photos and an accordion of venues. The accordion uses native
+ * <details> elements, so it works with keyboard and screen readers without JS.
+ */
+import { Image } from 'astro:assets';
+import flywheel from '../../assets/images/brand/flywheel-navy.png';
+import { tracking } from '../../config/site';
+import CtaButton from '../CtaButton.astro';
+
+interface Props {
+	heading: string;
+	cta: { label: string; hubspotCta: 'eventSpaceInquiry' };
+	photos: { image: ImageMetadata; alt: string }[];
+	venues: { name: string; details: string[] }[];
+}
+
+const { heading, cta, photos, venues } = Astro.props;
+---
+
+<section class="event-space" id="eventspace" aria-labelledby="event-space-heading">
+	<div class="container head-cta-layout">
+		<div class="head-cta-layout__head event-space__title">
+			<h2 id="event-space-heading">{heading}</h2>
+			<Image src={flywheel} alt="" width={48} densities={[1, 2, 3]} />
+		</div>
+		<CtaButton
+			class="head-cta-layout__cta"
+			variant="texture"
+			label={cta.label}
+			hubspotCta={tracking.hubspotCtas[cta.hubspotCta]}
+			srContext="about hosting an event"
+		/>
+		<div class="event-space__grid head-cta-layout__body">
+			<ul class="event-space__photos" role="list">
+				{
+					photos.map((photo) => (
+						<li>
+							<Image src={photo.image} alt={photo.alt} widths={[400, 640, 900]} sizes="(min-width: 64rem) 22rem, 50vw" />
+						</li>
+					))
+				}
+			</ul>
+			<div class="venues">
+				{
+					venues.map((venue) => (
+						<details class="venue">
+							<summary>
+								<h3>{venue.name}</h3>
+							</summary>
+							<ul class="chevron-list" role="list">
+								{venue.details.map((detail) => (
+									<li>{detail}</li>
+								))}
+							</ul>
+						</details>
+					))
+				}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.event-space {
+		padding-block: var(--space-7) var(--space-8);
+	}
+
+	.event-space__title {
+		display: flex;
+		align-items: center;
+		gap: var(--space-4);
+	}
+
+	.event-space__title img {
+		width: 2.6rem;
+		flex: none;
+	}
+
+	.event-space__grid {
+		display: grid;
+		gap: var(--space-5);
+	}
+
+	.event-space__photos {
+		display: grid;
+		gap: 0.5rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.event-space__photos img {
+		width: 100%;
+		aspect-ratio: 3 / 2;
+		object-fit: cover;
+		border-radius: var(--radius);
+	}
+
+	.venues {
+		border-top: 1px solid var(--color-text);
+	}
+
+	.venue {
+		border-bottom: 1px solid var(--color-text);
+	}
+
+	summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-3);
+		min-height: 3.75rem;
+		padding-block: var(--space-3);
+		cursor: pointer;
+		list-style: none;
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	/* Plus that turns into a minus when open. */
+	summary::after {
+		content: '';
+		flex: none;
+		width: 0.9rem;
+		height: 0.9rem;
+		background:
+			linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat,
+			linear-gradient(currentColor, currentColor) center / 1px 100% no-repeat;
+		margin-right: 0.3rem;
+	}
+
+	.venue[open] summary::after {
+		background: linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat;
+	}
+
+	.venue .chevron-list {
+		padding-bottom: var(--space-4);
+		font-weight: 700;
+	}
+
+	@media (min-width: 48rem) {
+		.event-space__photos {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.event-space__photos img {
+			aspect-ratio: 2 / 3;
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.event-space__grid {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			align-items: start;
+			gap: 0.6rem;
+		}
+	}
+</style>

@@ -1,0 +1,92 @@
+---
+import { Image } from 'astro:assets';
+import flywheel from '../../assets/images/brand/flywheel.png';
+import CtaButton from '../CtaButton.astro';
+
+interface Props {
+	heading: string;
+	cta: { label: string; href: string };
+	image: ImageMetadata;
+}
+
+const { heading, cta, image } = Astro.props;
+---
+
+<section class="space-hero" aria-labelledby="space-title">
+	<Image
+		class="space-hero__bg"
+		src={image}
+		alt=""
+		widths={[640, 1024, 1440, 1920, 2500]}
+		sizes="100vw"
+		loading="eager"
+		fetchpriority="high"
+	/>
+	<Image class="space-hero__flywheel" src={flywheel} alt="" width={100} densities={[1, 2, 3]} loading="eager" />
+	<div class="space-hero__content">
+		<h1 id="space-title">{heading}</h1>
+		<CtaButton class="space-hero__cta" variant="glass" label={cta.label} href={cta.href} />
+	</div>
+</section>
+
+<style>
+	.space-hero {
+		position: relative;
+		isolation: isolate;
+		display: flex;
+		align-items: flex-end;
+		min-height: clamp(30rem, 50vw, 45.25rem);
+		padding: calc(var(--header-height) + 5rem) var(--gutter) var(--space-5);
+		overflow: hidden;
+		color: var(--color-text-on-dark);
+	}
+
+	.space-hero__bg {
+		position: absolute;
+		inset: 0;
+		z-index: -2;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	/* Navy wash at 70%, as on the live site. */
+	.space-hero::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: rgb(4 30 52 / 0.7);
+	}
+
+	.space-hero__flywheel {
+		position: absolute;
+		top: calc(var(--header-height) + 1.5rem);
+		right: var(--gutter);
+		width: clamp(3.5rem, 7vw, 6.25rem);
+	}
+
+	.space-hero__content {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: var(--space-4);
+		width: 100%;
+	}
+
+	h1 {
+		flex: 1 1 32rem;
+		max-width: 46ch;
+		font-size: clamp(2.4rem, 1.5rem + 3.6vw, 5.07rem);
+		font-weight: 700;
+		line-height: 1.09;
+	}
+
+	.space-hero :global(.space-hero__cta) {
+		width: 13.25rem;
+		min-height: 4.25rem;
+		border-radius: var(--radius);
+		font-size: var(--text-base);
+	}
+</style>

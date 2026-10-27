@@ -1,0 +1,143 @@
+---
+import { getImage } from 'astro:assets';
+import swirl from '../../assets/images/brand/texture-swirl.jpg';
+import { inlineMarkdown } from '../../lib/inline-markdown';
+import CtaButton from '../CtaButton.astro';
+
+interface Props {
+	heading: string;
+	cta: { label: string; href: string };
+	items: {
+		name: string;
+		price: string;
+		includes?: string;
+		features: string[];
+		callout?: string[];
+		featured: boolean;
+	}[];
+}
+
+const { heading, cta, items } = Astro.props;
+const calloutBg = await getImage({ src: swirl, width: 600, format: 'webp' });
+---
+
+<section class="plans" id="coworkingplans" aria-labelledby="plans-heading" style={`--callout-bg: url(${calloutBg.src})`}>
+	<div class="container head-cta-layout">
+		<h2 id="plans-heading" class="head-cta-layout__head">{heading}</h2>
+		<CtaButton class="head-cta-layout__cta" label={cta.label} href={cta.href} />
+		<ul class="plans__grid head-cta-layout__body" role="list">
+			{
+				items.map((plan) => (
+					<li class:list={['plan', { 'plan--featured': plan.featured, 'plan--has-callout': plan.callout }]}>
+						<h3>{plan.name}</h3>
+						<p class="plan__price">{plan.price}</p>
+						{plan.includes && <p class="plan__includes" set:html={inlineMarkdown(plan.includes)} />}
+						<ul class="chevron-list" role="list">
+							{plan.features.map((feature) => (
+								<li>{feature}</li>
+							))}
+						</ul>
+						{plan.callout && (
+							<p class="plan__callout">
+								{plan.callout.map((line, i) => (
+									<>
+										{i > 0 && <br />}
+										{line}
+									</>
+								))}
+							</p>
+						)}
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.plans {
+		padding-block: var(--space-7) var(--space-8);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+		scroll-margin-top: 0;
+	}
+
+	.plans__grid {
+		display: grid;
+		gap: var(--space-5);
+		padding: 0;
+		list-style: none;
+	}
+
+	.plan {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-4);
+		padding: var(--space-4) 1.3rem var(--space-5);
+		border: 1px solid var(--color-paper);
+		border-radius: var(--radius);
+		--chevron-color: var(--color-accent);
+	}
+
+	h3 {
+		text-align: center;
+	}
+
+	.plan__price {
+		font-size: var(--text-sm);
+		font-weight: 500;
+		color: var(--color-accent);
+		text-align: center;
+	}
+
+	.plan__includes {
+		font-weight: 700;
+	}
+
+	.plan .chevron-list {
+		gap: var(--space-3);
+		line-height: 1.6;
+	}
+
+	/* Highlighted note straddling the bottom edge of the card. Space is
+	   reserved under the list so it never covers text. */
+	.plan--has-callout {
+		padding-bottom: 4.5rem;
+		margin-bottom: 3.5rem;
+	}
+
+	.plan__callout {
+		position: absolute;
+		left: 50%;
+		bottom: 0;
+		translate: -50% 50%;
+		width: min(calc(100% - 2rem), 20.2rem);
+		padding: 0.7rem 0.75rem;
+		border: 2px solid var(--color-accent);
+		border-radius: var(--radius);
+		background: var(--color-black) var(--callout-bg) center / cover;
+		color: var(--color-accent);
+		font-style: italic;
+		font-weight: 700;
+		line-height: 1.6;
+	}
+
+	@media (min-width: 64rem) {
+		.plans__grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			align-items: start;
+			gap: clamp(1rem, 1.5vw, 1.5rem);
+			padding-top: 2.5rem;
+		}
+
+		/* Featured plan sits slightly higher, as on the live site. */
+		.plan--featured {
+			margin-top: -2.5rem;
+		}
+
+		.plan--has-callout {
+			margin-bottom: 0;
+		}
+	}
+</style>

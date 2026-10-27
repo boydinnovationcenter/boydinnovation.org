@@ -1,0 +1,215 @@
+# Space page content (https://boydinnovation.org/space).
+# See CONTENT.md for editing instructions. Image paths are relative to this file.
+# Member logos are in members.yaml.
+
+space:
+  seo:
+    title: "Office and Coworking Space Columbia SC | Boyd Innovation"
+    description: "Find office space for rent in Columbia SC at the Boyd Innovation Center. Coworking from $50/mo, private offices, and conference rooms. Book a tour today."
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+
+  hero:
+    heading: "Office, Coworking, & Tech Community in Columbia, South Carolina"
+    cta: { label: "BOOK A TOUR", href: /book-a-tour }
+    image: ../assets/images/space/hero-pods.jpg
+
+  spaces:
+    heading: "Space"
+    options:
+      - title: "Coworking Memberships"
+        description: "Shared or dedicated desks plus communal space for tech founders, startup teams, and remote tech professionals, on flexible plans."
+        icon: ../assets/images/icons/coworking.png
+        iconAlt: "Coworking space icon showing shared desk with chairs and overhead lighting — Boyd Innovation Center, Columbia SC"
+        link: { label: "LEARN MORE ▶", href: "#coworkingplans" }
+      - title: "Office Space"
+        description: "Private offices for startup teams of 1–12 people with no long-term commitment."
+        icon: ../assets/images/icons/office.png
+        iconAlt: "Coworking workspace icon with desktop monitor, laptop, and desk — tech startup hub at Boyd Innovation Center, Columbia SC"
+        link: { label: "LEARN MORE ▶", href: "#officerentals" }
+      - title: "Conference Bookings"
+        description: "Professional meeting rooms for up to 16 people, built for startup team meetings, investor pitches, and client calls."
+        icon: ../assets/images/icons/conference-room.png
+        iconAlt: "Coworking space icon showing desks, office chairs, and presentation board — startup hub in Columbia, SC"
+        link: { label: "LEARN MORE ▶", href: "#conferencerooms" }
+      - title: "Event Space"
+        description: "Configurable venue for tech meetups, workshops, receptions, and large gatherings."
+        icon: ../assets/images/icons/event-space.png
+        iconAlt: "Calendar icon with a starred event date marking upcoming startup events at Boyd Innovation Center Columbia SC"
+        link: { label: "LEARN MORE ▶", href: "#eventspace" }
+    dayPass:
+      title: "Day Pass"
+      description: "Flexible single-day access to all Boyd Innovation Center shared spaces, 9am–5pm. Come see the space, explore coworking options, try out one of our soundproof phone booths, and discover why BIC is the place to build a tech startup in the Midlands."
+      link: { label: "BOOK A DAY PASS ▶", href: "https://boydinnovation.coworksapp.com/day-pass-signup/429?plan=8033" }
+      mobileLinkLabel: "BOOK A DAY PASS ▶"
+
+  membersHeading: "Home to Columbia’s Tech Founders"
+
+  # Full-width photo strip, left to right.
+  photos:
+    - image: ../assets/images/space/strip-1-lounge.jpg
+      alt: "Warm, welcoming lounge area at Boyd Innovation Center with leather sofa, blue chair, and soft lighting — office space for rent in Columbia SC"
+    - image: ../assets/images/space/hero-pods.jpg
+      alt: "Glass-walled private office pods at Boyd Innovation Center, bookable workspace in Columbia SC with exposed wood ceiling and modern design"
+    - image: ../assets/images/space/main-hall.jpg
+      alt: "Boyd Innovation Center event venue in Columbia SC — rows of chairs facing a projection screen displaying Launchpad COLA, set in a converted brick warehouse with wood-beam ceilings and string lights"
+    - image: ../assets/images/space/strip-4-main-space.jpg
+      alt: "Open coworking space at Boyd Innovation Center in Columbia SC featuring communal tables, private offices, and presentation screen"
+    - image: ../assets/images/space/conference-large.jpg
+      alt: "Boyd Innovation Center collaborative meeting room with U-shaped conference tables, TV display, and whiteboard — office space for rent in Columbia, SC"
+
+  plans:
+    heading: "Coworking Plans"
+    cta: { label: "BOOK A TOUR", href: /book-a-tour }
+    items:
+      - name: "Community Membership"
+        price: "$50 per month (limited time!)"
+        amount: 50
+        features:
+          - "Unlimited workday access to the lounge (M-F, 8am - 5pm)"
+          - "2 monthly conference room booking hours"
+          - "Soundproof phone booths"
+          - "Member-only programming and events"
+          - "Company logo on our website and signage"
+          - "Digital community platform"
+      - name: "Coworking Membership"
+        price: "$179 per month"
+        amount: 179
+        featured: true
+        includes: "Everything in Community, *PLUS*:"
+        features:
+          - "Unlimited 24/7 access to all BIC spaces"
+          - "Kitchen + bottomless snacks"
+          - "Printing + Office Supplies"
+          - "4 Monthly Conference Room hours"
+          - "Additional promo opportunities"
+        callout:
+          - "Don’t need unlimited?"
+          - "Ask about our 10 day per month option!"
+      - name: "Dedicated Desk"
+        price: "$250 per month"
+        amount: 250
+        includes: "Everything in Cowork, *PLUS*:"
+        features:
+          - "Dedicated desk — Set up your gear and leave it here!"
+          - "Lockable filing cabinet with a key"
+          - "5 Monthly Conference Room hours"
+          - "Additional promo opportunities"
+
+  offices:
+    heading: "Office Space"
+    cta: { label: "BOOK A TOUR", href: /book-a-tour }
+    items:
+      - name: "Premier Office (Up to 12 Seats)"
+        price: "$2,800/mo"
+        amount: 2800
+        availability: "0/1 Available"
+        availabilityNote: { label: "JOIN WAITLIST", href: /contact }
+        features:
+          - "504 Square Feet (28’ × 18’)"
+          - "Fully furnished with desks, tables, chairs, whiteboards, lockers, a sound proof phone booth, TV, and couch"
+          - "Lockable door for privacy and security"
+          - "Dedicated mailbox and professional business address"
+          - "Additional conference room booking hours"
+          - "Free rental credits for workshops and events"
+        photo:
+          image: ../assets/images/space/office-premier.jpg
+          alt: "Open coworking workspace at Boyd Innovation Center in Columbia SC with standing desks, exposed brick walls, and collaborative meeting area"
+      - name: "3-6 Person Offices"
+        price: "$1,200/mo"
+        amount: 1200
+        availability: "1 Available"
+        availabilityNote: "Starting Nov 1"
+        features:
+          - "144 Square Feet (12’ × 12’)"
+          - "Fully furnished with desks, chairs, and whiteboard"
+          - "Lockable door for privacy and security"
+          - "Dedicated mailbox and professional business address (included free!)"
+          - "Additional conference room booking hours"
+          - "Discounted rental credits for workshops and events"
+        photo:
+          image: ../assets/images/space/office-medium.jpg
+          alt: "Private office workspace at Boyd Innovation Center with whiteboard, dual monitors, and exposed brick walls — startup office space in Columbia, SC"
+      - name: "1-3 Person Offices"
+        price: "$600/mo"
+        amount: 600
+        availability: "0/4 Available"
+        availabilityNote: { label: "JOIN WAITLIST", href: /contact }
+        features:
+          - "81 Square Feet (9’ × 9’)"
+          - "Fully furnished with desk, chair, and whiteboard"
+          - "Lockable door for privacy and security"
+          - "Dedicated mailbox and professional business address (included free!)"
+          - "Additional conference room booking hours"
+          - "Discounted rental credits for workshops and events"
+        photo:
+          image: ../assets/images/space/office-small.jpg
+          alt: "Glass-walled private office pods with desks and chairs inside Boyd Innovation Center's coworking space in Columbia, SC"
+
+  amenities:
+    heading: "Amenities"
+    # icon: the file name (without .svg) in src/assets/images/icons/amenities
+    items:
+      - { icon: lock_open_right, text: "Up to 24/7 keyless door access via the Coworks app" }
+      - { icon: wifi, text: "High-speed WiFi throughout the space" }
+      - { icon: table_large, text: "Bookable conference rooms seating 2–16" }
+      - { icon: video_call, text: "Soundproof phone booths for calls and video meetings" }
+      - { icon: fork_spoon, text: "Bottomless snacks" }
+      - { icon: kitchen, text: "Shared kitchen and break area" }
+      - { icon: print, text: "Printing and scanning" }
+      - { icon: coffee, text: "Complimentary coffee and tea" }
+      - { icon: attachment, text: "Office supplies" }
+      - { icon: mimo, text: "Your company logo featured on our website and in-building signage" }
+      - { icon: mail, text: "Business and mailing address (office members)" }
+      - { icon: directions_car, text: "Reciprocal access to partner coworking spaces statewide" }
+
+  conference:
+    heading: "Conference Rooms and Meeting Space"
+    subheading: "Fully Equipped Conference Rooms for Groups of 2-16"
+    cta: { label: "BOOK A CONFERENCE ROOM", href: "https://boydinnovation.coworksapp.com/book/429?type=rooms" }
+    rooms:
+      - name: "Small Conference Room"
+        capacity: 8
+        rate: "$50/hr"
+        photo:
+          image: ../assets/images/space/conference-small.jpg
+          alt: "Boyd Innovation Center conference room with long table, 8 chairs, wall-mounted TV, and community photos — meeting space for rent in Columbia SC"
+      - name: "Large Conference Room"
+        capacity: 16
+        rate: "$75/hr"
+        photo:
+          image: ../assets/images/space/conference-large.jpg
+          alt: "Boyd Innovation Center conference room with U-shaped tables, rolling chairs, large TV display, and whiteboard — collaborative meeting space in Columbia, SC"
+    features:
+      - "TV screen mirroring"
+      - "Fast WiFi"
+      - "Whiteboards"
+      - "Podcast equipment available upon request"
+      - "Flexible room setup arrangements"
+
+  events:
+    heading: "Host Your Event at the BIC"
+    # Opens the HubSpot event space inquiry pop-up form.
+    cta: { label: "INQUIRE", hubspotCta: eventSpaceInquiry }
+    photos:
+      - image: ../assets/images/space/event-lounge.jpg
+        alt: "Founders and guests networking at a catered startup event in a brick-walled venue in Columbia, SC"
+      - image: ../assets/images/space/main-hall.jpg
+        alt: "Boyd Innovation Center event venue in Columbia SC — rows of chairs facing a projection screen displaying Launchpad COLA, set in a converted brick warehouse with wood-beam ceilings and string lights"
+    venues:
+      - name: "The Lounge"
+        details:
+          - "$150/hr, $500/half day, $800/day"
+          - "Capacity: 100"
+          - "Flexible arrangements"
+      - name: "The Main Hall"
+        details:
+          - "$200/hr, $650/half day, $1200/day"
+          - "Capacity: 150"
+          - "Flexible arrangements"
+          - "Stage, seats, and AV available"
+
+  tour:
+    eyebrow: "TAKE A LOOK INSIDE"
+    heading: "BIC Virtual Tour"
+    embedUrl: "https://3d.emrynvs.com/tour/boyd-innovation-center"
+    title: "Boyd Innovation Center virtual tour"

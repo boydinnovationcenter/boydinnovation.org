@@ -155,4 +155,94 @@ const programs = defineCollection({
 		}),
 });
 
-export const collections = { home, programs };
+/**
+ * BIC member companies, one entry each in src/content/members.yaml.
+ * A logo becomes a link once `url` is filled in.
+ */
+const members = defineCollection({
+	loader: file('src/content/members.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			name: z.string(),
+			logo: image(),
+			/** Position on the page (lowest first). */
+			order: z.number(),
+			url: z.url().optional(),
+			description: z.string().optional(),
+		}),
+});
+
+/** Space page copy, prices and availability. One entry ("space") in src/content/space.yaml. */
+const space = defineCollection({
+	loader: file('src/content/space.yaml'),
+	schema: ({ image }) => {
+		const photo = () => z.object({ image: image(), alt: z.string() });
+		return z.object({
+			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+			hero: z.object({ heading: z.string(), cta: link, image: image() }),
+			spaces: z.object({
+				heading: z.string(),
+				options: z.array(
+					z.object({ title: z.string(), description: z.string(), icon: image(), iconAlt: z.string(), link }),
+				),
+				dayPass: z.object({ title: z.string(), description: z.string(), link, mobileLinkLabel: z.string() }),
+			}),
+			membersHeading: z.string(),
+			photos: z.array(photo()),
+			plans: z.object({
+				heading: z.string(),
+				cta: link,
+				items: z.array(
+					z.object({
+						name: z.string(),
+						price: z.string(),
+						/** Monthly price in dollars, for search engines. */
+						amount: z.number(),
+						includes: z.string().optional(),
+						features: z.array(z.string()),
+						/** Highlighted note shown at the bottom of the card. */
+						callout: z.array(z.string()).optional(),
+						featured: z.boolean().default(false),
+					}),
+				),
+			}),
+			offices: z.object({
+				heading: z.string(),
+				cta: link,
+				items: z.array(
+					z.object({
+						name: z.string(),
+						price: z.string(),
+						amount: z.number(),
+						/** Availability tag, e.g. "0/1 Available" or "1 Available". */
+						availability: z.string(),
+						/** Second line of the tag: a link (e.g. Join waitlist) or plain text (e.g. Starting Nov 1). */
+						availabilityNote: z.union([link, z.string()]).optional(),
+						features: z.array(z.string()),
+						photo: photo(),
+					}),
+				),
+			}),
+			amenities: z.object({
+				heading: z.string(),
+				items: z.array(z.object({ icon: z.string(), text: z.string() })),
+			}),
+			conference: z.object({
+				heading: z.string(),
+				subheading: z.string(),
+				cta: link,
+				rooms: z.array(z.object({ name: z.string(), capacity: z.number(), rate: z.string(), photo: photo() })),
+				features: z.array(z.string()),
+			}),
+			events: z.object({
+				heading: z.string(),
+				cta: z.object({ label: z.string(), hubspotCta: z.literal('eventSpaceInquiry') }),
+				photos: z.array(photo()),
+				venues: z.array(z.object({ name: z.string(), details: z.array(z.string()) })),
+			}),
+			tour: z.object({ eyebrow: z.string(), heading: z.string(), embedUrl: z.url(), title: z.string() }),
+		});
+	},
+});
+
+export const collections = { home, programs, members, space };

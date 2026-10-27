@@ -71,6 +71,34 @@ To add a program, copy an existing one within its stage. Two programs per stage 
 
 The stage names and taglines in the `stages` list also fill the four stage cards at the top of the page.
 
+## Space page
+
+Everything on the Space page is in **`src/content/space.yaml`**: prices, plan features, office availability, amenities, conference rooms, event venues and the virtual tour link.
+
+Common edits:
+
+- **Office availability:** change `availability` (for example `"1 Available"`) and `availabilityNote`. The note can be plain text (`"Starting Nov 1"`) or a link (`{ label: "JOIN WAITLIST", href: /contact }`).
+- **Prices:** change `price` (the text shown on the page). Also update `amount` (the number only, such as `179`), which tells search engines the monthly price.
+- **Features:** each line under `features` is one ">" bullet.
+- **Amenity icons:** `icon` is the name of a file in `src/assets/images/icons/amenities` (without `.svg`). To add a new one, download it from Google's Material Symbols as SVG and put it in that folder.
+
+## Member companies
+
+Member logos are in **`src/content/members.yaml`**, one entry per company:
+
+```yaml
+- id: new-company
+  name: "New Company"
+  order: 9
+  logo: ../assets/images/members/new-company.png
+  url: "https://newcompany.com"
+  description: "One sentence about what they do."
+```
+
+- Put the logo file in `src/assets/images/members/`. White logos on a transparent background look best on the dark tiles.
+- `order` sets the position (lowest first).
+- `url` and `description` are optional. With a `url`, the logo becomes a link to the company's site.
+
 ## Site-wide details
 
 The navigation menu, footer links, address, phone number and social media links are in **`src/config/site.ts`**. Edit the text between the quotation marks and leave the rest alone.

@@ -1,0 +1,170 @@
+---
+import { Image } from 'astro:assets';
+import CtaButton from '../CtaButton.astro';
+
+interface Props {
+	heading: string;
+	subheading: string;
+	cta: { label: string; href: string };
+	rooms: { name: string; capacity: number; rate: string; photo: { image: ImageMetadata; alt: string } }[];
+	features: string[];
+}
+
+const { heading, subheading, cta, rooms, features } = Astro.props;
+---
+
+<section class="conference" id="conferencerooms" aria-labelledby="conference-heading">
+	<div class="container head-cta-layout">
+		<div class="head-cta-layout__head">
+			<h2 id="conference-heading">{heading}</h2>
+			<p class="conference__sub">{subheading}</p>
+		</div>
+		<CtaButton class="head-cta-layout__cta" label={cta.label} href={cta.href} />
+		<div class="conference__grid head-cta-layout__body">
+			{
+				rooms.map((room) => (
+					<figure class="room">
+						<figcaption>
+							<h3>{room.name}</h3>
+						</figcaption>
+						<div class="room__media">
+							<Image
+								src={room.photo.image}
+								alt={room.photo.alt}
+								widths={[480, 720, 960]}
+								sizes="(min-width: 64rem) 22rem, 100vw"
+							/>
+							<p class="room__capacity">Capacity: {room.capacity}</p>
+						</div>
+					</figure>
+				))
+			}
+			<div class="conference__details">
+				<ul class="conference__rates" role="list">
+					{
+						rooms.map((room) => (
+							<li>
+								{room.name}: {room.rate}
+							</li>
+						))
+					}
+				</ul>
+				<ul class="chevron-list" role="list">
+					{features.map((feature) => <li>{feature}</li>)}
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.conference {
+		padding-block: var(--space-7) var(--space-8);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.conference__sub {
+		margin-top: var(--space-2);
+		font-size: var(--text-sm);
+		font-weight: 500;
+		color: var(--color-accent);
+	}
+
+	.conference__grid {
+		display: grid;
+		gap: var(--space-5);
+	}
+
+	.room {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.room figcaption {
+		padding: 0.25rem;
+		border: 1px solid var(--color-paper);
+		border-bottom: 0;
+		border-radius: var(--radius) var(--radius) 0 0;
+		text-align: center;
+	}
+
+	.room h3 {
+		font-size: var(--text-sm);
+		font-weight: 700;
+		text-transform: uppercase;
+		line-height: 1.6;
+	}
+
+	.room__media {
+		position: relative;
+	}
+
+	.room__media img {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		border-radius: 0 0 var(--radius) var(--radius);
+	}
+
+	.room__capacity {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		padding: 0.15rem 0.9rem;
+		border-radius: 0 var(--radius) 0 var(--radius);
+		background: var(--color-green);
+		color: var(--color-black);
+		font-size: var(--text-sm);
+		font-weight: 700;
+		line-height: 1.8;
+	}
+
+	.conference__details {
+		display: grid;
+		align-content: start;
+		gap: var(--space-4);
+		padding: var(--space-3) 0.45rem var(--space-4);
+		border: 1px solid var(--color-paper);
+		border-radius: var(--radius);
+		font-size: var(--text-sm);
+		font-weight: 700;
+		--chevron-color: var(--color-accent);
+	}
+
+	.conference__rates {
+		display: grid;
+		gap: var(--space-4);
+		padding: 0;
+		list-style: none;
+		font-weight: 500;
+		color: var(--color-accent);
+	}
+
+	.conference__details .chevron-list {
+		gap: var(--space-3);
+	}
+
+	@media (min-width: 48rem) {
+		.conference__grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.conference__details {
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.conference__grid {
+			grid-template-columns: 1fr 1fr 0.75fr;
+			gap: clamp(1.5rem, 2.6vw, 2.4rem);
+			align-items: start;
+		}
+
+		.conference__details {
+			grid-column: auto;
+			align-self: stretch;
+		}
+	}
+</style>

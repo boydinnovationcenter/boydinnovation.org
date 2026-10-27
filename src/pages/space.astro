@@ -1,0 +1,99 @@
+---
+import { getEntry } from 'astro:content';
+import SpaceOptions from '../components/home/SpaceOptions.astro';
+import MemberLogos from '../components/MemberLogos.astro';
+import PhotoStrip from '../components/PhotoStrip.astro';
+import Amenities from '../components/space/Amenities.astro';
+import ConferenceRooms from '../components/space/ConferenceRooms.astro';
+import CoworkingPlans from '../components/space/CoworkingPlans.astro';
+import EventSpace from '../components/space/EventSpace.astro';
+import OfficeSpaces from '../components/space/OfficeSpaces.astro';
+import SpaceHero from '../components/space/SpaceHero.astro';
+import VirtualTour from '../components/space/VirtualTour.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const entry = await getEntry('space', 'space');
+if (!entry) throw new Error('Missing Space content: src/content/space.yaml');
+const { seo, hero, spaces, membersHeading, photos, plans, offices, amenities, conference, events, tour } = entry.data;
+
+const pageUrl = `${site.url}/space`;
+const monthly = (name: string, amount: number, anchor: string) => ({
+	'@type': 'Offer',
+	name,
+	url: `${pageUrl}#${anchor}`,
+	priceSpecification: { '@type': 'UnitPriceSpecification', price: amount, priceCurrency: 'USD', unitCode: 'MON' },
+});
+
+// Breadcrumb, plus the building with its amenities, rooms and monthly prices as listed on the page.
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+				{ '@type': 'ListItem', position: 2, name: 'Space', item: pageUrl },
+			],
+		},
+		{
+			'@type': 'Place',
+			'@id': `${site.url}/#place`,
+			name: site.name,
+			url: pageUrl,
+			amenityFeature: amenities.items.map((a) => ({ '@type': 'LocationFeatureSpecification', name: a.text, value: true })),
+			containsPlace: [
+				...conference.rooms.map((room) => ({
+					'@type': 'MeetingRoom',
+					name: room.name,
+					maximumAttendeeCapacity: room.capacity,
+				})),
+				...events.venues.map((venue) => {
+					const capacity = venue.details.join(' ').match(/Capacity:\s*(\d+)/);
+					return {
+						'@type': 'EventVenue',
+						name: venue.name,
+						...(capacity && { maximumAttendeeCapacity: Number(capacity[1]) }),
+					};
+				}),
+			],
+		},
+		{
+			'@type': 'OfferCatalog',
+			name: 'Coworking and office space at Boyd Innovation Center',
+			url: pageUrl,
+			offeredBy: { '@id': `${site.url}/#organization` },
+			itemListElement: [
+				...plans.items.map((plan) => monthly(plan.name, plan.amount, 'coworkingplans')),
+				...offices.items.map((office) => monthly(office.name, office.amount, 'officerentals')),
+			],
+		},
+	],
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	<SpaceHero {...hero} />
+	<div class="space-intro">
+		<SpaceOptions {...spaces} />
+	</div>
+	<MemberLogos heading={membersHeading} />
+	<PhotoStrip photos={photos} />
+	<CoworkingPlans {...plans} />
+	<OfficeSpaces {...offices} />
+	<Amenities {...amenities} />
+	<ConferenceRooms {...conference} />
+	<EventSpace {...events} />
+	<VirtualTour {...tour} />
+</BaseLayout>
+
+<style>
+	.space-intro {
+		padding-top: var(--space-7);
+	}
+
+	.space-intro :global(.spaces) {
+		padding-bottom: 0;
+	}
+</style>

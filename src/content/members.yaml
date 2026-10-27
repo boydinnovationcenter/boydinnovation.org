@@ -1,0 +1,37 @@
+# BIC member companies, shown on the Space page under "Home to Columbia's Tech Founders".
+# See CONTENT.md.
+# order sets the position on the page (lowest first).
+# Optional fields: url (makes the logo a link to the company's site) and description.
+
+- id: pulmanage
+  name: "PulManage"
+  order: 1
+  logo: ../assets/images/members/pulmanage.png
+- id: govpossible
+  name: "GovPossible"
+  order: 2
+  logo: ../assets/images/members/govpossible.png
+- id: rampart-cio
+  name: "Rampart CIO"
+  order: 3
+  logo: ../assets/images/members/rampart-cio.png
+- id: helloseo
+  name: "HelloSEO"
+  order: 4
+  logo: ../assets/images/members/helloseo.png
+- id: metamonster
+  name: "MetaMonster"
+  order: 5
+  logo: ../assets/images/members/metamonster.png
+- id: trustshield
+  name: "TrustShield"
+  order: 6
+  logo: ../assets/images/members/trustshield.png
+- id: e1t1-tech
+  name: "E1T1 Tech"
+  order: 7
+  logo: ../assets/images/members/e1t1-tech.png
+- id: bmc-it
+  name: "BMC IT Consulting Service"
+  order: 8
+  logo: ../assets/images/members/bmc-it.png

@@ -12,7 +12,7 @@ Third-party code found on the live Squarespace site (boydinnovation.org), checke
 | GA4 | `G-PEHD1QDBW8` | Analytics.astro | Carried over. On Squarespace this came from the built-in Google Analytics setting (it carried Squarespace's `developer_id`). **Open question:** does GTM also fire GA4? If so, one of the two should go. |
 | HubSpot tracking code | portal `50188189` | Analytics.astro | Carried over. It was included **twice** on the live site; it is now loaded once. This script also serves HubSpot pop-ups, including the "Join Our Newsletter" pop-up that opens on page load. |
 | LinkedIn Insight Tag | partner IDs `7841314` **and** `7872946` | Analytics.astro | Carried over. Both IDs are kept, and the loader script now loads once instead of twice. **Open question:** is one of these IDs obsolete? |
-| HubSpot CTA pop-up triggers | `217138433433` Program Interest form; `217149021356` event space inquiry; `218290064008` Carolina Ventures application | `tracking.hubspotCtas` in site.ts, rendered by [CtaButton.astro](src/components/CtaButton.astro) | The Squarespace footer script added `hs-cta-trigger-button` classes to button blocks by block ID. It's replaced by real `<button>`s that carry the class in the HTML; content files pick the pop-up by name (`hubspotCta: programInterest`). Used on /programs so far. |
+| HubSpot CTA pop-up triggers | `217138433433` Program Interest form; `217149021356` event space inquiry; `218290064008` Carolina Ventures application | `tracking.hubspotCtas` in site.ts, rendered by [CtaButton.astro](src/components/CtaButton.astro) | The Squarespace footer script added `hs-cta-trigger-button` classes to button blocks by block ID. It's replaced by real `<button>`s that carry the class in the HTML; content files pick the pop-up by name (`hubspotCta: programInterest`). Used on /programs and /space. |
 | Lovable support chat widget | `bic-support-widget.lovable.app/embed.js` | Not carried over | Commented out (disabled) on the live site |
 | Existing JSON-LD `LocalBusiness` | | Replaced, see [MIGRATION-NOTES.md](MIGRATION-NOTES.md) | |
 
@@ -31,6 +31,17 @@ Third-party code found on the live Squarespace site (boydinnovation.org), checke
 | Startup Sprint application | Link to `/startup-sprint#application` | programs.yaml |
 
 No page-specific Code Injection on /programs.
+
+## Space page
+
+| Integration | Details | Astro location |
+|---|---|---|
+| HubSpot event space inquiry pop-up | CTA `217149021356`, the "Inquire" button | `hubspotCta: eventSpaceInquiry` in [space.yaml](src/content/space.yaml) |
+| Virtual tour embed | `https://3d.emrynvs.com/tour/boyd-innovation-center` (iframe, lazy) | [VirtualTour.astro](src/components/space/VirtualTour.astro) |
+| Coworks room booking | Link to `boydinnovation.coworksapp.com/book/429?type=rooms` | space.yaml |
+| Coworks day pass | Same day pass link as the homepage | space.yaml |
+
+No page-specific Code Injection on /space.
 
 ## Still to inventory
 

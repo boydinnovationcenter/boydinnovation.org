@@ -145,3 +145,49 @@ Small-screen check: 320, 390, 768, 1024 and 1440px with no horizontal scroll.
 
 8. **HubSpot "Program Interest" form names don't match the page:** the form offers "Product Seminar", "Growth Seminar", "Stage-Based Mastermind Groups" and "Advisor Office Hours", but the page says Product Jam, Growth Jam, Stage Based Peer Groups and Advisor Fridays. This needs updating in HubSpot.
 9. **Stage label contrast** (see question 1): the green "ECOSYSTEM ENGAGEMENT" heading and the white-on-blue badges have the same contrast issue as the homepage labels.
+
+## Space (`/space`)
+
+Reference: live site captured 2026-10-27 at 1440, 1024, 768 and 390px. Title, meta description, canonical and social tags are copied exactly. Section anchors are kept: `#coworkingplans`, `#officerentals`, `#conferencerooms`, `#eventspace`, `#virtualtour`. The homepage links to the first four.
+
+### Layout fixes (Kennedy asked for layout issues to be fixed, 2026-10-27)
+
+| Area | Problem on the live site | Rebuild |
+|---|---|---|
+| Office Space, 768px and up | The 3–6 Person card overlapped the 1–3 Person card; the zig-zag rows had different heights | **Approved:** alternating rows (details + photo, photo + details) of equal height that never overlap |
+| Office Space, 768–1023px | The availability tags wrapped one letter per line ("Availab / le") | The tag sizes to its text |
+| Office Space, phones | Large empty space under each card (fixed heights) | Cards size to their content; photo above each card |
+| Coworking Plans, all widths | The "10 day per month" callout covered the last line of the Coworking Membership card (and two lines at 768px) | The callout still straddles the card's bottom edge, but space is reserved so it never covers text |
+| Coworking Plans, 768–1023px | Three plan cards squeezed into narrow columns | Stacked until 1024px |
+| Amenities, 768px | The heading broke as "Amenitie / s" | Fixed |
+| Amenities icons | 35px PNGs, blurry on retina screens | The same Google Material Symbols as crisp inline SVG, in brand blue |
+| Conference Rooms, 768–1023px | Rates box alone in a half-width row | Full width under the two rooms |
+| Member logos | Tiles of different heights at some widths | Equal tiles |
+| "Book a Tour" (plans and offices) | Two separate buttons, one shown on desktop and one on phones | One button that moves (beside the heading on desktop, after the list on phones) |
+
+### Other changes
+
+- **Member companies** are a content collection (`src/content/members.yaml`), one entry each with name, logo and order. Optional `url` makes the logo a link (labeled "website, opens in a new tab"); optional `description` is read by screen readers. Logo alt text is the company name, per AGENTS.md. No links yet, as on live (approved).
+- **Event venue accordion** uses native `<details>`, so it works with the keyboard and screen readers without JavaScript.
+- **Inquire** opens the HubSpot event space inquiry pop-up (CTA `217149021356`) from a real `<button>`.
+- **Virtual tour** iframe (`3d.emrynvs.com`) is kept, loaded lazily, with the same title.
+- **Images:** six photos were served as 5–8 MB PNG files named `.jpg`. They are converted to JPEG sources and served as responsive WebP. The duplicate large conference room photo is stored once.
+- **Structured data:** `BreadcrumbList`; the building's `Place` with its amenities, two `MeetingRoom`s and two `EventVenue`s (capacities as shown); and an `OfferCatalog` of the three memberships and three offices with their monthly prices.
+- Plan and office prices were `<h4>` headings on the live site; they're now plain text styled the same, so the heading order is h1 → h2 → h3 with no skips.
+
+Small-screen check: 320, 390, 768, 1024 and 1440px with no horizontal scroll.
+
+### Performance (Lighthouse, mobile, 2026-10-27)
+
+| | Live | Astro (local preview) |
+|---|---|---|
+| Performance | Couldn't be scored (4 runs; no LCP recorded) | 97 / 98 |
+| LCP | — | 2.1–2.2 s |
+| FCP | 13.1–13.3 s | 0.9 s |
+| Accessibility | 98 | 96 (contrast, open question 10) |
+| Page weight | 5.0–5.2 MB | 2.4–2.8 MB |
+
+### Open questions
+
+10. **Contrast:** the white text on the blue availability tags and the blue office prices (`#0099FF` on light backgrounds, about 2.9:1) fail WCAG AA, the same issue as questions 1 and 9. One decision could cover all three pages: keep brand blue/green for shapes and fills, and use a darker shade for small text on light backgrounds.
+11. **Office availability changes often** ("0/1 Available", "Starting Nov 1"). It's in `space.yaml` now. If it changes weekly, it may belong in the CMS (question 7).

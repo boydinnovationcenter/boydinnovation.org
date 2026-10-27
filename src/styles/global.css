@@ -121,6 +121,79 @@ a {
 	text-decoration-thickness: 2px;
 }
 
+/* Heading + button + content where the button sits beside the heading on
+   wider screens and after the content on phones (one button in the HTML). */
+.head-cta-layout {
+	display: grid;
+	grid-template-areas: 'head' 'body' 'cta';
+	gap: var(--space-5);
+}
+
+.head-cta-layout > .head-cta-layout__head {
+	grid-area: head;
+}
+
+.head-cta-layout > .head-cta-layout__body {
+	grid-area: body;
+}
+
+.head-cta-layout > .head-cta-layout__cta {
+	grid-area: cta;
+	width: 100%;
+	min-height: 2.9rem;
+	font-size: var(--text-sm);
+}
+
+@media (min-width: 48rem) {
+	.head-cta-layout {
+		grid-template-areas: 'head cta' 'body body';
+		grid-template-columns: 1fr auto;
+		align-items: center;
+	}
+
+	.head-cta-layout > .head-cta-layout__cta {
+		width: auto;
+		min-width: 13.25rem;
+		min-height: 4.25rem;
+		border-radius: var(--radius);
+	}
+}
+
+/* Brand gradient line used as a divider. */
+.gradient-rule {
+	height: 5px;
+	border: 0;
+	border-radius: 3px;
+	background: linear-gradient(
+		to right,
+		var(--color-green),
+		var(--color-blue) 33%,
+		var(--color-navy) 66%,
+		var(--color-black)
+	);
+}
+
+/* Lists marked with ">" as on the live site. */
+.chevron-list {
+	display: grid;
+	gap: var(--space-2);
+	padding: 0;
+	list-style: none;
+}
+
+.chevron-list li {
+	position: relative;
+	padding-left: 1.1em;
+}
+
+.chevron-list li::before {
+	content: '>';
+	position: absolute;
+	left: 0;
+	font-weight: 700;
+	color: var(--chevron-color, currentColor);
+}
+
 /* Buttons */
 .btn {
 	display: inline-flex;

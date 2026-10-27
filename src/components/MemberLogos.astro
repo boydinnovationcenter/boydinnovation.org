@@ -1,0 +1,95 @@
+---
+/**
+ * Grid of member company logos on the swirl texture. Members come from the
+ * `members` content collection; a logo links out once the member has a url.
+ */
+import { getCollection } from 'astro:content';
+import { getImage, Image } from 'astro:assets';
+import swirl from '../assets/images/brand/texture-swirl.jpg';
+
+interface Props {
+	heading: string;
+}
+
+const { heading } = Astro.props;
+const members = (await getCollection('members')).sort((a, b) => a.data.order - b.data.order);
+const tile = await getImage({ src: swirl, width: 600, format: 'webp' });
+---
+
+<section class="members" aria-labelledby="members-heading" style={`--tile-bg: url(${tile.src})`}>
+	<div class="container">
+		<hr class="gradient-rule" />
+		<h2 id="members-heading">{heading}</h2>
+		<ul class="members__grid" role="list">
+			{
+				members.map(({ data: member }) => {
+					const logo = <Image src={member.logo} alt={member.name} width={300} densities={[1, 2]} />;
+					return (
+						<li class="member">
+							{member.url ? (
+								<a href={member.url} target="_blank" rel="noopener">
+									{logo}
+									<span class="visually-hidden"> website (opens in a new tab)</span>
+								</a>
+							) : (
+								logo
+							)}
+							{member.description && <p class="visually-hidden">{member.description}</p>}
+						</li>
+					);
+				})
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.members {
+		padding-block: var(--space-7);
+	}
+
+	h2 {
+		margin-block: var(--space-6) var(--space-5);
+	}
+
+	.members__grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.6rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.member {
+		display: grid;
+		aspect-ratio: 267 / 147;
+		overflow: hidden;
+		padding: 0.5rem 0.4rem;
+		border-radius: 4px;
+		background: var(--color-black) var(--tile-bg) center / cover;
+	}
+
+	.member a {
+		display: block;
+		min-height: 0;
+		transition: opacity 0.2s ease;
+	}
+
+	.member a:hover {
+		opacity: 0.8;
+	}
+
+	.member img {
+		width: 100%;
+		height: 100%;
+		min-height: 0;
+		object-fit: contain;
+	}
+
+	@media (min-width: 48rem) {
+		.members__grid {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			padding-inline: clamp(0rem, 8.6vw - 4.5rem, 3.5rem);
+		}
+	}
+</style>
