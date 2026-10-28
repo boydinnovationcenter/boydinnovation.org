@@ -1,0 +1,65 @@
+---
+/**
+ * An event's Register / Learn more button. Eventbrite actions are real links
+ * to the event page; EventScripts.astro upgrades them to the checkout pop-up.
+ */
+interface Props {
+	action: { label: string; href: string } | { label: string; eventbrite: { id: string; url: string } };
+	eventTitle: string;
+	/** Filled green (main action) or outlined. */
+	primary?: boolean;
+}
+
+const { action, eventTitle, primary = false } = Astro.props;
+const href = 'eventbrite' in action ? action.eventbrite.url : action.href;
+const external = href.startsWith('http');
+---
+
+<a
+	class:list={['event-action', { 'event-action--primary': primary }]}
+	href={href}
+	{...(external ? { target: '_blank', rel: 'noopener' } : {})}
+	{...('eventbrite' in action ? { 'data-eventbrite-id': action.eventbrite.id } : {})}
+>
+	{action.label}
+	<span class="visually-hidden">
+		{' '}
+		for {eventTitle}
+		{external && ' (opens in a new tab)'}
+	</span>
+</a>
+
+<style>
+	/* Branded event buttons, carried over from the live site's custom CSS. */
+	.event-action {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.5rem;
+		padding: 0.55em 1.1em;
+		border: 1.5px solid var(--color-navy);
+		border-radius: var(--radius);
+		font-size: 0.8125rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-decoration: none;
+		text-transform: uppercase;
+		color: var(--color-navy-deep);
+		white-space: nowrap;
+		transition: background-color 0.15s ease;
+	}
+
+	.event-action:hover {
+		background: rgb(3 48 77 / 0.06);
+	}
+
+	.event-action--primary {
+		border: 1px solid var(--color-black);
+		background: var(--color-green);
+		color: var(--color-black);
+	}
+
+	.event-action--primary:hover {
+		background: var(--color-green);
+		opacity: 0.85;
+	}
+</style>

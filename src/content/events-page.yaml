@@ -16,8 +16,13 @@ eventsPage:
       - { label: "SUBSCRIBE TO OUR CALENDAR", href: "#calendarfeed" }
       - { label: "EVENT RENTALS", href: /space#eventspace }
 
-  recurringHeading: "Recurring Networking Events"
-  upcomingHeading: "Startup Workshops and Founder Networking Events around Columbia, SC"
+  recurring:
+    heading: "Recurring Networking Events"
+    subheading: "Hosted at the Boyd Innovation Center, 711 Saluda Ave"
+
+  community:
+    heading: "Around Columbia"
+    subheading: "Startup workshops and founder networking events around Columbia, SC"
 
   calendar:
     heading: "Sign Up for Our Calendar Feed"
@@ -32,6 +37,12 @@ eventsPage:
         href: "https://outlook.live.com/calendar/0/addfromweb/?url=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fc_5432f27ddc5f70ccb3d3f4e36ae247c15feec8e2ab598e24e9828d86d4b40681%2540group.calendar.google.com%2Fpublic%2Fbasic.ics&name=Boyd%20Innovation%20Center%20Events"
       - label: "Office 365"
         href: "https://outlook.office.com/calendar/0/addfromweb/?url=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fc_5432f27ddc5f70ccb3d3f4e36ae247c15feec8e2ab598e24e9828d86d4b40681%2540group.calendar.google.com%2Fpublic%2Fbasic.ics&name=Boyd%20Innovation%20Center%20Events"
+
+  # Shown beside the calendar feed at the bottom of the page.
+  host:
+    heading: "Host your event at the BIC"
+    text: "The Lounge seats up to 100 and the Main Hall up to 150, with flexible arrangements and AV available."
+    cta: { label: "EVENT RENTALS", href: /space#eventspace }
 
   # Full-width photo strip, left to right.
   photos:

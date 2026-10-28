@@ -1,9 +1,11 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
-import CalendarSubscribe from '../components/events/CalendarSubscribe.astro';
-import EventGrid from '../components/events/EventGrid.astro';
+import CommunityAgenda from '../components/events/CommunityAgenda.astro';
+import EventScripts from '../components/events/EventScripts.astro';
+import EventsClosing from '../components/events/EventsClosing.astro';
 import EventsHero from '../components/events/EventsHero.astro';
+import SeriesSection from '../components/events/SeriesSection.astro';
 import PhotoStrip from '../components/PhotoStrip.astro';
 import { site } from '../config/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -11,40 +13,42 @@ import { eventStatus, toEasternIso } from '../lib/event-dates';
 
 const entry = await getEntry('eventsPage', 'eventsPage');
 if (!entry) throw new Error('Missing Events page content: src/content/events-page.yaml');
-const { seo, hero, recurringHeading, upcomingHeading, calendar, photos } = entry.data;
+const { seo, hero, recurring, community, calendar, host, photos } = entry.data;
 
-const events = await getCollection('events');
-const bySection = (section: 'recurring' | 'upcoming') => events.filter((e) => e.data.section === section);
+const events = (await getCollection('events')).map((e) => e.data);
+const series = events.filter((e) => e.section === 'recurring');
+const communityEvents = events.filter((e) => e.section === 'community');
 
 const pageUrl = `${site.url}/events`;
 
-// Event structured data for dated events that haven't happened yet.
-// Times are Columbia, SC local time, written with their Eastern UTC offset.
-const datedEvents = await Promise.all(
-	events
-		.filter((e) => e.data.start && eventStatus(e.data.end ?? e.data.start) === 'upcoming')
-		.map(async ({ data }) => {
-			const image = await getImage({ src: data.image, width: 1200, format: 'jpeg' });
-			const atBic = /boyd innovation center/i.test(data.location);
-			const register = data.actions[0];
-			return {
-				'@type': 'Event',
-				name: data.title,
-				description: data.description,
-				startDate: toEasternIso(data.start!),
-				...(data.end && { endDate: toEasternIso(data.end) }),
-				eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-				eventStatus: 'https://schema.org/EventScheduled',
-				image: new URL(image.src, site.url).href,
-				location: atBic
-					? { '@id': `${site.url}/#place` }
-					: { '@type': 'Place', name: data.location, address: data.location },
-				...(atBic && { organizer: { '@id': `${site.url}/#organization` } }),
-				...(register && {
-					url: new URL('eventbrite' in register ? register.eventbrite.url : register.href, pageUrl).href,
-				}),
-			};
-		}),
+// Event structured data for every dated session that hasn't happened yet:
+// a series' next session and each upcoming community event.
+const dated = [
+	...series.flatMap((s) => (s.next ? [{ ...s, start: s.next.start, end: s.next.end, location: site.name }] : [])),
+	...communityEvents,
+].filter((e) => eventStatus(e.end ?? e.start) === 'upcoming');
+
+const eventData = await Promise.all(
+	dated.map(async (e) => {
+		const image = await getImage({ src: e.image, width: 1200, format: 'jpeg' });
+		const atBic = /boyd innovation center/i.test(e.location);
+		const register = e.actions[0];
+		return {
+			'@type': 'Event',
+			name: e.title,
+			description: e.description,
+			startDate: toEasternIso(e.start),
+			...(e.end ? { endDate: toEasternIso(e.end) } : {}),
+			eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+			eventStatus: 'https://schema.org/EventScheduled',
+			image: new URL(image.src, site.url).href,
+			location: atBic ? { '@id': `${site.url}/#place` } : { '@type': 'Place', name: e.location, address: e.location },
+			...(atBic ? { organizer: { '@id': `${site.url}/#organization` } } : {}),
+			...(register
+				? { url: new URL('eventbrite' in register ? register.eventbrite.url : register.href, pageUrl).href }
+				: {}),
+		};
+	}),
 );
 
 const structuredData = {
@@ -57,7 +61,7 @@ const structuredData = {
 				{ '@type': 'ListItem', position: 2, name: 'Events', item: pageUrl },
 			],
 		},
-		...datedEvents,
+		...eventData,
 	],
 };
 ---
@@ -65,8 +69,9 @@ const structuredData = {
 <BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
 	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 	<EventsHero {...hero} />
-	<EventGrid id="recurring" heading={recurringHeading} events={bySection('recurring')} />
-	<EventGrid id="upcoming" heading={upcomingHeading} events={bySection('upcoming')} />
-	<CalendarSubscribe {...calendar} />
+	<SeriesSection {...recurring} series={series} />
+	<CommunityAgenda {...community} events={communityEvents} />
+	<EventsClosing calendar={calendar} host={host} />
 	<PhotoStrip photos={photos} />
+	<EventScripts />
 </BaseLayout>

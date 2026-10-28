@@ -101,13 +101,41 @@ Member logos are in **`src/content/members.yaml`**, one entry per company:
 
 ## Events
 
-Each event on the Events page is its own file in **`src/content/events/`**. To add an event, copy an existing file, rename it (for example `pitch-night-2027.yaml`), and edit it:
+Each event on the Events page is its own file in **`src/content/events/`**. There are two kinds.
+
+### Recurring series (Tech on Tap, Tech Beans, Silicon Swamp)
+
+These always show in "Recurring Networking Events", even between sessions.
 
 ```yaml
+section: recurring
+order: 1                                   # position among the series
+title: "Tech on Tap"
+cadence: "MONTHLY · THIRD THURSDAY · EVENINGS"
+next: { start: "2026-01-21T17:00" }        # the next session (optional)
+description: "One or two sentences."
+image: ../../assets/images/events/tech-on-tap.jpg
+imageAlt: "Tech on Tap"
+actions:
+  - label: "Register"
+    eventbrite: { id: "1234567890", url: "https://www.eventbrite.com/e/..." }
+  - { label: "Learn more", href: /tech-on-tap }
+```
+
+The line at the bottom of the card updates itself:
+- With a `next` date still ahead, it reads "Next: Wed, Jan 21 · 5 PM" and the first button turns green.
+- Once that date passes, or with no `next` at all, it reads "Next date coming soon".
+- For a series that meets on a fixed schedule with no single date (Tech Beans), set `ongoing: "Every Tuesday"` instead of `next`.
+
+So when a series takes a break, there's nothing to remove. When it's back, add the new `next` date and Register link.
+
+### Community events (Around Columbia)
+
+```yaml
+section: community
 title: "Pitch Night"
-section: upcoming            # "recurring" or "upcoming"
-dateLabel: "Thu · Jan 14, 2027 · 6:00 PM"   # shown on the card exactly as written
-start: "2027-01-14T18:00"    # Columbia time, 24-hour clock
+start: "2027-01-14T18:00"     # Columbia time, 24-hour clock
+end: "2027-01-14T20:00"       # optional; use a date alone for multi-day events
 location: "The Boyd Innovation Center"
 description: "One or two sentences."
 image: ../../assets/images/events/pitch-night.jpg
@@ -116,13 +144,16 @@ actions:
   - { label: "Register", href: "https://..." }
 ```
 
-- **Dates:** `start` is `YYYY-MM-DD` or `YYYY-MM-DDTHH:MM`. For multi-day events, also add `end`. Recurring events with no single date (like Tech Beans) leave both out.
-- **Past events dim automatically after they end and disappear 48 hours later.** You don't need to remove them by hand, though you can delete the file.
-- **Eventbrite pop-up checkout:** instead of `href`, use `eventbrite: { id: "1234567890", url: "https://www.eventbrite.com/e/..." }`. The id is the number at the end of the Eventbrite event link.
-- **Images** go in `src/assets/images/events/`, ideally 16:9 (for example 1920×1080).
-- Recurring events appear in the order of their `order` number; upcoming events appear by date.
+- The date block (for example "NOV 13 · –14 · FRI–SAT") is made from `start` and `end`, so there's no date text to type.
+- Events appear in date order. They dim after they end and disappear 48 hours later; you can delete the file afterwards or leave it.
+- To add one, copy an existing file and rename it (for example `pitch-night-2027.yaml`).
 
-The hero, calendar links and photo strip are in `src/content/events-page.yaml`.
+### Images and buttons
+
+- Images go in `src/assets/images/events/`, ideally 16:9 (for example 1920×1080).
+- A button is either `{ label, href }` (a link) or `{ label, eventbrite: { id, url } }`, which opens Eventbrite's checkout pop-up. The id is the number at the end of the Eventbrite link.
+
+The hero, section headings, calendar links, "Host your event" box and photo strip are in `src/content/events-page.yaml`.
 
 ## About page: team and board
 

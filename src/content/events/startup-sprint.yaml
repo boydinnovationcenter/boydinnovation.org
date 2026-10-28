@@ -1,6 +1,5 @@
+section: community
 title: "Startup Sprint"
-section: upcoming
-dateLabel: "Nov 13 & 14, 2026"
 start: "2026-11-13"
 end: "2026-11-14"
 location: "Boyd Innovation Center"
@@ -8,4 +7,4 @@ description: "Startup Sprint is a fast-paced, 24-hour event where aspiring entre
 image: ../../assets/images/events/startup-sprint.jpg
 imageAlt: "Startup Sprint"
 actions:
-  - { label: "Learn More", href: /startup-sprint }
+  - { label: "Learn more", href: /startup-sprint }

@@ -1,8 +1,8 @@
-title: "Tech Beans"
 section: recurring
-order: 1
-dateLabel: "Tuesday Mornings · 8:00–9:00 AM"
-location: "The Boyd Innovation Center"
+order: 2
+title: "Tech Beans"
+cadence: "WEEKLY · TUESDAYS · 8–9 AM"
+ongoing: "Every Tuesday"
 description: "Coffee and casual conversation centered around building scalable, high-growth startups in Columbia."
 image: ../../assets/images/events/tech-beans.png
 imageAlt: "Tech Beans"

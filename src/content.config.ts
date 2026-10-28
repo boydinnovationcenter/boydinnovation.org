@@ -250,39 +250,52 @@ const localDateTime = z
 	.string()
 	.regex(/^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?$/, 'Use YYYY-MM-DD or YYYY-MM-DDTHH:MM, e.g. 2026-11-12T18:00');
 
+/** A Register / Learn more button: a link, or Eventbrite's checkout pop-up (`url` is the fallback without JavaScript). */
+const eventAction = z.union([
+	z.object({ label: z.string(), href: z.string() }),
+	z.object({ label: z.string(), eventbrite: z.object({ id: z.string(), url: z.url() }) }),
+]);
+
+const eventBase = (image: () => z.ZodType<ImageMetadata>) => ({
+	title: z.string(),
+	description: z.string(),
+	image: image(),
+	imageAlt: z.string(),
+	actions: z.array(eventAction).default([]),
+});
+
 /**
- * Events shown on /events, one YAML file each in src/content/events/.
- * Dated events dim after they end and disappear 48 hours later.
+ * Events on /events, one YAML file each in src/content/events/.
+ * - "recurring": a BIC series (Tech Beans, Tech on Tap...). Always shown.
+ *   With a future `next` date it shows that date; otherwise `ongoing`
+ *   (e.g. "Every Tuesday") or "Next date coming soon".
+ * - "community": a dated event. Dims after it ends, disappears 48 hours later.
  */
 const events = defineCollection({
 	loader: glob({ pattern: '*.yaml', base: './src/content/events' }),
 	schema: ({ image }) =>
-		z.object({
-			title: z.string(),
-			/** "recurring" (Recurring Networking Events) or "upcoming" (Startup Workshops and Founder Networking Events). */
-			section: z.enum(['recurring', 'upcoming']),
-			/** Date and time as shown on the card, e.g. "Thu · Nov 12, 2026 · 6:00 PM". */
-			dateLabel: z.string(),
-			/** When it starts. Leave out for recurring events with no single date. */
-			start: localDateTime.optional(),
-			/** When it ends, for multi-day events. Defaults to `start`. */
-			end: localDateTime.optional(),
-			location: z.string(),
-			description: z.string(),
-			image: image(),
-			imageAlt: z.string(),
-			/** Order within its section when events have no date (lowest first). */
-			order: z.number().default(0),
-			actions: z
-				.array(
-					z.union([
-						z.object({ label: z.string(), href: z.string() }),
-						/** Opens Eventbrite's checkout pop-up; `url` is the fallback without JavaScript. */
-						z.object({ label: z.string(), eventbrite: z.object({ id: z.string(), url: z.url() }) }),
-					]),
-				)
-				.default([]),
-		}),
+		z.discriminatedUnion('section', [
+			z.object({
+				section: z.literal('recurring'),
+				...eventBase(image),
+				/** Order among the series (lowest first). */
+				order: z.number(),
+				/** How often it meets, e.g. "WEEKLY · TUESDAYS · 8–9 AM". */
+				cadence: z.string(),
+				/** The next session. Leave out or let it pass to show `ongoing` / "Next date coming soon". */
+				next: z.object({ start: localDateTime, end: localDateTime.optional() }).optional(),
+				/** Status shown when there's no upcoming date, e.g. "Every Tuesday". */
+				ongoing: z.string().optional(),
+			}),
+			z.object({
+				section: z.literal('community'),
+				...eventBase(image),
+				start: localDateTime,
+				/** For multi-day events. */
+				end: localDateTime.optional(),
+				location: z.string(),
+			}),
+		]),
 });
 
 /** Events page copy (the events themselves are in src/content/events/). */
@@ -297,14 +310,15 @@ const eventsPage = defineCollection({
 				image: image(),
 				actions: z.array(link),
 			}),
-			recurringHeading: z.string(),
-			upcomingHeading: z.string(),
+			recurring: z.object({ heading: z.string(), subheading: z.string() }),
+			community: z.object({ heading: z.string(), subheading: z.string() }),
 			calendar: z.object({
 				heading: z.string(),
 				intro: z.string(),
 				buttonLabel: z.string(),
 				links: z.array(link),
 			}),
+			host: z.object({ heading: z.string(), text: z.string(), cta: link }),
 			photos: z.array(z.object({ image: image(), alt: z.string() })),
 		}),
 });

@@ -1,0 +1,61 @@
+---
+/** Dark band at the bottom of /events: calendar feed beside "host your event". */
+import CtaButton from '../CtaButton.astro';
+import CalendarSubscribe from './CalendarSubscribe.astro';
+
+interface Props {
+	calendar: { heading: string; intro: string; buttonLabel: string; links: { label: string; href: string }[] };
+	host: { heading: string; text: string; cta: { label: string; href: string } };
+}
+
+const { calendar, host } = Astro.props;
+---
+
+<section class="events-closing" aria-label="Stay in the loop">
+	<div class="container events-closing__grid">
+		<CalendarSubscribe {...calendar} />
+		<div class="events-panel">
+			<h2>{host.heading}</h2>
+			<p>{host.text}</p>
+			<CtaButton class="events-closing__cta" variant="glass" label={host.cta.label} href={host.cta.href} />
+		</div>
+	</div>
+</section>
+
+<style>
+	.events-closing {
+		padding-block: 4rem;
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.events-closing__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+		gap: 2rem;
+	}
+
+	.events-closing__grid :global(.events-panel) {
+		display: flex;
+		flex-direction: column;
+		gap: 0.875rem;
+		padding: 2rem;
+		border: 1px solid rgb(236 246 242 / 0.3);
+		border-radius: 8px;
+	}
+
+	.events-closing__grid :global(.events-panel h2) {
+		font-size: 1.75rem;
+	}
+
+	.events-closing__grid :global(.events-panel p) {
+		line-height: 1.6;
+	}
+
+	.events-closing :global(.events-closing__cta) {
+		align-self: flex-start;
+		min-height: 3rem;
+		margin-top: 0.5rem;
+		border-radius: var(--radius);
+	}
+</style>

@@ -1,0 +1,221 @@
+---
+/**
+ * Dated community events as an agenda: date block, image, details, button.
+ * Events more than 48 hours past are left out at build time; EventScripts.astro
+ * dims and removes ones that pass after the build.
+ */
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { dateBlock, eventStatus } from '../../lib/event-dates';
+import EventAction from './EventAction.astro';
+
+type Community = Extract<CollectionEntry<'events'>['data'], { section: 'community' }>;
+
+interface Props {
+	heading: string;
+	subheading: string;
+	events: Community[];
+}
+
+const { heading, subheading, events } = Astro.props;
+
+const items = events
+	.map((e) => ({ ...e, ends: e.end ?? e.start, status: eventStatus(e.end ?? e.start) }))
+	.filter((e) => e.status !== 'hidden')
+	.sort((a, b) => a.start.localeCompare(b.start))
+	.map((e) => ({ ...e, block: dateBlock(e.start, e.end) }));
+---
+
+{
+	items.length > 0 && (
+		<section class="agenda" aria-labelledby="agenda-heading">
+			<div class="container">
+				<div class="events-section-head agenda__head">
+					<h2 id="agenda-heading">{heading}</h2>
+					<p>{subheading}</p>
+				</div>
+				<ol class="agenda__list" role="list">
+					{items.map((item) => (
+						<li class:list={['agenda-item', { 'agenda-item--past': item.status === 'past' }]} data-ends={item.ends}>
+							<time class="agenda-item__date" datetime={item.start}>
+								<span class="visually-hidden">{item.block.spoken}</span>
+								<span class="agenda-item__month" aria-hidden="true">
+									{item.block.month}
+								</span>
+								<span class="agenda-item__day" aria-hidden="true">
+									{item.block.day}
+								</span>
+								<span class="agenda-item__detail" aria-hidden="true">
+									{item.block.detail}
+								</span>
+							</time>
+							<Image
+								class="agenda-item__img"
+								src={item.image}
+								alt={item.imageAlt}
+								widths={[320, 480, 720]}
+								sizes="(min-width: 64rem) 14rem, 100vw"
+							/>
+							<div class="agenda-item__title">
+								<h3>{item.title}</h3>
+								<p class="agenda-item__location">{item.location}</p>
+							</div>
+							<p class="agenda-item__desc">{item.description}</p>
+							{item.actions.length > 0 && (
+								<div class="agenda-item__actions">
+									{item.actions.map((action) => (
+										<EventAction action={action} eventTitle={item.title} />
+									))}
+								</div>
+							)}
+						</li>
+					))}
+				</ol>
+			</div>
+		</section>
+	)
+}
+
+<style>
+	.agenda {
+		padding-bottom: var(--space-8);
+	}
+
+	.agenda__head {
+		padding-top: var(--space-7);
+		border-top: 1px solid var(--color-navy-deep);
+	}
+
+	.agenda__list {
+		display: grid;
+		gap: 0.75rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	/* Phones: date + title side by side; description, photo and button full width below. */
+	.agenda-item {
+		display: grid;
+		grid-template-columns: 6.5rem minmax(0, 1fr);
+		grid-template-areas:
+			'date title'
+			'desc desc'
+			'img img'
+			'actions actions';
+		gap: 1rem 1.25rem;
+		align-items: start;
+		padding: 1.25rem;
+		border: 1px solid rgb(3 48 77 / 0.18);
+		border-radius: 8px;
+		background: #fff;
+		transition: opacity 0.25s ease;
+	}
+
+	.agenda-item--past {
+		opacity: 0.45;
+	}
+
+	.agenda-item--past .agenda-item__actions {
+		pointer-events: none;
+	}
+
+	.agenda-item__date {
+		grid-area: date;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		min-height: 6.5rem;
+		padding: 0.5rem;
+		border-radius: 6px;
+		background: var(--color-navy-deep);
+		color: var(--color-paper);
+		text-align: center;
+	}
+
+	.agenda-item__month {
+		font-size: 0.8125rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		color: var(--color-green);
+	}
+
+	.agenda-item__day {
+		font-size: 2.5rem;
+		font-weight: 700;
+		line-height: 1;
+	}
+
+	.agenda-item__detail {
+		margin-top: 0.2rem;
+		font-size: 0.75rem;
+		line-height: 1.3;
+		white-space: nowrap;
+	}
+
+	.agenda-item__img {
+		grid-area: img;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		border-radius: 6px;
+	}
+
+	.agenda-item__title {
+		grid-area: title;
+		align-self: center;
+		display: grid;
+		gap: 0.375rem;
+	}
+
+	.agenda-item__desc {
+		grid-area: desc;
+		font-size: 0.9375rem;
+		line-height: 1.5;
+	}
+
+	.agenda-item h3 {
+		font-size: 1.375rem;
+		line-height: 1.2;
+	}
+
+	.agenda-item__location {
+		font-size: 0.875rem;
+		color: var(--color-navy);
+	}
+
+	.agenda-item__actions {
+		grid-area: actions;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	@media (min-width: 64rem) {
+		.agenda-item {
+			grid-template-columns: 7.5rem 13.75rem minmax(0, 1fr) auto;
+			grid-template-areas:
+				'date img title actions'
+				'date img desc actions';
+			gap: 0.375rem 2rem;
+			align-items: center;
+			padding: 1.25rem 1.5rem;
+		}
+
+		.agenda-item__img {
+			aspect-ratio: 220 / 124;
+		}
+
+		.agenda-item__title {
+			align-self: end;
+		}
+
+		.agenda-item__desc {
+			align-self: start;
+		}
+
+		.agenda-item__actions {
+			justify-content: flex-end;
+		}
+	}
+</style>

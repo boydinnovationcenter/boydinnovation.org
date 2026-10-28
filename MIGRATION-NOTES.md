@@ -292,3 +292,17 @@ Reference: live site captured 2026-10-27. Title, meta description, canonical and
 ### Open questions
 
 14. **Tour bookings go to Kennedy's personal HubSpot meetings link.** If tours should rotate across the team or survive a staffing change, a HubSpot team (round-robin) meetings link would be sturdier. It's a one-line change in `book-a-tour.yaml`.
+
+## Events redesign (approved by Kennedy, 2026-10-28)
+
+The Events page was rebuilt from concept A ("Series + agenda") on the design canvas, replacing the straight recreation. Reason: the live layout of big image cards looked empty with only one or two dated events, and the recurring series vanished when they had no date.
+
+- **Hero:** the crowd photo is now a faint texture behind the text (no translucent panel or flywheel). "Subscribe to our calendar" is the green main button; "Event rentals" stays as the glass button.
+- **Recurring Networking Events:** Tech on Tap, Tech Beans and Silicon Swamp always show, each with its cadence, description and a status line: "Next: Thu, Nov 12 · 6 PM", "Every Tuesday" or "Next date coming soon". When a series' next date passes, the card falls back to "Next date coming soon" by itself, both at build time and in the browser. New subheading: "Hosted at the Boyd Innovation Center, 711 Saluda Ave".
+- **Around Columbia** (was "Startup Workshops and Founder Networking Events around Columbia, SC"; that text is now the subheading): an agenda list of dated community events with a generated date block, image, details and button. Events still dim after they end and disappear 48 hours later.
+- **Closing band:** the calendar feed ("Sign Up for Our Calendar Feed", live copy) beside a new "Host your event at the BIC" box. Its capacities come from the Space page.
+- **Kept from live:** all copy except the new section heading and subheadings, every link and Eventbrite pop-up, the calendar options, the photo strip and the `#calendarfeed` anchor.
+- **Accessibility:** the blue date labels that failed contrast are gone. Date blocks have full spoken dates for screen readers (for example "Friday, November 13 – Saturday, November 14, 2026"). Lighthouse accessibility is 100, and performance is 94–97 (LCP 2.2–2.4 s) on the local preview.
+- **Content model:** recurring and community events are separate shapes in `src/content/events/`, documented in CONTENT.md.
+
+Open question 15: **Silicon Swamp's cadence** is shown as "THURSDAY EVENINGS". The live site doesn't say how often it meets; confirm with its organizers (`src/content/events/silicon-swamp.yaml`).

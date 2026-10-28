@@ -52,6 +52,12 @@ const [first, underlined, last] = headline;
 		align-items: center;
 	}
 
+	/* The headline is sized from this column's width (cqi), not the window's,
+	   so each of its three lines fits on one line at any screen size. */
+	.about-hero__text {
+		container-type: inline-size;
+	}
+
 	.about-hero__eyebrow {
 		font-size: clamp(0.9rem, 0.85rem + 0.2vw, 1rem);
 		font-weight: 500;
@@ -60,13 +66,14 @@ const [first, underlined, last] = headline;
 
 	h1 {
 		margin-block: var(--space-3) var(--space-6);
-		font-size: clamp(1.9rem, 1rem + 3.9vw, 4.6rem);
+		font-size: min(8.3cqi, 4.6rem);
 		font-weight: 700;
 		line-height: 1.05;
 	}
 
 	.about-hero__line {
 		display: block;
+		white-space: nowrap;
 	}
 
 	.about-hero__underlined {

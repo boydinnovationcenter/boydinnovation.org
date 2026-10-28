@@ -1,0 +1,172 @@
+---
+/**
+ * The BIC's recurring series, always shown. Each card's status line shows
+ * the next session if it's still ahead, else `ongoing` or "Next date coming soon".
+ * EventScripts.astro updates the status in the browser once a date passes.
+ */
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { eventStatus, nextLabel } from '../../lib/event-dates';
+import EventAction from './EventAction.astro';
+
+type Series = Extract<CollectionEntry<'events'>['data'], { section: 'recurring' }>;
+
+interface Props {
+	heading: string;
+	subheading: string;
+	series: Series[];
+}
+
+const { heading, subheading, series } = Astro.props;
+const FALLBACK = 'Next date coming soon';
+
+const cards = [...series]
+	.sort((a, b) => a.order - b.order)
+	.map((s) => {
+		const ends = s.next ? (s.next.end ?? s.next.start) : undefined;
+		const hasNext = !!ends && eventStatus(ends) === 'upcoming';
+		const idle = s.ongoing ?? FALLBACK;
+		return { ...s, ends, idle, status: hasNext ? `Next: ${nextLabel(s.next!.start)}` : idle, scheduled: hasNext || !!s.ongoing };
+	});
+---
+
+<section class="series" aria-labelledby="series-heading">
+	<div class="container">
+		<div class="events-section-head">
+			<h2 id="series-heading">{heading}</h2>
+			<p>{subheading}</p>
+		</div>
+		<ul class="series__grid" role="list">
+			{
+				cards.map((card) => (
+					<li class="series-card">
+						<Image
+							class="series-card__img"
+							src={card.image}
+							alt={card.imageAlt}
+							widths={[400, 640, 900]}
+							sizes="(min-width: 64rem) 25rem, (min-width: 48rem) 45vw, 100vw"
+						/>
+						<div class="series-card__body">
+							<p class="series-card__cadence">{card.cadence}</p>
+							<h3>{card.title}</h3>
+							<p class="series-card__desc">{card.description}</p>
+							<div class="series-card__foot">
+								<p
+									class:list={['series-card__status', { 'is-scheduled': card.scheduled }]}
+									data-next-ends={card.ends}
+									data-idle={card.idle}
+									data-idle-scheduled={card.ongoing ? 'true' : 'false'}
+								>
+									<span class="series-card__dot" aria-hidden="true" />
+									<span class="series-card__status-text">{card.status}</span>
+								</p>
+								{card.actions.length > 0 && (
+									<div class="series-card__actions">
+										{card.actions.map((action, i) => (
+											<EventAction action={action} eventTitle={card.title} primary={i === 0 && card.scheduled} />
+										))}
+									</div>
+								)}
+							</div>
+						</div>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.series {
+		padding-block: var(--space-7) var(--space-6);
+	}
+
+	.series__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+		gap: 1.5rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.series-card {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		border-radius: 8px;
+		background: var(--color-mint);
+		box-shadow: 0 14px 34px -18px rgb(4 30 51 / 0.5);
+	}
+
+	.series-card__img {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		background: var(--color-navy-deep);
+	}
+
+	.series-card__body {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 1.5rem;
+	}
+
+	.series-card__cadence {
+		font-size: 0.8125rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		color: var(--color-navy);
+	}
+
+	.series-card h3 {
+		font-size: 1.5rem;
+		line-height: 1.2;
+	}
+
+	.series-card__desc {
+		font-size: 0.9375rem;
+		line-height: 1.55;
+	}
+
+	/* Status above the buttons on every card, so the three cards line up. */
+	.series-card__foot {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.75rem;
+		margin-top: auto;
+		padding-top: 0.75rem;
+		border-top: 1px solid rgb(3 48 77 / 0.2);
+	}
+
+	.series-card__status {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+	}
+
+	/* Hollow dot when there's no date yet; filled when it meets on a schedule. */
+	.series-card__dot {
+		flex: none;
+		width: 0.6rem;
+		height: 0.6rem;
+		border: 2px solid var(--color-navy);
+		border-radius: 50%;
+	}
+
+	.series-card__status.is-scheduled .series-card__dot {
+		border-color: #0f7a2e;
+		background: #0f7a2e;
+	}
+
+	.series-card__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+</style>

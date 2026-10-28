@@ -159,6 +159,21 @@ a {
 	}
 }
 
+/* Events page section heading with a short line of context beside it. */
+.events-section-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.5rem 2rem;
+	margin-bottom: 2rem;
+}
+
+.events-section-head p {
+	font-size: 0.9375rem;
+	color: var(--color-navy);
+}
+
 /* Brand gradient line used as a divider. */
 .gradient-rule {
 	height: 5px;
