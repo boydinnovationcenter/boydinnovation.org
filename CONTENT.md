@@ -190,6 +190,43 @@ Everything on the Startup Sprint page is in **`src/content/startup-sprint.yaml`*
 - **Application form**: `application.hubspotFormId` is the HubSpot form. To use a different form, paste its ID from HubSpot.
 - **Sponsors**: one entry each under `sponsors.items`, with name and logo (white on transparent; put the file in `src/assets/images/startup-sprint/sponsors/`). Add `url: "https://..."` to make a logo a link. Add `tall: true` for logos that are stacked over several lines, so they don't look small. The logos scroll on their own; there's no speed or copy count to adjust.
 
+## Blog posts
+
+Each post is a folder in **`src/content/blog/`**. The folder name is the post's address: `src/content/blog/tech-on-tap-july-2026/` is boydinnovation.org/blog/tech-on-tap-july-2026. Inside the folder:
+
+- **`index.mdx`**: the post, in Markdown (plain text with a few symbols for bold, links and headings).
+- **`cover.jpg`**: the thumbnail on the blog page, also used when the post is shared on social media.
+- Any other images in the post, and a **`gallery/`** folder for a photo slideshow.
+
+The blog page, its "Older Posts" pages, the tag pages (such as /blog/tag/Tech+on+Tap), the "Related Posts" under each post and the RSS feed (/blog/rss.xml) all update by themselves from the posts.
+
+### Adding a post
+
+1. Copy **`src/content/blog/_template`**, and rename the copy to the new address (lowercase, words joined by dashes). Folders that start with `_` never appear on the site.
+2. Add the images to the new folder. JPG or PNG, up to about 1500px wide. For a slideshow, put the photos in `gallery/` and name them `01.jpg`, `02.jpg`, … in the order they should appear.
+3. Fill in the top of `index.mdx` (between the `---` lines): `title`, `description`, `date`, `tags` and `image`. Each line in the template explains itself.
+   - **`description`** is what Google shows under the title. Copy the post's first sentence or two (150–200 characters).
+   - **`tags`**: start with the topic (Tech on Tap, Startup Sprint, Launchpad COLA, Founder Spotlight, Marketing and SEO, Founder Wellbeing, Press Releases, BIC News). Spell them exactly as listed. Tags show as links under the post and decide its "Related Posts".
+   - **`image`** is also the picture shown when the post is shared on social media.
+4. Replace the example text with the post. The template shows headings, bold, links, lists, dividers, images and the slideshow.
+5. Change `draft: true` to `draft: false` to publish.
+
+**With Claude Code in the browser:** ask it to "add a blog post", then paste the text and give it the photos. Claude can't save images attached to a chat as files, so either upload them to the post's folder on GitHub first (**Add file → Upload files**), or send links it can download (for example a shared Google Drive folder). It follows the steps in `.claude/skills/new-blog-post/SKILL.md`.
+
+### Images in a post
+
+- `<Figure src={photo} alt="…" />` is a full-width image. Add `align="left"` or `align="right"` with `width={0.5}` to wrap the text around it, or `align="center"` with a `width` for a smaller centered image.
+- Every image needs an `alt` that says what it shows, for people using screen readers and for Google. For graphics with words on them, type out the words.
+- Each image used with `<Figure>` needs its own `import` line at the top of the post, as in the template.
+
+### Headings
+
+Pick the size you want, as in Squarespace: `##` large, `###` normal (most posts), `####` small. The site sets the heading order for search engines and screen readers automatically, so the size you choose is only about looks.
+
+### Editing or removing a post
+
+Edit its `index.mdx`. To take a post down without deleting it, set `draft: true`. If you delete a post or rename its folder, add a line to `public/_redirects` sending the old address to a new one, so links to it keep working.
+
 ## Site-wide details
 
 The navigation menu, footer links, address, phone number and social media links are in **`src/config/site.ts`**. Edit the text between the quotation marks and leave the rest alone.

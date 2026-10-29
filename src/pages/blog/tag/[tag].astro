@@ -1,0 +1,39 @@
+---
+/** Tag pages, e.g. /blog/tag/Programs and /blog/tag/Tech+Incubator. */
+import type { GetStaticPaths } from 'astro';
+import { getEntry } from 'astro:content';
+import BlogListPage from '../../../components/blog/BlogListPage.astro';
+import { getPosts, paginate, tagSlug, tagUrl, type ListPage } from '../../../lib/blog';
+
+export const getStaticPaths = (async () => {
+	const entry = await getEntry('blogPage', 'blog');
+	const posts = await getPosts();
+	const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+	return tags.map((tag) => {
+		const [page] = paginate(
+			posts.filter((p) => p.data.tags.includes(tag)),
+			entry!.data.pageSize,
+			tagUrl(tag),
+		);
+		return { params: { tag: tagSlug(tag) }, props: { tag, page } };
+	});
+}) satisfies GetStaticPaths;
+
+const { tag, page } = Astro.props as { tag: string; page: ListPage };
+const entry = await getEntry('blogPage', 'blog');
+const blogName = entry!.data.seo.title.replace(/ \| Boyd Innovation$/, '');
+---
+
+<!-- Title as on the live tag pages: the blog's title with the tag in front. -->
+<BlogListPage
+	page={page}
+	title={`${tag} — ${blogName} | Boyd Innovation`}
+	description={`${tag} posts from the Boyd Innovation Center blog for tech founders in Columbia, SC.`}
+	tag={tag}
+	name={tag}
+	crumbs={[
+		{ name: 'Home', path: '/' },
+		{ name: 'Blog', path: '/blog' },
+		{ name: tag, path: tagUrl(tag) },
+	]}
+/>

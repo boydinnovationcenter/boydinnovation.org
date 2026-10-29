@@ -1,0 +1,111 @@
+---
+/**
+ * A full blog list page: hero, a two-column grid of posts and the
+ * Newer/Older Posts links. Used by /blog, its later pages and the tag pages.
+ */
+import { getEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { listStructuredData, type ListPage } from '../../lib/blog';
+import BlogHero from './BlogHero.astro';
+import PostCard from './PostCard.astro';
+
+interface Props {
+	page: ListPage;
+	/** Exact <title> (the live tag pages use "Tag — Tech Startup Blog for Founders | Boyd Innovation"). */
+	title: string;
+	description: string;
+	/** Name for structured data, e.g. "Programs". */
+	name: string;
+	/** Breadcrumb trail ending with this page, e.g. Home › Blog › Programs. */
+	crumbs: { name: string; path: string }[];
+	/** On tag pages, the tag, shown after "BLOG" above the headline. */
+	tag?: string;
+}
+
+const { page, title, description, name, crumbs, tag } = Astro.props;
+const entry = await getEntry('blogPage', 'blog');
+if (!entry) throw new Error('Missing blog page content: src/content/blog-page.yaml');
+const { seo, hero } = entry.data;
+const structuredData = listStructuredData(name, crumbs.at(-1)!.path, page.posts, crumbs);
+---
+
+<BaseLayout title={title} description={description} ogImage={seo.ogImage}>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	<BlogHero {...hero} eyebrow={tag ? `${hero.eyebrow} / ${tag}` : hero.eyebrow} />
+	<section class="post-list" aria-label="Posts">
+		<div class="post-list__grid">
+			{page.posts.map((post, i) => <PostCard post={post} priority={i < 2 && page.number === 1} />)}
+		</div>
+		{
+			(page.newer || page.older) && (
+				<nav class="post-list__pager" aria-label="More posts">
+					{page.newer && (
+						<a class="post-list__newer" href={page.newer} rel="prev">
+							<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><polyline points="7.4,1.2 2.5,7.9 7.4,14.7" /></svg>
+							Newer Posts
+						</a>
+					)}
+					{page.older && (
+						<a class="post-list__older" href={page.older} rel="next">
+							Older Posts
+							<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><polyline points="1.6,1.2 6.5,7.9 1.6,14.7" /></svg>
+						</a>
+					)}
+				</nav>
+			)
+		}
+	</section>
+</BaseLayout>
+
+<style>
+	.post-list {
+		padding: clamp(var(--space-5), 4vw, 3.55rem) var(--gutter) clamp(var(--space-6), 6vw, 5rem);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	/* Live at 1440: two 591px columns, 60px apart, inside a 1242px area. */
+	.post-list__grid {
+		display: grid;
+		gap: clamp(var(--space-6), 4.5vw, 4.1rem) clamp(var(--space-5), 4.2vw, 3.75rem);
+		width: min(100%, 77.6rem);
+		margin-inline: auto;
+	}
+
+	@media (min-width: 48rem) {
+		.post-list__grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	.post-list__pager {
+		display: flex;
+		justify-content: space-between;
+		width: min(100%, 77.6rem);
+		margin: clamp(var(--space-6), 7vw, 6.5rem) auto 0;
+	}
+
+	.post-list__pager a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		min-height: 2.75rem;
+		text-decoration: none;
+	}
+
+	.post-list__pager a:hover {
+		text-decoration: underline;
+	}
+
+	.post-list__older {
+		margin-left: auto;
+	}
+
+	.post-list__pager svg {
+		width: 0.45rem;
+		height: 0.8rem;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.5;
+	}
+</style>

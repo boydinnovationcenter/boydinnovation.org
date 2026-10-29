@@ -1,0 +1,126 @@
+# Redirects for boydinnovation.org, served by Cloudflare (Workers static assets).
+# Format: /old-path /new-path status. The first matching rule wins, so specific
+# rules must stay above the /events/* pattern at the bottom.
+# Paths match exactly, so a source with a trailing slash needs its own line.
+# (Real pages are fine: /about/ redirects to /about on its own.) Query strings are passed through.
+# See MIGRATION-NOTES.md ("Redirects") for where each group came from.
+
+# --- Carried over from Squarespace URL Mappings (exported 2026-10-29) ---
+/programs-1 /programs 301
+/membership /space 301
+/office-rentals /space 301
+/rent-space /space 301
+/about-us /about 301
+/contact-us /contact 301
+/internships /contact 301
+/request-membership /contact 301
+/launchpad-cola /programs 301
+/carolina-ventures /programs/carolina-ventures 301
+/events/tech-on-tap-august-2026 /tech-on-tap 301
+/showcase https://www.eventbrite.com/e/spark803-startup-showcase-graduation-tickets-2003786227547 301
+/donate /contact 301
+/friendsgiving https://docs.google.com/spreadsheets/d/11n2_XK8SaQfa778gAJ72kklEUYdUun7iMkp1564ORmI/edit?usp=sharing 302
+/blog/5-free-things-founders-can-do-to-boost-their-seo-right-now-mgmkh /blog/5-free-things-founders-can-do-to-boost-their-seo-right-now 301
+/blog/andrew-nye-founder-spotlight-d26mw /blog/andrew-nye-founder-spotlight 301
+/blog/burnout-crowd-out-step-out-the-energy-pitfalls-holding-founders-back-34me9 /blog/burnout-crowd-out-step-out-the-energy-pitfalls-holding-founders-back 301
+/blog/founder-spotlight-andy-kottage-slhct /blog/founder-spotlight-andy-kottage 301
+/blog/founder-spotlight-dana-watkins-5lel6 /blog/founder-spotlight-dana-watkins 301
+/blog/how-ai-is-changing-health-tech-xaje9 /blog/how-ai-is-changing-health-tech 301
+/blog/how-startups-can-use-video-to-promote-themselves-online-6gcpx /blog/how-startups-can-use-video-to-promote-themselves-online 301
+/blog/how-to-maintain-a-growth-mindset-the-power-of-the-yet-emksc /blog/how-to-maintain-a-growth-mindset-the-power-of-the-yet 301
+/blog/launchpad-cola-halfway-6wtkw /blog/launchpad-cola-halfway 301
+/blog/nautiq-ai-launchpad-spotlight-fp7zh /blog/nautiq-ai-launchpad-spotlight 301
+/blog/tech-on-tap-march-2026-myd4c /blog/tech-on-tap-march-2026 301
+/blog/understanding-step-out-as-a-founder-9jatg /blog/understanding-step-out-as-a-founder 301
+/blog/what-is-crowd-out-recognizing-the-signs-as-a-founder-ac5hx /blog/what-is-crowd-out-recognizing-the-signs-as-a-founder 301
+/blog/what-to-include-on-your-landing-page-wp6df /blog/what-to-include-on-your-landing-page 301
+/blog/when-to-create-a-coming-soon-web-page-2hyzg /blog/when-to-create-a-coming-soon-web-page 301
+/blog/why-i-chose-to-bootstrap-my-health-tech-startup-zgcst /blog/why-i-chose-to-bootstrap-my-health-tech-startup 301
+/blog/how-to-get-your-business-found-on-google-maps-and-beyond-wdsnt /blog/how-to-get-your-business-found-on-google-maps-and-beyond 301
+
+# --- Trailing-slash versions of the rules above (Squarespace matched both; Cloudflare does not) ---
+/programs-1/ /programs 301
+/membership/ /space 301
+/office-rentals/ /space 301
+/rent-space/ /space 301
+/about-us/ /about 301
+/contact-us/ /contact 301
+/internships/ /contact 301
+/request-membership/ /contact 301
+/launchpad-cola/ /programs 301
+/carolina-ventures/ /programs/carolina-ventures 301
+/events/tech-on-tap-august-2026/ /tech-on-tap 301
+/showcase/ https://www.eventbrite.com/e/spark803-startup-showcase-graduation-tickets-2003786227547 301
+/donate/ /contact 301
+/friendsgiving/ https://docs.google.com/spreadsheets/d/11n2_XK8SaQfa778gAJ72kklEUYdUun7iMkp1564ORmI/edit?usp=sharing 302
+/blog/5-free-things-founders-can-do-to-boost-their-seo-right-now-mgmkh/ /blog/5-free-things-founders-can-do-to-boost-their-seo-right-now 301
+/blog/andrew-nye-founder-spotlight-d26mw/ /blog/andrew-nye-founder-spotlight 301
+/blog/burnout-crowd-out-step-out-the-energy-pitfalls-holding-founders-back-34me9/ /blog/burnout-crowd-out-step-out-the-energy-pitfalls-holding-founders-back 301
+/blog/founder-spotlight-andy-kottage-slhct/ /blog/founder-spotlight-andy-kottage 301
+/blog/founder-spotlight-dana-watkins-5lel6/ /blog/founder-spotlight-dana-watkins 301
+/blog/how-ai-is-changing-health-tech-xaje9/ /blog/how-ai-is-changing-health-tech 301
+/blog/how-startups-can-use-video-to-promote-themselves-online-6gcpx/ /blog/how-startups-can-use-video-to-promote-themselves-online 301
+/blog/how-to-maintain-a-growth-mindset-the-power-of-the-yet-emksc/ /blog/how-to-maintain-a-growth-mindset-the-power-of-the-yet 301
+/blog/launchpad-cola-halfway-6wtkw/ /blog/launchpad-cola-halfway 301
+/blog/nautiq-ai-launchpad-spotlight-fp7zh/ /blog/nautiq-ai-launchpad-spotlight 301
+/blog/tech-on-tap-march-2026-myd4c/ /blog/tech-on-tap-march-2026 301
+/blog/understanding-step-out-as-a-founder-9jatg/ /blog/understanding-step-out-as-a-founder 301
+/blog/what-is-crowd-out-recognizing-the-signs-as-a-founder-ac5hx/ /blog/what-is-crowd-out-recognizing-the-signs-as-a-founder 301
+/blog/what-to-include-on-your-landing-page-wp6df/ /blog/what-to-include-on-your-landing-page 301
+/blog/when-to-create-a-coming-soon-web-page-2hyzg/ /blog/when-to-create-a-coming-soon-web-page 301
+/blog/why-i-chose-to-bootstrap-my-health-tech-startup-zgcst/ /blog/why-i-chose-to-bootstrap-my-health-tech-startup 301
+/blog/how-to-get-your-business-found-on-google-maps-and-beyond-wdsnt/ /blog/how-to-get-your-business-found-on-google-maps-and-beyond 301
+/events/ /events 301
+
+# --- Leftover duplicate pages from the redesign (live serves copies of / and /programs) ---
+/home / 301
+/programs-1-1 /programs 301
+
+# --- Search Console 404s with no exact match (export 2026-10-23) ---
+# Unused event-page drafts and deleted events go to the Events page.
+/meetups /events 301
+/trial-event-coworks /events 301
+/events/tech-beans-2026-06-9 /events 301
+/events/tech-beans-2026-07-21-kzf3t-e8c7p-ztxym-9dgam-eednl-j2xgh-sjbbh-gd9df /events 301
+/events/tech-on-tap-june-2026 /events 301
+/events/scra-annual-summit-2026 /events 301
+# Same event, slug renamed.
+/events/startups-on-tap-july-22-2026 /event-calendar/startups-on-tap-2026-07-22 301
+# Deleted sponsorship PDF (typo is in the original URL).
+/s/startup-sprint-sponsorhsip-bic.pdf /startup-sprint 301
+# Left as 404s on purpose: /events/tech-, /office-, /new-dropdown (half-typed drafts;
+# /events/tech- reaches a 404 through the /events/* rule below).
+
+# --- Squarespace duplicate-suffix event URLs (from the Search Console export) ---
+/events/advisor-fridays-may-29-26-hswca /event-calendar/advisor-fridays-may-29-26 301
+/events/coffee-and-connections-ai-networking-dec-2025-gbk42 /event-calendar/coffee-and-connections-ai-networking-dec-2025 301
+/events/finance-workshop-2r8j9 /event-calendar/finance-workshop 301
+/events/hello-seo-power-hour-feb-17-9mtle /event-calendar/hello-seo-power-hour-feb-17 301
+/events/launchpad-cola-pitch-night-fe423 /event-calendar/launchpad-cola-pitch-night 301
+/events/launchpad-cola-pitch-night-jzknh /event-calendar/launchpad-cola-pitch-night 301
+/events/launchpad-cola-spring-26-session-11-wxdex /event-calendar/launchpad-cola-spring-26-session-11 301
+/events/launchpad-cola-spring-26-session-8-4hps8 /event-calendar/launchpad-cola-spring-26-session-8 301
+/events/launchpad-cola-tech-incubator-applications-w7e6a /event-calendar/launchpad-cola-tech-incubator-applications 301
+/events/silicon-swamp-mar-26-g2tjb /event-calendar/silicon-swamp-mar-26 301
+/events/startup-sprint-spring-2026-y5a3h /event-calendar/startup-sprint-spring-2026 301
+/events/tech-beans-2026-05-19-gpls8 /event-calendar/tech-beans-2026-05-19 301
+/events/tech-beans-2026-06-16-kzf3t-e8c7p-ztxym /event-calendar/tech-beans-2026-06-16 301
+/events/tech-beans-2026-06-16-kzf3t-e8c7p-ztxym-4b3z4 /event-calendar/tech-beans-2026-06-16 301
+/events/tech-beans-2026-06-2-kzf3t /event-calendar/tech-beans-2026-06-2 301
+/events/tech-beans-2026-06-2-sc4tg /event-calendar/tech-beans-2026-06-2 301
+/events/tech-beans-2026-06-23-kzf3t-e8c7p-ztxym-9dgam /event-calendar/tech-beans-2026-06-23 301
+/events/tech-beans-2026-06-30-kzf3t-e8c7p-ztxym-9dgam-eednl /event-calendar/tech-beans-2026-06-30 301
+/events/tech-beans-2026-07-14kzf3t-e8c7p-ztxym-9dgam-eednl-j2xgh-sjbbh /event-calendar/tech-beans-2026-07-14 301
+/events/tech-beans-2026-07-28-kzf3t-e8c7p-ztxym-9dgam-eednl-j2xgh-sjbbh-gd9df-ba7d5 /event-calendar/tech-beans-2026-07-28 301
+/events/tech-beans-2026-07-7-kzf3t-e8c7p-ztxym-9dgam-eednl-j2xgh /event-calendar/tech-beans-2026-07-7 301
+/events/tech-on-tap-jan-2026-kggkw /event-calendar/tech-on-tap-jan-2026 301
+/events/tech-on-tap-july-17-2025-g268l /event-calendar/tech-on-tap-july-17-2025 301
+/events/tech-on-tap-july-2026-ynftp /event-calendar/tech-on-tap-july-2026 301
+/events/usc-entrepreneurship-internship-fair-fall-2025-hbffa /event-calendar/usc-entrepreneurship-internship-fair-fall-2025 301
+/events/veteran-entrepreneurship-workshop-yhgyx /event-calendar/veteran-entrepreneurship-workshop 301
+
+# --- Patterns. Keep these last: rules with * are checked after plain ones. ---
+# Old blog category pages (e.g. /blog/category/Press Releases).
+/blog/category/* /blog 301
+# Event pages moved from /events/<slug> to /event-calendar/<slug>. Doesn't affect /events itself.
+/events/* /event-calendar/:splat 301

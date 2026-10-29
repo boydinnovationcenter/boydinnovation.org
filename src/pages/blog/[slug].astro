@@ -1,0 +1,286 @@
+---
+/** A blog post, e.g. /blog/tech-on-tap-july-2026. Content: src/content/blog/<slug>/index.mdx. */
+import type { GetStaticPaths } from 'astro';
+import { getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import PostCard from '../../components/blog/PostCard.astro';
+import PostPager from '../../components/blog/PostPager.astro';
+import { site } from '../../config/site';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, longDate, postTitle, postUrl, relatedPosts, tagUrl, type Post } from '../../lib/blog';
+
+export const getStaticPaths = (async () => {
+	const posts = await getPosts();
+	return posts.map((post, i) => ({
+		params: { slug: post.id },
+		// The list is newest first: the previous link goes to the newer post.
+		props: { post, newer: posts[i - 1], older: posts[i + 1], related: relatedPosts(post, posts, 2, [posts[i - 1], posts[i + 1]]) },
+	}));
+}) satisfies GetStaticPaths;
+
+const { post, newer, older, related } = Astro.props as { post: Post; newer?: Post; older?: Post; related: Post[] };
+const { data } = post;
+const { Content } = await render(post);
+
+// The post's own image, served from this site, for link previews and search.
+const shareImage = await getImage({ src: data.image, width: 1200, format: 'jpeg' });
+const shareImageUrl = new URL(shareImage.src, site.url).href;
+const shareWidth = Math.min(1200, data.image.width);
+const shareHeight = Math.round((shareWidth * data.image.height) / data.image.width);
+
+const url = `${site.url}${postUrl(post)}`;
+// Sized so the longest word in the title never breaks mid-word on phones.
+const longestWord = Math.max(...data.title.split(/\s+/).map((w) => w.length));
+
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'BlogPosting',
+			'@id': `${url}#article`,
+			headline: data.title,
+			url,
+			mainEntityOfPage: url,
+			datePublished: data.date.toISOString(),
+			...(data.updated && { dateModified: data.updated.toISOString() }),
+			...(data.description && { description: data.description }),
+			image: shareImageUrl,
+			...(data.tags.length && { keywords: data.tags.join(', ') }),
+			author: { '@id': `${site.url}/#organization` },
+			publisher: { '@id': `${site.url}/#organization` },
+			isPartOf: { '@id': `${site.url}/blog#blog` },
+		},
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+				{ '@type': 'ListItem', position: 2, name: 'Blog', item: `${site.url}/blog` },
+				{ '@type': 'ListItem', position: 3, name: data.title, item: url },
+			],
+		},
+	],
+};
+---
+
+<BaseLayout
+	title={postTitle(post)}
+	description={data.description ?? ''}
+	ogImage={shareImageUrl}
+	ogImageWidth={shareWidth}
+	ogImageHeight={shareHeight}
+	ogType="article"
+	twitterCard="summary_large_image"
+>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	<article class="post" style={`--longest-word: ${longestWord}`}>
+		<header class="post__header">
+			<h1>{data.title}</h1>
+			<time class="post__date" datetime={data.date.toISOString()}>{longDate(data.date)}</time>
+		</header>
+		<div class="post__body">
+			<Content />
+		</div>
+		{
+			data.tags.length > 0 && (
+				<footer class="post__tags">
+					<h2 class="visually-hidden">Tags</h2>
+					<ul>
+						{data.tags.map((tag) => (
+							<li>
+								<a href={tagUrl(tag)}>{tag}</a>
+							</li>
+						))}
+					</ul>
+				</footer>
+			)
+		}
+	</article>
+	{
+		related.length > 0 && (
+			<section class="related" aria-labelledby="related-heading">
+				<h2 id="related-heading">Related Posts</h2>
+				<div class="related__grid">
+					{related.map((p) => (
+						<PostCard post={p} headingLevel={3} />
+					))}
+				</div>
+			</section>
+		)
+	}
+	<PostPager newer={newer} older={older} />
+</BaseLayout>
+
+<style>
+	.post {
+		padding: calc(var(--header-height) + clamp(2.6rem, 6.3vw, 5.6rem)) var(--gutter) var(--space-6);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	/* Live: a 994px column at 1440 (69% of the window on tablets and up). */
+	.post__header,
+	.post__body {
+		width: min(100%, 62.125rem);
+		margin-inline: auto;
+		container-type: inline-size;
+	}
+
+	@media (min-width: 48rem) {
+		.post__header,
+		.post__body {
+			width: min(69vw, 62.125rem);
+		}
+	}
+
+	h1 {
+		font-size: min(var(--text-hero), 100cqi / (var(--longest-word) * 0.6));
+		font-weight: 500;
+		line-height: 1.3;
+		text-align: center;
+	}
+
+	.post__date {
+		display: block;
+		margin-top: 1rem;
+		font-size: var(--text-sm);
+		text-align: center;
+	}
+
+	.post__body {
+		margin-top: 1.25rem;
+	}
+
+	/* Tag links under the post. */
+	.post__tags {
+		width: min(100%, 62.125rem);
+		margin: var(--space-6) auto 0;
+	}
+
+	@media (min-width: 48rem) {
+		.post__tags {
+			width: min(69vw, 62.125rem);
+		}
+	}
+
+	.post__tags ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.post__tags a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.25rem;
+		padding: 0.25rem 0.9rem;
+		border: 1px solid currentColor;
+		border-radius: 999px;
+		font-size: var(--text-sm);
+		text-decoration: none;
+	}
+
+	.post__tags a:hover {
+		color: var(--color-accent);
+	}
+
+	/* Two posts like this one, in the blog list's card style. */
+	.related {
+		padding: var(--space-6) var(--gutter);
+		border-top: 1px solid rgb(236 246 242 / 0.25);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.related h2,
+	.related__grid {
+		width: min(100%, 77.6rem);
+		margin-inline: auto;
+	}
+
+	.related h2 {
+		margin-bottom: var(--space-5);
+		font-size: var(--text-h2);
+	}
+
+	.related__grid {
+		display: grid;
+		gap: var(--space-6) clamp(var(--space-5), 4.2vw, 3.75rem);
+	}
+
+	@media (min-width: 48rem) {
+		.related__grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	/* Floated images don't spill past the end of the post. */
+	.post__body::after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+
+	/* Post copy comes from Markdown, so it's styled from here. */
+	/* Plain Markdown lists only; component lists (the gallery) have a class. */
+	.post__body :global(p),
+	.post__body :global(:is(ul, ol):not([class])) {
+		margin-block: 1rem;
+	}
+
+	.post__body :global(:is(ul, ol):not([class])) {
+		padding-left: 2.5rem;
+	}
+
+	.post__body :global(:is(ul, ol):not([class]) li + li) {
+		margin-top: 0.25rem;
+	}
+
+	/* Long URLs written out as link text wrap instead of widening the page. */
+	.post__body :global(a) {
+		color: var(--color-accent);
+		overflow-wrap: anywhere;
+	}
+
+	.post__body :global(:is(h2, h3, h4, h5, h6)) {
+		margin-block: 2rem;
+	}
+
+	/* Sizes follow what the author picked (##, ###, ####), not the outline level. */
+	.post__body :global(.is-h2) {
+		font-size: var(--text-h2);
+	}
+
+	.post__body :global(.is-h3) {
+		font-size: var(--text-h3);
+	}
+
+	.post__body :global(.is-h4) {
+		font-size: var(--text-sm);
+		line-height: var(--leading-tight);
+	}
+
+	.post__body :global(.center) {
+		text-align: center;
+	}
+
+	.post__body :global(.large) {
+		font-size: clamp(1.1rem, 1.05rem + 0.25vw, 1.41rem);
+	}
+
+	.post__body :global(.text-accent) {
+		color: var(--color-accent);
+	}
+
+	.post__body :global(hr) {
+		clear: both;
+		margin-block: 1.6rem;
+		border: 0;
+		border-top: 1px solid currentColor;
+	}
+
+	.post__body :global(.gallery) {
+		clear: both;
+	}
+</style>

@@ -16,6 +16,10 @@ interface Props {
 	ogImage: string;
 	ogImageWidth?: number;
 	ogImageHeight?: number;
+	/** og:type; blog posts are "article" on the live site. */
+	ogType?: 'website' | 'article';
+	/** Blog posts use the large-image link preview. */
+	twitterCard?: 'summary' | 'summary_large_image';
 	/** Canonical URL; defaults to the current path without a trailing slash. */
 	canonical?: string;
 }
@@ -26,6 +30,8 @@ const {
 	ogImage,
 	ogImageWidth = 1500,
 	ogImageHeight = 226,
+	ogType = 'website',
+	twitterCard = 'summary',
 	// The build writes /about.html (build.format: 'file'); live URLs are /about.
 	canonical = new URL(Astro.url.pathname.replace(/(\/index)?\.html$/, ''), site.url).href.replace(/\/$/, ''),
 } = Astro.props;
@@ -50,7 +56,7 @@ const isProduction = import.meta.env.PUBLIC_SITE_ENV === 'production';
 		<meta property="og:site_name" content={site.ogSiteName} />
 		<meta property="og:title" content={title} />
 		<meta property="og:url" content={canonical} />
-		<meta property="og:type" content="website" />
+		<meta property="og:type" content={ogType} />
 		<meta property="og:description" content={description} />
 		<meta property="og:image" content={ogImage} />
 		<meta property="og:image:width" content={String(ogImageWidth)} />
@@ -58,8 +64,10 @@ const isProduction = import.meta.env.PUBLIC_SITE_ENV === 'production';
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:image" content={ogImage} />
 		<meta name="twitter:url" content={canonical} />
-		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:card" content={twitterCard} />
 		<meta name="twitter:description" content={description} />
+
+		<link rel="alternate" type="application/rss+xml" title="Boyd Innovation Center Blog" href="/blog/rss.xml" />
 
 		<Font cssVariable="--font-sans" preload />
 		<Font cssVariable="--font-mono" />

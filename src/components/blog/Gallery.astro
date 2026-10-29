@@ -1,0 +1,256 @@
+---
+/**
+ * Photo slideshow with a thumbnail strip, as in the live event recaps.
+ *
+ * Put the photos in a `gallery/` folder next to the post's index.mdx (they
+ * show in file-name order: 01.jpg, 02.jpg…) and add:
+ *
+ *   <Gallery photos={import.meta.glob("./gallery/*.{jpg,png,webp,gif}", { eager: true, import: "default" })} />
+ *
+ * Without JavaScript the photos are a swipeable, scrollable row. The script
+ * adds the arrows and makes the thumbnails jump to their photo.
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+	photos: Record<string, ImageMetadata> | ImageMetadata[];
+	/** Accessible name for the slideshow. */
+	label?: string;
+	/** Load the first photo right away; use when the gallery is at the top of a post. */
+	priority?: boolean;
+}
+
+const { photos, label = 'Event photos', priority = false } = Astro.props;
+const list = Array.isArray(photos)
+	? photos
+	: Object.keys(photos)
+			.sort()
+			.map((key) => photos[key]);
+const total = list.length;
+---
+
+<section class="gallery" aria-roledescription="carousel" aria-label={label} data-gallery>
+	<div class="gallery__stage">
+		<ul class="gallery__track" tabindex="0" aria-label={`${label}, ${total} photos. Scroll sideways for more.`} data-track>
+			{
+				list.map((photo, i) => (
+					<li class="gallery__slide" aria-roledescription="slide" aria-label={`${i + 1} of ${total}`}>
+						<Image
+							src={photo}
+							alt=""
+							widths={[400, 700, 1000, 1400]}
+							sizes="(min-width: 48rem) min(69vw, 994px), 100vw"
+							loading={priority && i === 0 ? 'eager' : 'lazy'}
+							fetchpriority={priority && i === 0 ? 'high' : undefined}
+						/>
+					</li>
+				))
+			}
+		</ul>
+		<button class="gallery__arrow gallery__arrow--prev" type="button" aria-label="Previous photo" data-prev hidden>
+			<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><polyline points="7.4,1.2 2.5,7.9 7.4,14.7"></polyline></svg>
+		</button>
+		<button class="gallery__arrow gallery__arrow--next" type="button" aria-label="Next photo" data-next hidden>
+			<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><polyline points="1.6,1.2 6.5,7.9 1.6,14.7"></polyline></svg>
+		</button>
+	</div>
+	<ul class="gallery__thumbs" data-thumbs hidden>
+		{
+			list.map((photo, i) => (
+				<li>
+					<button type="button" aria-label={`Show photo ${i + 1} of ${total}`} aria-current={i === 0 ? 'true' : undefined}>
+						<Image src={photo} alt="" width={160} height={160} fit="cover" loading="lazy" />
+					</button>
+				</li>
+			))
+		}
+	</ul>
+	<p class="visually-hidden" aria-live="polite" data-status></p>
+</section>
+
+<style>
+	.gallery {
+		margin-block: var(--space-5);
+	}
+
+	.gallery__stage {
+		position: relative;
+	}
+
+	/* Live: auto-cropped to a 3:2 frame (994 × 663 @1440). */
+	.gallery__track {
+		display: flex;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		overscroll-behavior-x: contain;
+		scrollbar-width: none;
+		padding: 0;
+		list-style: none;
+		background: rgb(175 175 175 / 0.1);
+	}
+
+	.gallery__track::-webkit-scrollbar {
+		display: none;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.gallery__track {
+			scroll-behavior: smooth;
+		}
+	}
+
+	.gallery__slide {
+		flex: 0 0 100%;
+		scroll-snap-align: center;
+		aspect-ratio: 3 / 2;
+	}
+
+	.gallery__slide :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.gallery__arrow {
+		position: absolute;
+		top: 50%;
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 3.5rem;
+		padding: 0;
+		border: 0;
+		background: rgb(0 0 0 / 0.25);
+		color: #fff;
+		cursor: pointer;
+		translate: 0 -50%;
+	}
+
+	.gallery__arrow[hidden] {
+		display: none;
+	}
+
+	.gallery__arrow:hover {
+		background: rgb(0 0 0 / 0.45);
+	}
+
+	.gallery__arrow--prev {
+		left: 0;
+	}
+
+	.gallery__arrow--next {
+		right: 0;
+	}
+
+	.gallery__arrow svg {
+		width: 0.7rem;
+		height: 1.25rem;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.5;
+	}
+
+	/* Live: an 80px strip under the photo, thumbnails edge to edge. */
+	.gallery__thumbs {
+		display: flex;
+		gap: 0;
+		margin-top: 0.95rem;
+		padding: 0;
+		overflow-x: auto;
+		list-style: none;
+		scrollbar-width: thin;
+	}
+
+	.gallery__thumbs[hidden] {
+		display: none;
+	}
+
+	.gallery__thumbs li {
+		flex: 1 0 2.75rem;
+	}
+
+	.gallery__thumbs button {
+		display: block;
+		width: 100%;
+		height: 5rem;
+		padding: 0;
+		border: 0;
+		background: none;
+		cursor: pointer;
+		opacity: 0.55;
+	}
+
+	.gallery__thumbs button:hover,
+	.gallery__thumbs button[aria-current='true'] {
+		opacity: 1;
+	}
+
+	.gallery__thumbs button:focus-visible {
+		outline-offset: -3px;
+	}
+
+	.gallery__thumbs :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+</style>
+
+<script>
+	for (const gallery of document.querySelectorAll<HTMLElement>('[data-gallery]')) {
+		const track = gallery.querySelector<HTMLElement>('[data-track]')!;
+		const slides = [...track.children] as HTMLElement[];
+		const thumbs = [...gallery.querySelectorAll<HTMLButtonElement>('[data-thumbs] button')];
+		const status = gallery.querySelector<HTMLElement>('[data-status]')!;
+		const prev = gallery.querySelector<HTMLButtonElement>('[data-prev]')!;
+		const next = gallery.querySelector<HTMLButtonElement>('[data-next]')!;
+		let current = 0;
+
+		const show = (i: number) => {
+			const target = (i + slides.length) % slides.length;
+			track.scrollTo({ left: slides[target].offsetLeft - track.offsetLeft });
+		};
+
+		const setCurrent = (i: number) => {
+			if (i === current) return;
+			current = i;
+			thumbs.forEach((t, n) => (n === i ? t.setAttribute('aria-current', 'true') : t.removeAttribute('aria-current')));
+			// Keep the current thumbnail in view (sideways only, never moving the page).
+			const strip = thumbs[i]?.closest('ul');
+			const li = thumbs[i]?.parentElement;
+			if (strip && li) {
+				const left = li.offsetLeft - strip.offsetLeft;
+				if (left < strip.scrollLeft || left + li.offsetWidth > strip.scrollLeft + strip.clientWidth) {
+					strip.scrollTo({ left: left - strip.clientWidth / 2 + li.offsetWidth / 2 });
+				}
+			}
+			status.textContent = `Photo ${i + 1} of ${slides.length}`;
+		};
+
+		// The slide that's mostly in view is the current one.
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) setCurrent(slides.indexOf(entry.target as HTMLElement));
+				}
+			},
+			{ root: track, threshold: 0.6 },
+		);
+		slides.forEach((s) => observer.observe(s));
+
+		prev.addEventListener('click', () => show(current - 1));
+		next.addEventListener('click', () => show(current + 1));
+		thumbs.forEach((t, i) => t.addEventListener('click', () => show(i)));
+		track.addEventListener('keydown', (e) => {
+			if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+				e.preventDefault();
+				show(current + (e.key === 'ArrowRight' ? 1 : -1));
+			}
+		});
+
+		if (slides.length > 1) {
+			prev.hidden = next.hidden = false;
+			gallery.querySelector<HTMLElement>('[data-thumbs]')!.hidden = false;
+		}
+	}
+</script>

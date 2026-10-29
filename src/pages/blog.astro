@@ -1,0 +1,21 @@
+---
+import { getEntry } from 'astro:content';
+import BlogListPage from '../components/blog/BlogListPage.astro';
+import { getPosts, paginate } from '../lib/blog';
+
+const entry = await getEntry('blogPage', 'blog');
+if (!entry) throw new Error('Missing blog page content: src/content/blog-page.yaml');
+const { seo, pageSize } = entry.data;
+const [page] = paginate(await getPosts(), pageSize, '/blog');
+---
+
+<BlogListPage
+	page={page}
+	title={seo.title}
+	description={seo.description}
+	name="Blog"
+	crumbs={[
+		{ name: 'Home', path: '/' },
+		{ name: 'Blog', path: '/blog' },
+	]}
+/>

@@ -1,0 +1,89 @@
+---
+/** Links to the newer (left) and older (right) post, under each post. */
+import { postUrl, type Post } from '../../lib/blog';
+
+interface Props {
+	newer?: Post;
+	older?: Post;
+}
+
+const { newer, older } = Astro.props;
+---
+
+{
+	(newer || older) && (
+		<nav class="post-pager" aria-label="More posts">
+			{newer && (
+				<a class="post-pager__link post-pager__link--newer" href={postUrl(newer)} rel="prev">
+					<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false">
+						<polyline points="7.4,1.2 2.5,7.9 7.4,14.7" />
+					</svg>
+					<span>
+						<span class="visually-hidden">Previous post: </span>
+						{newer.data.title}
+					</span>
+				</a>
+			)}
+			{older && (
+				<a class="post-pager__link post-pager__link--older" href={postUrl(older)} rel="next">
+					<span>
+						<span class="visually-hidden">Next post: </span>
+						{older.data.title}
+					</span>
+					<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false">
+						<polyline points="1.6,1.2 6.5,7.9 1.6,14.7" />
+					</svg>
+				</a>
+			)}
+		</nav>
+	)
+}
+
+<style>
+	/* Live at 1440: a 144px band, links at the page gutters. */
+	.post-pager {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--space-5);
+		padding: clamp(var(--space-3), 3vw, 2.7rem) var(--gutter);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.post-pager__link {
+		display: flex;
+		align-items: center;
+		gap: clamp(0.75rem, 2vw, 1.6rem);
+		max-width: 46%;
+		min-height: 2.75rem;
+		font-size: var(--text-h3);
+		font-weight: 500;
+		line-height: 1.1;
+		text-decoration: none;
+	}
+
+	/* Long words ("Entrepreneurship") hyphenate on narrow phones instead of overflowing. */
+	.post-pager__link > span {
+		min-width: 0;
+		overflow-wrap: break-word;
+		hyphens: auto;
+	}
+
+	.post-pager__link:hover > span {
+		text-decoration: underline;
+	}
+
+	.post-pager__link--older {
+		margin-left: auto;
+		text-align: right;
+	}
+
+	svg {
+		flex: none;
+		width: 0.8rem;
+		height: 1.4rem;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.2;
+	}
+</style>

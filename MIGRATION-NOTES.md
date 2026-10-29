@@ -87,7 +87,7 @@ The Astro numbers come from a local server, so they will shift on real hosting. 
 ### Live-site issues noticed, not changed
 
 - The HubSpot reCAPTCHA shows "This reCAPTCHA is for testing purposes only" on the live site too. This is a HubSpot account setting.
-- `/home` returns a full duplicate of the homepage (HTTP 200) and is listed in the live sitemap. It should become a 301 to `/` at launch (to confirm).
+- `/home` returns a full duplicate of the homepage (HTTP 200) and is listed in the live sitemap. It is now a 301 to `/` (see Redirects).
 - `og:image` / `twitter:image` point to an `http://static1.squarespace.com/...` URL. They are kept exactly as instructed, but **they will break when the Squarespace site is cancelled** (open question 4).
 
 ### Open questions
@@ -98,7 +98,7 @@ The Astro numbers come from a local server, so they will shift on real hosting. 
    - In "Product Jam" and "Growth Jam", only the first word is linked.
 3. **Mobile order and content:** on phones the live explore cards show Space, Programs, Events; the rebuild uses the desktop order (Programs, Space, Events) on every screen, per the "same order on every screen" rule. The Day Pass description is also hidden on phones on the live site, and that is preserved.
 4. **og:image hosting:** keep the Squarespace URL until launch and switch to a self-hosted copy of the same image at launch?
-5. **Hosting:** where will the site be deployed (e.g. Cloudflare Pages, Netlify, Vercel)? This decides how redirects (Squarespace URL Mappings) and trailing-slash handling are configured.
+5. ~~**Hosting:**~~ Answered: Cloudflare (Workers static assets, deployed from `main`). Redirects live in `public/_redirects` (see Redirects).
 6. **Tracking:** does GTM already fire GA4 `G-PEHD1QDBW8`? Is LinkedIn partner `7841314` or `7872946` obsolete? (See INTEGRATIONS.md.)
 7. **CMS:** editing `home.yaml` requires Git. If non-technical editors need a web UI, the Git-based options that fit this setup are Decap CMS (free), TinaCMS and CloudCannon. The choice can wait until more pages are migrated.
 
@@ -406,3 +406,100 @@ Checked every 8px from 320 to 1440 with no horizontal scroll; screenshots at 320
 
 20. **Sponsor website addresses:** what are the links for Sweetwaters Coffee & Tea, Integer Technologies, Security Federal Bank and Snaply Sites? Their logos become links once these are added.
 21. **Pausing the sponsor scroll (WCAG 2.2.2):** moving content that runs longer than 5 seconds needs a way to pause it. Hover and keyboard focus now pause it, but phone users have no way to. A small pause button beside the logos would fully meet the guideline. It would be a visible addition, so it needs approval.
+
+## Redirects (2026-10-29)
+
+All redirects are in [public/_redirects](public/_redirects), which Cloudflare reads at deploy time. 101 rules, tested against `wrangler dev`. Sources:
+
+- **Squarespace URL Mappings** (export pasted by Kennedy, 2026-10-29): all 29 rules carried over unchanged, including the two external ones (`/showcase` to Eventbrite and `/friendsgiving` to a Google Sheet, which stays a 302). Squarespace redirected to `http://`; the new rules go to relative paths, so visitors stay on `https` with no extra hop.
+- **Trailing slashes:** Squarespace matched `/about-us` and `/about-us/` alike, but Cloudflare matches exactly. Each mapping therefore has a second line with the slash, plus `/events/` to `/events`. Real pages need no rule, because `/about/` already redirects to `/about` (Cloudflare uses a 307 there).
+- **Leftover duplicates:** `/home` to `/` and `/programs-1-1` to `/programs`. Live serves full copies of those pages at these URLs. `/programs-1` was already in the URL Mappings.
+- **Search Console "Not found (404)" export** (last crawled through 2026-10-23): 149 rows, 111 unique paths once `www`, `http` and tracking parameters are removed.
+  - 56 are event pages that moved from `/events/<slug>` to `/event-calendar/<slug>`. These are handled by a single `/events/*` pattern rule, which also catches old event links Google hasn't reported.
+  - 42 have Squarespace duplicate suffixes (`-xxxxx`, sometimes chained). 16 blog ones were already in the URL Mappings. The 26 event ones were generated from the export, each pointing to the page that exists in the live sitemap.
+  - `/events/startups-on-tap-july-22-2026` goes to its renamed page, `/event-calendar/startups-on-tap-2026-07-22`.
+  - Unused event-page drafts (`/meetups`, `/trial-event-coworks`, per Kennedy) and four deleted events go to `/events`. Google may report these as soft 404s, which is harmless.
+  - `/blog/category/*` goes to `/blog`.
+  - The deleted sponsorship PDF `/s/startup-sprint-sponsorhsip-bic.pdf` goes to `/startup-sprint`. If the PDF turns up, host it at that path and remove the rule.
+  - `/events/tech-`, `/office-` and `/new-dropdown` are half-typed drafts and are left as 404s on purpose.
+  - Result: 109 of the 111 paths redirect to a URL in the live sitemap; the other 2 return 404.
+- **Not handled here:** `www.boydinnovation.org` to `boydinnovation.org`. Squarespace does this today; on Cloudflare it is a domain-level redirect rule, set up at launch.
+- **Order matters:** the first matching rule wins, and Cloudflare checks plain rules before rules with `*`, so the two pattern rules stay at the bottom of the file.
+
+
+## Blog (`/blog`, 44 posts, tag pages) (2026-10-29)
+
+All 50 live blog URLs (the list, 44 posts and 5 tag pages) are rebuilt and return 200 on the Cloudflare build, with the live titles and canonicals. Descriptions, social images and some page structure were then changed on purpose for SEO (Kennedy approved, 2026-10-29; see "SEO changes" below).
+
+### How it's built
+
+- **One folder per post:** `src/content/blog/<slug>/index.mdx` (Markdown plus two components), with that post's images next to it. A new post is a copy of `src/content/blog/_template`. CONTENT.md explains this for the team, and `.claude/skills/new-blog-post/SKILL.md` tells Claude Code (including in the browser) how to add one.
+- **Imported, not retyped:** a one-off script read Squarespace's JSON export of all 44 posts, converted the text to Markdown, and downloaded 205 images (at most 1500px wide). It also checked every computed `<title>` against live, with no differences. The script stays in the session scratchpad and isn't part of the site. **Don't re-run it**: the posts have since been edited by hand (typos, descriptions, tags), and new posts go through the template.
+- **Post components:** `<Figure>` (full width, floated left or right, or centered at a set width, with the Squarespace crop and corner radius where live has them) and `<Gallery>` (the recap slideshows: 9 galleries, photo counts identical to live).
+- **List pages:** 10 posts per page, as on Squarespace. Squarespace's "Older Posts" went to `/blog?offset=…`, which a static site can't serve, so later pages are now `/blog/page/2`…`/5`, and `/blog/tag/<Tag>/page/2` for tags. `?offset=` links still open `/blog`, which shows page 1.
+- **Tag URLs with `+`** (`/blog/tag/Tech+Incubator`): Cloudflare would redirect these to `%2B`. A small build step (`src/lib/plus-sign-rewrites.mjs`) adds rewrites so they're served at the live address with a 200.
+- **Markdown settings:** "smart" punctuation is off (it changed `--` in a press release to `—`), and so is automatic linking of plain email addresses and URLs (live shows several founder emails as plain text).
+
+### Fixes (no visible change, or small-screen only)
+
+- **Heading structure:** live posts jump from the title `<h1>` straight to `<h3>`, and some go back up to `<h2>` later. A build step renumbers each post's headings so they run 2, 3, 4 with no skipped levels. Each heading keeps the size the author chose, through a class. Blog list cards were each an `<h1>` on live; they're now `<h2>`.
+- **Invisible text on live:** some headings and links use Squarespace's "dark accent" color, which is the same navy as the background. Examples are the seven "Sprint Block #1–7" headings in the Spring 2026 Startup Sprint recap, and the Bivvy and Pathly links in a press release. **They're shown in the normal text color in the rebuild.** This makes text visible that live hides by accident. Revert it if that was intentional (see question 22).
+- **Alt text:** live has none on images inside posts. All 33 now have it, mostly the words in each "Founder Spotlight" graphic. Slideshows are labeled ("Photos: <post title>"), and each thumbnail is a button ("Show photo 3 of 15").
+- **Links:** links to other sites open in a new tab, as on live, and now tell screen readers so. "Read More" links include the post title for screen readers. 22 internal links that went through a redirect (`/launchpad-cola`, `/membership`, `/donate`, old `/events/…` addresses) now go straight to the final page.
+- **Small screens:**
+  - Blog hero, about 320–414px: live breaks "Highlightin-g" across lines. The headline now shrinks just enough to keep its longest word whole.
+  - Post titles at all widths: same rule, so long words never break mid-word.
+  - Post pages at 320–360px: the previous/next links hyphenate long words instead of widening the page. One post's long URL link text now wraps.
+  - All 59 blog pages were checked at 320, 360, 375, 414, 768 and 1024px. The ten most varied were also checked every 8px from 320 to 1440. No sideways scrolling.
+
+### Deviations
+
+- **Slideshow thumbnails** are equal-width squares in one strip, scrollable on phones. Live's strip sizes them unevenly.
+- **Squarespace spacer blocks** (26, mostly between entries in the cohort posts) aren't carried over, so those posts are a little tighter vertically. Text, order and dividers are unchanged.
+- **Scroll fade-in animations** on live aren't recreated, as on the other pages.
+
+### Structured data
+
+Posts: `BlogPosting` (headline, published and modified dates, image, tags, with BIC as author and publisher) and `BreadcrumbList`. List and tag pages: `Blog`, `CollectionPage` with an `ItemList` of the posts shown, and `BreadcrumbList`.
+
+### Performance (Lighthouse, mobile, 2026-10-29)
+
+| Page | Live | Astro (local Cloudflare) |
+|---|---|---|
+| `/blog` | 51 perf, LCP 24.0 s, 5.6 MB, a11y 96 | 96 perf, LCP 2.4 s, 1.9 MB, a11y 100 |
+| `/blog/tech-on-tap-july-2026` | 48 perf, LCP 25.3 s, 3.8 MB, a11y 98 | 98 perf, LCP 1.9 s, 2.1 MB, a11y 100 |
+
+### SEO changes (approved by Kennedy, 2026-10-29: "make the SEO improvements you think make the most sense")
+
+- **Meta descriptions:** 5 posts had one on live, and those are kept word for word. The other 39 were blank on live, so Google wrote its own snippet. Each now has a description copied from the post's own opening sentences (150–200 characters). No new wording, except the Fall 2025 cohort post, whose description lists the first eight companies by name. These also become `og:description` and appear in the RSS feed.
+- **Visible publish date** under each post title ("July 22, 2026"). Live showed dates only on the blog list.
+- **Topic tags:** 8 new tags group the series: Tech on Tap, Startup Sprint, Launchpad COLA, Founder Spotlight, Marketing and SEO, Founder Wellbeing, Press Releases and BIC News. Each gets a tag page (for example `/blog/tag/Tech+on+Tap`). The 5 live tags are unchanged and still list the same posts. Tag pages show the tag above the headline ("BLOG / TECH ON TAP") and have a short description. Later list pages say "Page 2" in their titles, so no two pages share a title.
+- **Tag links and "Related Posts" under each post:** two posts chosen by shared tags (rarer tags count more), never the two already linked by the previous/next links. Previously, older posts could only be reached through four or five "Older Posts" pages.
+- **Social images:** posts now use their own cover image, served from this site at 1200px (`og:image`, `twitter:image`), with `summary_large_image` cards, instead of Squarespace CDN links that stop working when Squarespace is cancelled. They're absolute `https://boydinnovation.org/_astro/…` URLs, so they only resolve once the domain points at Cloudflare. The blog list and other pages still use the Squarespace URL (question 4).
+- **RSS feed** at `/blog/rss.xml`, listed in every page's `<head>`. The old Squarespace feed (`/blog?format=rss`) can't be redirected, because Cloudflare redirects can't match on query strings.
+
+### Typos fixed (2026-10-29, approved by Kennedy)
+
+Found with a dictionary check plus checks for repeated words and common slips. Names and URLs weren't changed.
+
+| Post | Was | Now |
+|---|---|---|
+| nautiq-ai-launchpad-spotlight | busienss; a valueable asset | business; a valuable asset |
+| meet-launchpad-cola-fall-2025 | electromanetic | electromagnetic |
+| tech-on-tap-july-2026 | from planing and establishing | from planning and establishing |
+| tech-on-tap-july-2026, tech-on-tap-may-2026 | Our check out our events calendar | Or check out our events calendar |
+| tech-on-tap-may-2026 | but but he can | but he can |
+| launchpad-cola-halfway | 7 AM and and leave; Shriha Ganesh Babu | 7 AM and leave; Shrihan Ganesh Babu (as spelled in the cohort post) |
+| startup-sprint-spring-2026 | Goruchos; helped contributed to | Groucho’s; helped contribute to |
+| founder-spotlight-jade-pruett-of-helloseo | Linkedin | LinkedIn |
+
+Left as-is: the misspelled URL `/blog/tech-on-tap-novemeber-2025`, which is live and indexed; and "Yuri", which is used throughout the NeedNoMore spotlight while the cohort list says "Yurii" (it may be a nickname).
+
+### Decisions
+
+22. **"Dark accent" text:** shown in the normal text color (not hidden as on live).
+23. **Slideshow photos:** labeled per slideshow ("Photos: <post title>"). The 128 photos don't get individual descriptions (Kennedy, 2026-10-29).
+
+### Testing note
+
+On 320px phones, HubSpot's popup overlay (`#hs-interactives-modal-overlay`, injected on every page) is 3px wider than the window. That makes `scrollWidth` report up to 341px, but the page can't be scrolled sideways, because `body { overflow-x: clip }` contains it (checked by trying to scroll). No change is needed. Remember this when an automated width check flags a page only some of the time.

@@ -1,0 +1,76 @@
+---
+# ─────────────────────────────────────────────────────────────────────────
+# NEW BLOG POST TEMPLATE
+# 1. Copy this whole _template folder and rename the copy to the post's URL,
+#    lowercase with dashes: src/content/blog/tech-on-tap-december-2026
+#    → boydinnovation.org/blog/tech-on-tap-december-2026
+# 2. Put the post's images in the new folder (and event photos in a
+#    gallery/ folder inside it). Folders starting with "_" never go live.
+# 3. Fill in the fields below, replace the example body, set draft: false.
+# Full guide: CONTENT.md → "Blog posts".
+# ─────────────────────────────────────────────────────────────────────────
+
+# Headline at the top of the post and in the blog list.
+title: "Tech on Tap December 2026 Recap"
+
+# Optional. Shorter title for the browser tab and Google, if the headline is long.
+# " | Boyd Innovation" is added automatically.
+# seoTitle: "Tech on Tap December 2026"
+
+# One or two sentences (150–200 characters) shown under the title in Google and
+# in link previews. Use the post's own opening lines rather than new wording.
+description: "What founders learned at December's Tech on Tap at the Boyd Innovation Center in Columbia, SC."
+
+# Publish date and time in UTC (Eastern + 5 hours, or + 4 in summer). Posts are listed newest first.
+date: 2026-12-18T15:00:00Z
+
+# Tags list the post on /blog/tag/<Tag> pages, show as links under the post and
+# pick its "Related Posts". Put the topic first and reuse existing tags exactly:
+#   Topics: Tech on Tap, Startup Sprint, Launchpad COLA, Founder Spotlight,
+#           Marketing and SEO, Founder Wellbeing, Press Releases, BIC News
+#   General: Programs, Entrepreneur Programs, Training, Incubator, Tech Incubator
+tags: ["Tech on Tap", "Programs", "Entrepreneur Programs"]
+
+# Thumbnail in the blog list and the picture shown when the post is shared.
+# Landscape (3:2) works best, at least 1200px wide.
+image: ./cover.jpg
+
+# true keeps the post off the site while you work on it.
+draft: true
+---
+
+{/* Load the image and slideshow components. Remove any you don't use. */}
+import { Figure, Gallery } from '../../../components/blog';
+
+{/* One line per image used with <Figure>. The name on the left is used below. */}
+import speakerPhoto from './speaker.jpg';
+
+<h3 class="center">One-line summary under the title (optional)</h3>
+
+---
+
+{/* A slideshow of every photo in the gallery/ folder, in file-name order (01.jpg, 02.jpg…).
+    "priority" makes it load first because it's at the top of the post. */}
+<Gallery priority photos={import.meta.glob("./gallery/*.{jpg,png,webp,gif}", { eager: true, import: "default" })} />
+
+Write paragraphs as plain text with a blank line between them. Use **bold**, *italics* and [links](https://example.com) like this. Links to other websites open in a new tab automatically.
+
+### A section heading
+
+Use `###` for normal section headings, `##` for a larger one and `####` for a small one. The site fixes heading order for search engines and screen readers by itself.
+
+<Figure src={speakerPhoto} alt="Describe what the photo shows, e.g. Jane Doe presenting at Tech on Tap" align="left" width={0.5} />
+
+An image with align="left" sits on the left with this text wrapping around it (on phones it goes full width above the text). Use align="right" for the other side, align="center" with a width for a smaller centered image, or leave both out for a full-width image.
+
+- Bulleted lists start with a dash
+- One item per line
+
+1. Numbered lists start with a number
+2. Like this
+
+---
+
+### What is Tech On Tap?
+
+The line above (three dashes on their own line) draws a divider.

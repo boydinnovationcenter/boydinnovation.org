@@ -1,0 +1,32 @@
+---
+/**
+ * /blog/page/2, /blog/page/3, … (Squarespace used /blog?offset=…, which a
+ * static site can't serve; those links still land on /blog).
+ */
+import type { GetStaticPaths } from 'astro';
+import { getEntry } from 'astro:content';
+import BlogListPage from '../../../components/blog/BlogListPage.astro';
+import { getPosts, paginate, type ListPage } from '../../../lib/blog';
+
+export const getStaticPaths = (async () => {
+	const entry = await getEntry('blogPage', 'blog');
+	const pages = paginate(await getPosts(), entry!.data.pageSize, '/blog');
+	return pages.slice(1).map((page) => ({ params: { page: String(page.number) }, props: { page } }));
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props as { page: ListPage };
+const entry = await getEntry('blogPage', 'blog');
+const { seo } = entry!.data;
+---
+
+<BlogListPage
+	page={page}
+	title={seo.title.replace(/ \| Boyd Innovation$/, `, Page ${page.number} | Boyd Innovation`)}
+	description={seo.description}
+	name={`Blog, page ${page.number}`}
+	crumbs={[
+		{ name: 'Home', path: '/' },
+		{ name: 'Blog', path: '/blog' },
+		{ name: `Page ${page.number}`, path: `/blog/page/${page.number}` },
+	]}
+/>

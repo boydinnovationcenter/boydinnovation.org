@@ -484,6 +484,56 @@ const startupSprint = defineCollection({
 		}),
 });
 
+/**
+ * Blog posts. One folder per post in src/content/blog/<url-slug>/ with an
+ * index.mdx and the post's images; the folder name is the URL
+ * (/blog/<url-slug>). Folders starting with "_" (the template) are skipped.
+ * See CONTENT.md ("Blog posts").
+ */
+const blog = defineCollection({
+	loader: glob({
+		pattern: '[!_]*/index.mdx',
+		base: './src/content/blog',
+		generateId: ({ entry }) => entry.split('/')[0],
+	}),
+	schema: ({ image }) =>
+		z.object({
+			/** Headline shown on the post and in the blog list. */
+			title: z.string(),
+			/** Browser-tab/search title, if different from the headline. " | Boyd Innovation" is added. */
+			seoTitle: z.string().optional(),
+			/** Search-result snippet. */
+			description: z.string().optional(),
+			/** Publish date and time (UTC, e.g. 2026-07-22T16:42:13Z). Shown in Eastern time. */
+			date: z.coerce.date(),
+			/** Last meaningful edit, for search engines. */
+			updated: z.coerce.date().optional(),
+			/** Each tag gets a page at /blog/tag/<Tag+Name>. */
+			tags: z.array(z.string()).default([]),
+			/** Thumbnail in the blog list, and the picture shown when the post is shared. */
+			image: image(),
+			/** true keeps the post off the site. */
+			draft: z.boolean().default(false),
+		}),
+});
+
+/** Blog list page (/blog) copy. One entry ("blog") in src/content/blog-page.yaml. */
+const blogPage = defineCollection({
+	loader: file('src/content/blog-page.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+			hero: z.object({
+				eyebrow: z.string(),
+				/** Headline lines, shown one per line. */
+				headline: z.array(z.string()),
+				image: image(),
+			}),
+			/** Posts per page; matches Squarespace. */
+			pageSize: z.number().default(10),
+		}),
+});
+
 export const collections = {
 	home,
 	programs,
@@ -497,4 +547,6 @@ export const collections = {
 	bookATour,
 	techOnTap,
 	startupSprint,
+	blog,
+	blogPage,
 };

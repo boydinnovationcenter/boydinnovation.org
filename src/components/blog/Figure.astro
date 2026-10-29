@@ -1,0 +1,107 @@
+---
+/**
+ * An image inside a blog post.
+ *
+ *   <Figure src={photo} alt="What the image shows" />                    full width
+ *   <Figure src={photo} alt="…" align="center" width={0.5} />            centered, half width
+ *   <Figure src={photo} alt="…" align="left" width={0.5} />              text wraps on the right
+ *
+ * `width` is a fraction of the text column. Floated images go full width on
+ * phones. Images never stretch past their own pixel width (as on Squarespace).
+ * `aspect` crops to a shape (width ÷ height, e.g. 0.83 for a tall portrait)
+ * and `rounded` rounds the corners (in pixels).
+ * Use alt="" only for purely decorative images.
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+	src: ImageMetadata;
+	alt: string;
+	align?: 'left' | 'right' | 'center';
+	/** Fraction of the text column, e.g. 0.5. Defaults to the full column. */
+	width?: number;
+	/** Makes the image a link. */
+	href?: string;
+	caption?: string;
+	/** Crop to this width ÷ height. */
+	aspect?: number;
+	/** Corner radius in pixels. */
+	rounded?: number;
+	/** Load right away; use for an image at the very top of a post. */
+	priority?: boolean;
+}
+
+const { src, alt, align, width = 1, href, caption, aspect, rounded, priority = false } = Astro.props;
+const style = [
+	`--figure-width: ${width}`,
+	`--natural-width: ${src.width}px`,
+	aspect && `--aspect: ${aspect}`,
+	rounded && `--radius: ${rounded}px`,
+]
+	.filter(Boolean)
+	.join('; ');
+// The text column is at most 994px (62.125rem) wide, 69vw on tablets and up.
+const sizes = `(min-width: 48rem) min(${Math.round(width * 69)}vw, ${Math.round(width * 994)}px), 100vw`;
+const isExternal = href ? /^https?:\/\//.test(href) && !href.includes('boydinnovation.org') : false;
+---
+
+<figure class:list={['figure', align && `figure--${align}`, aspect && 'figure--cropped']} style={style}>
+	{
+		href ? (
+			<a href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener' : undefined}>
+				<Image src={src} alt={alt} widths={[400, 700, 1000, 1400]} sizes={sizes} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : undefined} />
+				{isExternal && <span class="visually-hidden"> (opens in a new tab)</span>}
+			</a>
+		) : (
+			<Image src={src} alt={alt} widths={[400, 700, 1000, 1400]} sizes={sizes} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : undefined} />
+		)
+	}
+	{caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+	.figure {
+		max-width: var(--natural-width);
+		margin-block: var(--space-5);
+		margin-inline: auto;
+	}
+
+	.figure :global(img) {
+		width: 100%;
+		border-radius: var(--radius, 0);
+	}
+
+	.figure--cropped :global(img) {
+		aspect-ratio: var(--aspect);
+		object-fit: cover;
+	}
+
+	figcaption {
+		margin-top: var(--space-2);
+		font-size: var(--text-sm);
+	}
+
+	@media (min-width: 48rem) {
+		.figure--center {
+			width: calc(var(--figure-width) * 100%);
+			margin-inline: auto;
+		}
+
+		/* Live: the image takes its share of the column minus half the gap. */
+		.figure--left,
+		.figure--right {
+			width: min(calc(var(--figure-width) * 100% - 1.1rem), var(--natural-width));
+			margin-block: 0.4rem var(--space-3);
+		}
+
+		.figure--left {
+			float: left;
+			margin-right: 2.2rem;
+		}
+
+		.figure--right {
+			float: right;
+			margin-left: 2.2rem;
+		}
+	}
+</style>
