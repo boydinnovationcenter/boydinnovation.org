@@ -1,0 +1,164 @@
+---
+/**
+ * "Made possible by": sponsor logos scrolling sideways in a loop, in CSS
+ * only (the live site built this with JavaScript). The list is repeated so
+ * wide screens never show a gap; screen readers get the first copy only.
+ * The scroll pauses on hover and keyboard focus, and visitors who prefer
+ * reduced motion see one still, centered row instead.
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+	heading: string;
+	items: { name: string; logo: ImageMetadata; url?: string; tall: boolean }[];
+}
+
+const { heading, items } = Astro.props;
+/** Copies of the list in each half of the loop. */
+const REPEAT = 3;
+const halves = [false, true].map((clone) => Array.from({ length: REPEAT }, (_, r) => ({ hidden: clone || r > 0 })));
+---
+
+<section class="sponsors" aria-labelledby="sponsors-heading">
+	<h2 id="sponsors-heading">{heading}</h2>
+	<div class="sponsors__viewport">
+		<div class="sponsors__track">
+			{
+				halves.map((copies, half) => (
+					<ul class="sponsors__set" role="list" aria-hidden={half === 1 ? 'true' : undefined}>
+						{copies.map(({ hidden }) =>
+							items.map((s) => {
+								const logo = (
+									<Image
+										class:list={{ 'is-tall': s.tall }}
+										src={s.logo}
+										alt={hidden ? '' : s.name}
+										height={s.tall ? 72 : 44}
+										densities={[1, 2]}
+									/>
+								);
+								return (
+									<li class:list={{ 'is-copy': hidden }} aria-hidden={hidden && half === 0 ? 'true' : undefined}>
+										{s.url ? (
+											<a href={s.url} target="_blank" rel="noopener" tabindex={hidden ? -1 : undefined}>
+												{logo}
+												{!hidden && <span class="visually-hidden"> website (opens in a new tab)</span>}
+											</a>
+										) : (
+											logo
+										)}
+									</li>
+								);
+							}),
+						)}
+					</ul>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.sponsors {
+		--logo-height: 2.75rem;
+		--logo-gap: 5rem;
+		/* Live speed: 35px per second across one half of the loop. */
+		--duration: 84s;
+		padding-block: 2.45rem 2.5rem;
+		background: var(--color-navy-deep);
+		color: #fff;
+		text-align: center;
+	}
+
+	h2 {
+		padding-inline: var(--gutter);
+	}
+
+	.sponsors__viewport {
+		overflow: hidden;
+		margin-top: 0.7rem;
+		padding-block: 1.5rem;
+		-webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+		mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+	}
+
+	.sponsors__track {
+		display: flex;
+		width: max-content;
+	}
+
+	.sponsors__set {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		gap: var(--logo-gap);
+		padding: 0 var(--logo-gap) 0 0; /* matches the gap so the loop is seamless */
+		list-style: none;
+	}
+
+	.sponsors__set li,
+	.sponsors__set a {
+		display: block;
+		flex-shrink: 0;
+	}
+
+	.sponsors__set img {
+		width: auto;
+		max-width: none;
+		height: var(--logo-height);
+	}
+
+	.sponsors__set img.is-tall {
+		height: calc(var(--logo-height) * 72 / 44); /* stacked logos need more height to look balanced */
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.sponsors__track {
+			animation: sponsors-scroll var(--duration) linear infinite;
+		}
+
+		.sponsors__viewport:hover .sponsors__track,
+		.sponsors__viewport:focus-within .sponsors__track {
+			animation-play-state: paused;
+		}
+	}
+
+	@keyframes sponsors-scroll {
+		to {
+			transform: translateX(-50%);
+		}
+	}
+
+	/* Still: one centered row (wrapping if needed), no copies. */
+	@media (prefers-reduced-motion: reduce) {
+		.sponsors__viewport {
+			-webkit-mask-image: none;
+			mask-image: none;
+		}
+
+		.sponsors__track {
+			width: auto;
+			justify-content: center;
+		}
+
+		.sponsors__set {
+			flex-wrap: wrap;
+			justify-content: center;
+			row-gap: 1.5rem;
+			padding: 0 var(--gutter);
+		}
+
+		.sponsors__set[aria-hidden],
+		.sponsors__set .is-copy {
+			display: none;
+		}
+	}
+
+	@media (max-width: 47.99rem) {
+		.sponsors {
+			--logo-height: 2rem;
+			--logo-gap: 3rem;
+			--duration: 57s;
+		}
+	}
+</style>

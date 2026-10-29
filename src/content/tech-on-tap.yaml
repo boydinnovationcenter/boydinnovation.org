@@ -1,0 +1,84 @@
+# Tech on Tap page (https://boydinnovation.org/tech-on-tap). See CONTENT.md.
+# Copied as it is on the live site. The October recap is out of date and will be
+# updated after launch.
+
+techOnTap:
+  seo:
+    title: "Tech on Tap | Boyd Innovation"
+    # Empty on the live site.
+    description: ""
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+
+  hero:
+    eyebrow: "EVERY THIRD THURSDAY"
+    heading: "Tech On Tap"
+    # Eastern time. Shown as "Thursday, November 19, 2026" and "5:00 PM to 6:30 PM".
+    start: "2026-11-19T17:00"
+    end: "2026-11-19T18:30"
+    location:
+      - "Boyd Innovation Center"
+      - "711 Saluda Ave, Columbia, SC 29205"
+    register:
+      label: "REGISTER NOW"
+      eventbrite: { id: "2003836042545", url: "https://www.eventbrite.com/e/tech-on-tap-november-2026-tickets-2003836042545" }
+    video:
+      src: /video/tech-on-tap.mp4
+      captions: /video/tech-on-tap.en.vtt
+      poster: ../assets/images/events/hero.jpg
+      label: "Video: founders on the Boyd Innovation Center community"
+
+  recent:
+    heading:
+      - "Recent Event: October Tech on Tap"
+      - "“From Founder to CEO”"
+    thanks: "Thank you to our panel speakers!"
+    speakers:
+      - name: "Laura Boccanfuso"
+        role: "Founder & CEO"
+        photo: ../assets/images/tech-on-tap/laura-boccanfuso.jpg
+        linkedin: "https://www.linkedin.com/in/laura-boccanfuso/"
+        company: "VAN Robotics"
+        logo: ../assets/images/tech-on-tap/logo-van-robotics.png
+        companyUrl: "https://www.smartrobottutor.com/"
+      - name: "Ben Rex"
+        role: "Founder & President"
+        photo: ../assets/images/tech-on-tap/ben-rex.webp
+        linkedin: "https://www.linkedin.com/in/benrex/"
+        company: "Cyberwoven"
+        logo: ../assets/images/tech-on-tap/logo-cyberwoven.png
+        companyUrl: "https://www.cyberwoven.com/"
+      - name: "Dan Young"
+        role: "Founder & CEO"
+        photo: ../assets/images/tech-on-tap/dan-young.jpg
+        linkedin: "https://www.linkedin.com/in/dan-young-40473b22a/"
+        company: "PostPixel"
+        logo: ../assets/images/tech-on-tap/logo-postpixel.png
+        companyUrl: "https://www.postpixel.ai/"
+
+  about:
+    paragraphs:
+      - "*Tech on Tap* is a monthly community gathering to connect with Columbia’s tech scene and learn from pros who have built, scaled, and exited successful companies ."
+      - "Every third Thursday evening we bring in an expert to share insights on the challenges that can make or break your tech startup—from incorporation decisions to scaling strategies."
+      - "It's networking with purpose: connect with fellow founders & tech professionals while learning from entrepreneurs who've guided successful companies through these exact decisions."
+    audienceHeading: "Tech on Tap is for you if:"
+    audience:
+      - "You're building, growing, or scaling a tech company."
+      - "You're interested in starting a tech business."
+      - "You're a technology professional or student looking to connect with others in Columbia's tech scene."
+    detailsHeading: "Event Details"
+    details:
+      - "Doors (and bar) open at 5 pm"
+      - "Session begins at 5:30 pm"
+      - "Q&A and networking from 6 – 6:30 pm"
+
+  photos:
+    - image: ../assets/images/events/strip-founders.jpg
+      alt: "Four women founders smiling together at a Boyd Innovation Center networking event in Columbia, SC"
+    - image: ../assets/images/programs/strip-1-tech-on-tap.jpg
+      alt: "Founders and tech community members networking at a Tech on Tap event at Boyd Innovation Center in Columbia, SC"
+    - image: ../assets/images/tech-on-tap/strip-3-conversation.jpg
+      alt: "Attendees talking in a small group at a Tech on Tap networking event at Boyd Innovation Center"
+    - image: ../assets/images/programs/strip-5-networking.jpg
+      alt: "Founders and mentors networking at a Boyd Innovation Center startup event in Columbia, SC, under warm string lights"
+    - image: ../assets/images/tech-on-tap/strip-5-speaker.jpg
+      alt: "A speaker addressing the room at a Tech on Tap event at Boyd Innovation Center"

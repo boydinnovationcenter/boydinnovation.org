@@ -1,0 +1,63 @@
+---
+import { getImage } from 'astro:assets';
+import { getEntry } from 'astro:content';
+import EventbriteCheckout from '../components/EventbriteCheckout.astro';
+import PhotoStrip from '../components/PhotoStrip.astro';
+import SpeakerPanel from '../components/tech-on-tap/SpeakerPanel.astro';
+import TechOnTapAbout from '../components/tech-on-tap/TechOnTapAbout.astro';
+import TechOnTapHero from '../components/tech-on-tap/TechOnTapHero.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { eventStatus, toEasternIso } from '../lib/event-dates';
+
+const entry = await getEntry('techOnTap', 'techOnTap');
+if (!entry) throw new Error('Missing Tech on Tap content: src/content/tech-on-tap.yaml');
+const { seo, hero, recent, about, photos } = entry.data;
+
+const pageUrl = `${site.url}/tech-on-tap`;
+const eventName = 'Tech on Tap';
+const eventImage = await getImage({ src: hero.video.poster, width: 1200, format: 'jpeg' });
+// 960px is sharp in the ~600px-wide player and on phones.
+const poster = await getImage({ src: hero.video.poster, width: 960, format: 'webp' });
+
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+				{ '@type': 'ListItem', position: 2, name: eventName, item: pageUrl },
+			],
+		},
+		// The session shown in the hero, while it's still ahead.
+		...(eventStatus(hero.end) === 'upcoming'
+			? [
+					{
+						'@type': 'Event',
+						name: eventName,
+						description: about.paragraphs[0].replace(/\*/g, ''),
+						startDate: toEasternIso(hero.start),
+						endDate: toEasternIso(hero.end),
+						eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+						eventStatus: 'https://schema.org/EventScheduled',
+						image: new URL(eventImage.src, site.url).href,
+						location: { '@id': `${site.url}/#place` },
+						organizer: { '@id': `${site.url}/#organization` },
+						url: hero.register.eventbrite.url,
+					},
+				]
+			: []),
+	],
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
+	<link slot="head" rel="preload" as="image" href={poster.src} fetchpriority="high" />
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	<TechOnTapHero {...hero} posterSrc={poster.src} />
+	<SpeakerPanel {...recent} />
+	<TechOnTapAbout {...about} register={hero.register} eventTitle={eventName} />
+	<PhotoStrip photos={photos} />
+	<EventbriteCheckout />
+</BaseLayout>

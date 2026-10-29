@@ -167,6 +167,29 @@ The hero, section headings, calendar links, "Host your event" box and photo stri
 
 The tour scheduler link is `meetingsUrl` in **`src/content/book-a-tour.yaml`**. To send tour bookings to a different HubSpot calendar, replace that link (keep `?embed=true` at the end).
 
+## Tech on Tap page
+
+Everything on the Tech on Tap page is in **`src/content/tech-on-tap.yaml`**.
+
+For the next session, change these in `hero`:
+
+- **`start` and `end`**: the date and times, in Columbia time on a 24-hour clock (`"2026-12-17T17:00"`). The page writes them out as "Thursday, December 17, 2026" and "5:00 PM to 6:30 PM", so there's no date text to type.
+- **`register`**: the Eventbrite event. The `id` is the number at the end of the Eventbrite link. Both Register buttons on the page use it.
+
+The **"Recent Event"** section is `recent`: the two heading lines, the thank-you line, and one entry per speaker (name, role, photo, LinkedIn link, company name, logo and company website). Put speaker photos and logos in `src/assets/images/tech-on-tap/`. Square photos work best.
+
+The video file lives in `public/video/`. Its captions are in `tech-on-tap.en.vtt` in the same folder. If you replace the video, replace or remove the captions too.
+
+The page doesn't hide itself when the date passes. It shows whatever is in the file. The Tech on Tap card on the Events page is a separate file (`src/content/events/tech-on-tap.yaml`), so update both.
+
+## Startup Sprint page
+
+Everything on the Startup Sprint page is in **`src/content/startup-sprint.yaml`**.
+
+- **Dates** appear in the text in three places: the Day 1 and Day 2 paragraphs and the "will be back" box (`callout`). Also update `event` (start and end, Columbia time), which tells Google when the event is.
+- **Application form**: `application.hubspotFormId` is the HubSpot form. To use a different form, paste its ID from HubSpot.
+- **Sponsors**: one entry each under `sponsors.items`, with name and logo (white on transparent; put the file in `src/assets/images/startup-sprint/sponsors/`). Add `url: "https://..."` to make a logo a link. Add `tall: true` for logos that are stacked over several lines, so they don't look small. The logos scroll on their own; there's no speed or copy count to adjust.
+
 ## Site-wide details
 
 The navigation menu, footer links, address, phone number and social media links are in **`src/config/site.ts`**. Edit the text between the quotation marks and leave the rest alone.

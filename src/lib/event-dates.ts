@@ -95,6 +95,21 @@ export function dateBlock(start: string, end?: string) {
 	};
 }
 
+/**
+ * Long wording for a single-day session, as on the Tech on Tap page:
+ * "2026-11-19T17:00" to "2026-11-19T18:30" -> { date: "Thursday, November 19, 2026", time: "5:00 PM to 6:30 PM" }
+ */
+export function longDateTime(start: string, end: string) {
+	const s = parts(start);
+	const e = parts(end);
+	const time = (p: ReturnType<typeof parts>) =>
+		`${p.hour! % 12 || 12}:${String(p.minute).padStart(2, '0')} ${p.hour! < 12 ? 'AM' : 'PM'}`;
+	return {
+		date: fmt(s.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+		time: `${time(s)} to ${time(e)}`,
+	};
+}
+
 /** Short "next session" wording for a series: "Thu, Nov 12 · 6 PM". */
 export function nextLabel(start: string) {
 	const s = parts(start);

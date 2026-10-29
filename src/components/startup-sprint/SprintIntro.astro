@@ -1,0 +1,75 @@
+---
+/**
+ * "Ready to See If the Startup Journey Is For You?": the event description
+ * and schedule beside an outlined box with the dates and Apply button.
+ */
+import CtaButton from '../CtaButton.astro';
+
+interface Props {
+	heading: string;
+	paragraphs: string[];
+	callout: { text: string; cta: { label: string; href: string } };
+}
+
+const { heading, paragraphs, callout } = Astro.props;
+---
+
+<section class="sprint-intro" aria-labelledby="intro-heading">
+	<div class="container sprint-intro__inner">
+		<div class="sprint-intro__text">
+			<h2 id="intro-heading">{heading}</h2>
+			{paragraphs.map((p) => <p>{p}</p>)}
+		</div>
+		<div class="sprint-intro__callout">
+			<p>{callout.text}</p>
+			<CtaButton variant="outline" label={callout.cta.label} href={callout.cta.href} srContext="for Startup Sprint" />
+		</div>
+	</div>
+</section>
+
+<style>
+	.sprint-intro {
+		padding-block: clamp(3rem, 7.3vw, 6.5rem);
+		color: var(--color-text);
+	}
+
+	.sprint-intro__inner {
+		display: grid;
+		gap: var(--space-5);
+		align-items: start;
+	}
+
+	.sprint-intro__text {
+		display: grid;
+		gap: 1rem;
+	}
+
+	h2 {
+		margin-bottom: 1rem;
+		font-weight: 700;
+	}
+
+	.sprint-intro__callout {
+		display: grid;
+		justify-items: center;
+		gap: 1.25rem;
+		padding: 1.5rem;
+		border: 1px solid var(--color-black);
+		border-radius: 2px;
+		text-align: center;
+	}
+
+	.sprint-intro__callout p {
+		max-width: 22.25rem;
+		font-size: clamp(1.27rem, 1.2rem + 0.33vw, 1.41rem);
+		font-weight: 700;
+		line-height: 1.8;
+	}
+
+	@media (min-width: 48rem) {
+		.sprint-intro__inner {
+			grid-template-columns: 1.34fr 1fr;
+			column-gap: clamp(2rem, 4.6vw, 4.2rem);
+		}
+	}
+</style>

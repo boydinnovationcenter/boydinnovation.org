@@ -1,0 +1,44 @@
+---
+/**
+ * Branded Eventbrite "Register" button, styled as in the live site's custom
+ * CSS. A real link to the Eventbrite event; EventbriteCheckout.astro opens
+ * Eventbrite's checkout pop-up instead once its script has loaded.
+ */
+interface Props {
+	label: string;
+	eventbrite: { id: string; url: string };
+	/** Event name for screen readers, e.g. "Tech on Tap". */
+	eventTitle: string;
+}
+
+const { label, eventbrite, eventTitle } = Astro.props;
+---
+
+<a class="register-btn" href={eventbrite.url} target="_blank" rel="noopener" data-eventbrite-id={eventbrite.id}>
+	{label}
+	<span class="visually-hidden"> for {eventTitle} (opens in a new tab)</span>
+</a>
+
+<style>
+	.register-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 3.0625rem;
+		padding: 0.875rem 2rem;
+		border-radius: 6px;
+		background: var(--color-green);
+		color: var(--color-black);
+		font-size: 1rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		line-height: 1.3;
+		text-decoration: none;
+		text-transform: uppercase;
+		transition: opacity 0.2s ease;
+	}
+
+	.register-btn:hover {
+		opacity: 0.85;
+	}
+</style>

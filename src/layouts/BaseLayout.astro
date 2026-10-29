@@ -26,7 +26,8 @@ const {
 	ogImage,
 	ogImageWidth = 1500,
 	ogImageHeight = 226,
-	canonical = new URL(Astro.url.pathname, site.url).href.replace(/\/$/, ''),
+	// The build writes /about.html (build.format: 'file'); live URLs are /about.
+	canonical = new URL(Astro.url.pathname.replace(/(\/index)?\.html$/, ''), site.url).href.replace(/\/$/, ''),
 } = Astro.props;
 
 // Keep preview deployments out of search results until launch.

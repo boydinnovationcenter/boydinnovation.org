@@ -1,0 +1,64 @@
+---
+/** "Startup Sprint is for you if:" list beside the team photo, on navy. */
+import { Image } from 'astro:assets';
+
+interface Props {
+	heading: string;
+	items: string[];
+	image: ImageMetadata;
+	alt: string;
+}
+
+const { heading, items, image, alt } = Astro.props;
+---
+
+<section class="sprint-audience" aria-labelledby="audience-heading">
+	<div class="container sprint-audience__inner">
+		<div>
+			<h3 id="audience-heading">{heading}</h3>
+			<ul class="chevron-list" role="list">
+				{items.map((item) => <li>{item}</li>)}
+			</ul>
+		</div>
+		<Image src={image} alt={alt} widths={[400, 700, 1000]} sizes="(min-width: 48rem) 34vw, 92vw" />
+	</div>
+</section>
+
+<style>
+	.sprint-audience {
+		padding-block: clamp(3.5rem, 10vw, 9rem);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+		--chevron-color: var(--color-green);
+	}
+
+	.sprint-audience__inner {
+		display: grid;
+		gap: var(--space-5);
+		align-items: center;
+	}
+
+	h3 {
+		font-weight: 700;
+		color: var(--color-green);
+	}
+
+	.chevron-list {
+		gap: 0.9rem;
+		margin-top: 1.75rem;
+	}
+
+	img {
+		width: 100%;
+		aspect-ratio: 490 / 305;
+		object-fit: cover;
+		border-radius: 8px;
+	}
+
+	@media (min-width: 48rem) {
+		.sprint-audience__inner {
+			grid-template-columns: 1.45fr 1fr;
+			column-gap: var(--space-5);
+		}
+	}
+</style>

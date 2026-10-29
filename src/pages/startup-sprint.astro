@@ -1,0 +1,65 @@
+---
+import { getImage } from 'astro:assets';
+import { getEntry } from 'astro:content';
+import PhotoStrip from '../components/PhotoStrip.astro';
+import SponsorMarquee from '../components/startup-sprint/SponsorMarquee.astro';
+import SprintApplication from '../components/startup-sprint/SprintApplication.astro';
+import SprintAudience from '../components/startup-sprint/SprintAudience.astro';
+import SprintHero from '../components/startup-sprint/SprintHero.astro';
+import SprintIntro from '../components/startup-sprint/SprintIntro.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { eventStatus, toEasternIso } from '../lib/event-dates';
+
+const entry = await getEntry('startupSprint', 'startupSprint');
+if (!entry) throw new Error('Missing Startup Sprint content: src/content/startup-sprint.yaml');
+const { seo, hero, event, intro, callout, audience, application, sponsors, photos } = entry.data;
+
+const pageUrl = `${site.url}/startup-sprint`;
+const eventImage = await getImage({ src: audience.image, width: 1200, format: 'jpeg' });
+
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+				{ '@type': 'ListItem', position: 2, name: hero.heading, item: pageUrl },
+			],
+		},
+		...(eventStatus(event.end) === 'upcoming'
+			? [
+					{
+						'@type': 'Event',
+						name: hero.heading,
+						description: intro.paragraphs[0],
+						startDate: toEasternIso(event.start),
+						endDate: toEasternIso(event.end),
+						eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+						eventStatus: 'https://schema.org/EventScheduled',
+						image: new URL(eventImage.src, site.url).href,
+						location: { '@id': `${site.url}/#place` },
+						organizer: { '@id': `${site.url}/#organization` },
+						sponsor: sponsors.items.map((s) => ({
+							'@type': 'Organization',
+							name: s.name,
+							...(s.url ? { url: s.url } : {}),
+						})),
+						url: pageUrl,
+					},
+				]
+			: []),
+	],
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	<SprintHero {...hero} />
+	<SprintIntro {...intro} callout={callout} />
+	<SprintAudience {...audience} />
+	<SprintApplication {...application} />
+	<SponsorMarquee {...sponsors} />
+	<PhotoStrip photos={photos} />
+</BaseLayout>

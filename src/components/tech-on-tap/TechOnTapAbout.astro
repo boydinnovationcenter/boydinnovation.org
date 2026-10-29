@@ -1,0 +1,114 @@
+---
+/**
+ * Two outlined boxes on navy: what Tech on Tap is, and who it's for with the
+ * evening's schedule and a second Register button. Side by side from 1024px.
+ */
+import { inlineMarkdown } from '../../lib/inline-markdown';
+import RegisterButton from './RegisterButton.astro';
+
+interface Props {
+	paragraphs: string[];
+	audienceHeading: string;
+	audience: string[];
+	detailsHeading: string;
+	details: string[];
+	register: { label: string; eventbrite: { id: string; url: string } };
+	eventTitle: string;
+}
+
+const { paragraphs, audienceHeading, audience, detailsHeading, details, register, eventTitle } = Astro.props;
+---
+
+<section class="tot-about" aria-label={`About ${eventTitle}`}>
+	<div class="container tot-about__inner">
+		<div class="tot-box tot-box--intro">
+			{paragraphs.map((p) => <p set:html={inlineMarkdown(p)} />)}
+		</div>
+		<div class="tot-box tot-box--details">
+			<h2>{audienceHeading}</h2>
+			<ul class="tot-box__audience">
+				{audience.map((item) => <li>{item}</li>)}
+			</ul>
+			<h2>{detailsHeading}</h2>
+			<ul class="tot-box__schedule" role="list">
+				{details.map((item) => <li>{item}</li>)}
+			</ul>
+			<RegisterButton {...register} eventTitle={eventTitle} />
+		</div>
+	</div>
+</section>
+
+<style>
+	/* Live: 95px above the boxes and a deep navy band below them. */
+	.tot-about {
+		padding-block: clamp(3rem, 6.6vw, 5.9rem) clamp(4rem, 20vw, 18.25rem);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+		font-weight: 700;
+	}
+
+	.tot-about__inner {
+		display: grid;
+		gap: var(--space-4);
+		align-items: start;
+	}
+
+	.tot-box {
+		border: 1px solid var(--color-text-on-dark);
+		border-radius: 10px;
+	}
+
+	.tot-box--intro {
+		display: grid;
+		gap: 1rem;
+		padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1.25rem, 3vw, 2.55rem);
+	}
+
+	.tot-box--details {
+		padding: clamp(1.25rem, 2.2vw, 1.875rem);
+	}
+
+	h2 {
+		font-size: 1rem;
+		font-weight: 700;
+		line-height: 1.8;
+		color: var(--color-blue);
+	}
+
+	h2 + ul {
+		margin-top: 1rem;
+	}
+
+	ul + h2 {
+		margin-top: 1rem;
+	}
+
+	.tot-box__audience {
+		display: grid;
+		gap: 0.5rem;
+		padding-left: 2.5rem;
+	}
+
+	.tot-box__schedule {
+		padding: 0;
+		list-style: none;
+	}
+
+	/* The ➡️ markers are decorative, so screen readers skip them. */
+	.tot-box__schedule li::before {
+		content: '➡️';
+		content: '➡️' / '';
+		margin-right: 0.15em;
+	}
+
+	.tot-box--details :global(.register-btn) {
+		margin-top: 1.6rem;
+	}
+
+	@media (min-width: 64rem) {
+		.tot-about__inner {
+			grid-template-columns: 1.34fr 1fr;
+			column-gap: clamp(2rem, 4.6vw, 4.2rem);
+		}
+	}
+</style>

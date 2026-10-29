@@ -389,4 +389,112 @@ const bookATour = defineCollection({
 		}),
 });
 
-export const collections = { home, programs, members, space, events, eventsPage, team, board, about, bookATour };
+/** Tech on Tap page. One entry ("techOnTap") in src/content/tech-on-tap.yaml. */
+const techOnTap = defineCollection({
+	loader: file('src/content/tech-on-tap.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+			hero: z.object({
+				eyebrow: z.string(),
+				heading: z.string(),
+				/** The next session. The date and times shown on the page are written out from these. */
+				start: localDateTime,
+				end: localDateTime,
+				/** Venue lines, e.g. name then street address. */
+				location: z.array(z.string()),
+				/** The Register button (both on the page). `url` is the fallback without JavaScript. */
+				register: z.object({ label: z.string(), eventbrite: z.object({ id: z.string(), url: z.url() }) }),
+				video: z.object({
+					/** File in public/video/, e.g. /video/tech-on-tap.mp4 */
+					src: z.string(),
+					/** Captions file (WebVTT) in public/video/. */
+					captions: z.string().optional(),
+					poster: image(),
+					/** Name read out by screen readers. */
+					label: z.string(),
+				}),
+			}),
+			recent: z.object({
+				/** Shown as one heading on two lines. */
+				heading: z.tuple([z.string(), z.string()]),
+				thanks: z.string(),
+				speakers: z.array(
+					z.object({
+						name: z.string(),
+						role: z.string(),
+						photo: image(),
+						linkedin: z.url(),
+						company: z.string(),
+						logo: image(),
+						companyUrl: z.url(),
+					}),
+				),
+			}),
+			about: z.object({
+				/** Paragraphs in the left box. **bold** and *italic* are supported. */
+				paragraphs: z.array(z.string()),
+				audienceHeading: z.string(),
+				audience: z.array(z.string()),
+				detailsHeading: z.string(),
+				details: z.array(z.string()),
+			}),
+			photos: z.array(z.object({ image: image(), alt: z.string() })),
+		}),
+});
+
+/** Startup Sprint page. One entry ("startupSprint") in src/content/startup-sprint.yaml. */
+const startupSprint = defineCollection({
+	loader: file('src/content/startup-sprint.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+			hero: z.object({
+				heading: z.string(),
+				tagline: z.string(),
+				partnerLogo: image(),
+				partnerLogoAlt: z.string(),
+			}),
+			/** Start and end, for search engines only; the dates people see are in the text below. */
+			event: z.object({ start: localDateTime, end: localDateTime }),
+			intro: z.object({ heading: z.string(), paragraphs: z.array(z.string()) }),
+			callout: z.object({ text: z.string(), cta: link }),
+			audience: z.object({ heading: z.string(), items: z.array(z.string()), image: image(), alt: z.string() }),
+			application: z.object({
+				heading: z.string(),
+				intro: z.string(),
+				/** HubSpot form ID for the application form. */
+				hubspotFormId: z.string(),
+			}),
+			sponsors: z.object({
+				heading: z.string(),
+				items: z.array(
+					z.object({
+						name: z.string(),
+						/** White logo on a transparent background. */
+						logo: image(),
+						/** The logo becomes a link once this is filled in. */
+						url: z.url().optional(),
+						/** For stacked logos that need more height to look balanced. */
+						tall: z.boolean().default(false),
+					}),
+				),
+			}),
+			photos: z.array(z.object({ image: image(), alt: z.string() })),
+		}),
+});
+
+export const collections = {
+	home,
+	programs,
+	members,
+	space,
+	events,
+	eventsPage,
+	team,
+	board,
+	about,
+	bookATour,
+	techOnTap,
+	startupSprint,
+};

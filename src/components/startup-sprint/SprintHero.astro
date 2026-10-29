@@ -1,0 +1,98 @@
+---
+/**
+ * Startup Sprint hero: centered title and tagline, the CIU × BIC partner
+ * lockup at the bottom left and the flywheel mark cut off at the bottom
+ * right corner.
+ */
+import { Image } from 'astro:assets';
+import flywheel from '../../assets/images/startup-sprint/flywheel-cropped.png';
+
+interface Props {
+	heading: string;
+	tagline: string;
+	partnerLogo: ImageMetadata;
+	partnerLogoAlt: string;
+}
+
+const { heading, tagline, partnerLogo, partnerLogoAlt } = Astro.props;
+---
+
+<section class="sprint-hero" aria-labelledby="page-title">
+	<div class="sprint-hero__title">
+		<h1 id="page-title">{heading}</h1>
+		<p class="sprint-hero__tagline">{tagline}</p>
+	</div>
+	<Image
+		class="sprint-hero__partners"
+		src={partnerLogo}
+		alt={partnerLogoAlt}
+		widths={[400, 700, 1100]}
+		sizes="(min-width: 48rem) 38vw, 90vw"
+		loading="eager"
+	/>
+	<Image
+		class="sprint-hero__flywheel"
+		src={flywheel}
+		alt=""
+		widths={[300, 500, 700]}
+		sizes="(min-width: 48rem) 23vw, 37vw"
+		loading="eager"
+	/>
+</section>
+
+<style>
+	/* Live at 1440: 629px tall including the header; title from y=206,
+	   lockup flush with the bottom at the page gutter. */
+	.sprint-hero {
+		--flywheel-width: clamp(9rem, 22.6vw, 20.3rem);
+		position: relative;
+		overflow: hidden;
+		padding: calc(var(--header-height) + clamp(2rem, 8.3vw, 7.45rem)) var(--gutter) 0;
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.sprint-hero__title {
+		width: min(100%, 52rem);
+		margin-inline: auto;
+		text-align: center;
+	}
+
+	h1 {
+		/* 49px @390 → 95px @1440; the vw cap keeps it on one line on the narrowest phones. */
+		font-size: min(clamp(2.2rem, 2.04rem + 4.3vw, 5.91rem), 12.5vw);
+		line-height: 1;
+	}
+
+	.sprint-hero__tagline {
+		margin-top: 1.2rem;
+		font-size: clamp(1.27rem, 1.2rem + 0.33vw, 1.41rem);
+		font-weight: 700;
+		line-height: 1.8;
+		color: var(--color-green);
+	}
+
+	.sprint-hero__partners {
+		position: relative;
+		z-index: 1;
+		width: min(100%, 34rem);
+		/* Phones: leave the bottom-right corner to the flywheel. */
+		margin: var(--space-5) 0 calc(var(--flywheel-width) * 344 / 325 + 0.5rem);
+	}
+
+	.sprint-hero__flywheel {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		width: var(--flywheel-width);
+		aspect-ratio: 325 / 344;
+		object-fit: cover;
+	}
+
+	@media (min-width: 48rem) {
+		.sprint-hero__partners {
+			width: clamp(16rem, 38vw, 34rem);
+			margin: clamp(7rem, 8.75vw, 7.9rem) 0 0.3rem;
+		}
+	}
+</style>

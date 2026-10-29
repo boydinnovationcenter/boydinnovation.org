@@ -1,0 +1,51 @@
+---
+/**
+ * Application form (#application, the target of the Apply buttons). The form
+ * is a HubSpot embed; HubSpot's form script is already loaded on every page
+ * for the newsletter (NewsletterSignup.astro).
+ */
+import { tracking } from '../../config/site';
+
+interface Props {
+	heading: string;
+	intro: string;
+	hubspotFormId: string;
+}
+
+const { heading, intro, hubspotFormId } = Astro.props;
+---
+
+<section class="sprint-apply" id="application" aria-labelledby="apply-heading">
+	<div class="container">
+		<h2 id="apply-heading">{heading}</h2>
+		<p>{intro}</p>
+		<div class="hs-form-frame sprint-apply__form" data-region="na1" data-form-id={hubspotFormId} data-portal-id={tracking.hubspotPortalId}>
+		</div>
+	</div>
+</section>
+
+<style>
+	.sprint-apply {
+		padding-block: clamp(2.5rem, 4vw, 3.6rem) clamp(4rem, 10vw, 9rem);
+		color: var(--color-text);
+		text-align: center;
+	}
+
+	h2 + p {
+		margin-top: 0.5rem;
+	}
+
+	/* Rendered HubSpot form height, reserved so the page doesn't jump. */
+	.sprint-apply__form {
+		max-width: 62rem;
+		min-height: 69.6rem;
+		margin: 2rem auto 0;
+		text-align: start;
+	}
+
+	@media (min-width: 48rem) {
+		.sprint-apply__form {
+			min-height: 55.1rem;
+		}
+	}
+</style>

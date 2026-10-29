@@ -1,0 +1,104 @@
+---
+/**
+ * Tech on Tap hero: next session details and Register button beside the
+ * recap video. The video plays only when asked (no autoplay) and loads
+ * nothing but its poster until then.
+ */
+import { longDateTime } from '../../lib/event-dates';
+import RegisterButton from './RegisterButton.astro';
+
+interface Props {
+	eyebrow: string;
+	heading: string;
+	start: string;
+	end: string;
+	location: string[];
+	register: { label: string; eventbrite: { id: string; url: string } };
+	video: { src: string; captions?: string; label: string };
+	/** Optimized poster URL. The page preloads it, as it's the largest thing on screen at first. */
+	posterSrc: string;
+}
+
+const { eyebrow, heading, start, end, location, register, video, posterSrc } = Astro.props;
+const when = longDateTime(start, end);
+---
+
+<section class="tot-hero" aria-labelledby="page-title">
+	<div class="container tot-hero__inner">
+		<div class="tot-hero__text">
+			<p class="tot-hero__eyebrow">{eyebrow}</p>
+			<h1 id="page-title">{heading}</h1>
+			<p>{when.date}<br />{when.time}</p>
+			<p>{location.map((line, i) => (i ? <><br />{line}</> : line))}</p>
+			<RegisterButton {...register} eventTitle={heading} />
+		</div>
+		<video
+			class="tot-hero__video"
+			controls
+			playsinline
+			preload="none"
+			poster={posterSrc}
+			width="1920"
+			height="1080"
+			aria-label={video.label}
+		>
+			<source src={video.src} type="video/mp4" />
+			{video.captions && <track kind="captions" src={video.captions} srclang="en" label="English" />}
+		</video>
+	</div>
+</section>
+
+<style>
+	/* Live: 661px tall at 1440 including the header, content from y=182. */
+	.tot-hero {
+		padding-block: calc(var(--header-height) + clamp(2.5rem, 6.5vw, 5.9rem)) clamp(4rem, 8vw, 7.1rem);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.tot-hero__inner {
+		display: grid;
+		gap: var(--space-6);
+	}
+
+	.tot-hero__eyebrow {
+		font-size: clamp(1.27rem, 1.2rem + 0.33vw, 1.41rem);
+		line-height: 1.8;
+		color: var(--color-green);
+	}
+
+	h1 {
+		margin-bottom: 1.75rem;
+		font-size: var(--text-hero);
+		line-height: 1.09;
+		color: #fff;
+	}
+
+	.tot-hero__text p + p {
+		margin-top: 1rem;
+	}
+
+	.tot-hero__text :global(.register-btn) {
+		margin-top: 1.6rem;
+	}
+
+	.tot-hero__video {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 9;
+		object-fit: cover; /* the poster photo is 3:2; fill the frame as live does */
+		background: var(--color-black);
+	}
+
+	@media (min-width: 48rem) {
+		.tot-hero__inner {
+			grid-template-columns: 0.9fr 1fr;
+			align-items: start;
+			column-gap: clamp(2rem, 4.6vw, 4.1rem);
+		}
+
+		.tot-hero__video {
+			margin-top: 0.3rem;
+		}
+	}
+</style>

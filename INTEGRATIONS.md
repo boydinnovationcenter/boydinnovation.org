@@ -47,7 +47,7 @@ No page-specific Code Injection on /space.
 
 | Integration | Details | Astro location |
 |---|---|---|
-| Eventbrite checkout pop-up | Event `1995983756145` (Tech Beans), `2001623057447` (Tech on Tap, Oct 2026), loaded from `eb_widgets.js` | `eventbrite: { id, url }` in [src/content/events/](src/content/events/), wired up in [EventGrid.astro](src/components/events/EventGrid.astro) |
+| Eventbrite checkout pop-up | Event `1995983756145` (Tech Beans), `2001623057447` (Tech on Tap, Oct 2026), loaded from `eb_widgets.js` | `eventbrite: { id, url }` in [src/content/events/](src/content/events/), wired up in [EventbriteCheckout.astro](src/components/EventbriteCheckout.astro) |
 | Google Calendar subscription | Public calendar `c_5432f27d…@group.calendar.google.com`, offered for Google, Apple (webcal), Outlook.com and Office 365 | [events-page.yaml](src/content/events-page.yaml), [CalendarSubscribe.astro](src/components/events/CalendarSubscribe.astro) |
 | Luma | Silicon Swamp registration link | silicon-swamp.yaml |
 
@@ -60,6 +60,22 @@ No page-specific Code Injection on /events; everything was in on-page code block
 | HubSpot Meetings scheduler | `meetings.hubspot.com/kennedy-marren?embed=true`, loaded with `MeetingsEmbedCode.js` | `meetingsUrl` in [book-a-tour.yaml](src/content/book-a-tour.yaml), [book-a-tour.astro](src/pages/book-a-tour.astro) |
 
 No page-specific Code Injection on /about or /book-a-tour.
+
+## Tech on Tap page
+
+| Integration | Details | Astro location |
+|---|---|---|
+| Eventbrite checkout pop-up | Event `2003836042545` (Tech on Tap, Nov 2026), on both Register buttons. On live, `eb_widgets.js` was loaded twice, blocking rendering, and both buttons had the same element id; it now loads once when the page is idle and each button gets its own id. | `hero.register` in [tech-on-tap.yaml](src/content/tech-on-tap.yaml), [EventbriteCheckout.astro](src/components/EventbriteCheckout.astro) |
+| Recap video | Was a Squarespace-hosted video (HLS stream). Now a self-hosted MP4 in `public/video/`, with captions. | `hero.video` in tech-on-tap.yaml |
+
+## Startup Sprint page
+
+| Integration | Details | Astro location |
+|---|---|---|
+| HubSpot embedded form | Application form `08b4d195-3cbe-4e9f-96fc-2ae0953ae4c5`, region `na1`, at `#application`. Uses the same `js.hsforms.net` script as the newsletter, so it's loaded once per page instead of twice. | `application.hubspotFormId` in [startup-sprint.yaml](src/content/startup-sprint.yaml), [SprintApplication.astro](src/components/startup-sprint/SprintApplication.astro) |
+| Sponsor logo marquee | A code block with JavaScript that built the scrolling logos. Rebuilt in CSS only, no script. | `sponsors` in startup-sprint.yaml, [SponsorMarquee.astro](src/components/startup-sprint/SponsorMarquee.astro) |
+
+No page-specific Code Injection on /tech-on-tap or /startup-sprint (checked 2026-10-29).
 
 ## Still to inventory
 

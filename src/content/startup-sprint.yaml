@@ -1,0 +1,71 @@
+# Startup Sprint page (https://boydinnovation.org/startup-sprint). See CONTENT.md.
+
+startupSprint:
+  seo:
+    title: "Build a Startup in 24 Hours | Startup Sprint | Boyd Innovation"
+    description: "Learn how to build a startup in 24 hours at Boyd Innovation Center's Startup Sprint. Team up, pitch ideas, and build with industry experts. Apply now."
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+
+  hero:
+    heading: "Startup Sprint"
+    tagline: "Turn Your Startup Idea into Reality in 24 Hours"
+    partnerLogo: ../assets/images/startup-sprint/ciu-x-bic.png
+    partnerLogoAlt: "Columbia International University × Boyd Innovation Center"
+
+  # Eastern time. Only used to tell search engines when the event is; update it
+  # along with the dates in the text below.
+  event:
+    start: "2026-11-13T17:30"
+    end: "2026-11-14T17:00"
+
+  intro:
+    heading: "Ready to See If the Startup Journey Is For You?"
+    paragraphs:
+      - "Startup Sprint is a fast-paced, 24-hour event where aspiring entrepreneurs, developers, designers, and innovators come together to experience what it takes to build a startup."
+      - "Day 1 | Friday, November 13th, 5:30 - 8 pm: Kick things off with dinner, networking, and team formation. Share your ideas and join a team that inspires you!"
+      - "Day 2 | Saturday, November 14th, 8:30 am - 5 pm: Get ready for an action packed day. You’ll dive into intensive sprint blocks, led by industry experts, where your team will take your idea through the entire startup journey."
+
+  callout:
+    text: "Startup Sprint will be back November 13-14, 2026!"
+    cta: { label: "APPLY NOW", href: "#application" }
+
+  audience:
+    heading: "Startup Sprint is for you if:"
+    items:
+      - "You have an idea for a technology-related business that you want to test."
+      - "You're curious about startups but don't know where to begin."
+      - "You have technical, creative, or business skills and want to see them in action."
+      - "You want to connect with other builders, tech professionals, and creatives in Columbia."
+    image: ../assets/images/startup-sprint/team-photo.jpg
+    alt: "Startup Sprint participants gathered in front of a screen showing the Startup Sprint logo"
+
+  application:
+    heading: "Apply for Startup Sprint"
+    intro: "All skill levels welcome, no startup experience needed."
+    hubspotFormId: "08b4d195-3cbe-4e9f-96fc-2ae0953ae4c5"
+
+  sponsors:
+    heading: "Startup Sprint is made possible by"
+    # Add `url: "https://..."` to a sponsor to link its logo.
+    items:
+      - name: "Sweetwaters Coffee & Tea"
+        logo: ../assets/images/startup-sprint/sponsors/sweetwaters.png
+      - name: "Integer Technologies"
+        logo: ../assets/images/startup-sprint/sponsors/integer.png
+      - name: "Security Federal Bank"
+        logo: ../assets/images/startup-sprint/sponsors/security-federal.png
+        tall: true
+      - name: "Snaply Sites"
+        logo: ../assets/images/startup-sprint/sponsors/snaply-sites.png
+
+  photos:
+    - image: ../assets/images/startup-sprint/strip-1.jpg
+      alt: "Startup Sprint participants working on laptops in the Boyd Innovation Center event space"
+    - image: ../assets/images/startup-sprint/strip-2.jpg
+      alt: "Startup Sprint participants talking during a team work session"
+    - image: ../assets/images/startup-sprint/strip-3.jpg
+      alt: "Three Startup Sprint participants in event T-shirts posing together"
+    - image: ../assets/images/startup-sprint/strip-4.jpg
+      alt: "Group photo of Startup Sprint participants and mentors"
+    - image: ../assets/images/startup-sprint/strip-5.jpg
+      alt: "A smiling Startup Sprint participant giving a thumbs-up during a work session"

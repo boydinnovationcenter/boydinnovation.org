@@ -1,0 +1,40 @@
+---
+/**
+ * Turns links marked with `data-eventbrite-id` into Eventbrite's checkout
+ * pop-up. Include once on any page with such links. The widget script is
+ * heavy, so it loads only if the page needs it, once the page is idle. Until
+ * then (or without JavaScript) the links open the event on Eventbrite.
+ */
+---
+
+<script>
+	type EBWidgets = { createWidget: (options: Record<string, unknown>) => void };
+	const triggers = document.querySelectorAll<HTMLAnchorElement>('a[data-eventbrite-id]');
+
+	const loadEventbrite = () => {
+		const script = document.createElement('script');
+		script.src = 'https://www.eventbrite.com/static/widgets/eb_widgets.js';
+		script.async = true;
+		script.onload = () => {
+			const eb = (window as Window & { EBWidgets?: EBWidgets }).EBWidgets;
+			if (!eb) return;
+			triggers.forEach((link, i) => {
+				const eventId = link.dataset.eventbriteId!;
+				// Unique per link, so two buttons for the same event both work.
+				link.id ||= `eventbrite-widget-modal-trigger-${eventId}-${i}`;
+				link.addEventListener('click', (e) => e.preventDefault());
+				link.removeAttribute('target');
+				link.setAttribute('aria-haspopup', 'dialog');
+				eb.createWidget({ widgetType: 'checkout', eventId, modal: true, modalTriggerElementId: link.id });
+			});
+		};
+		document.head.append(script);
+	};
+
+	if (triggers.length) {
+		const whenIdle = () =>
+			'requestIdleCallback' in window ? requestIdleCallback(loadEventbrite, { timeout: 4000 }) : setTimeout(loadEventbrite, 2000);
+		if (document.readyState === 'complete') whenIdle();
+		else addEventListener('load', whenIdle, { once: true });
+	}
+</script>

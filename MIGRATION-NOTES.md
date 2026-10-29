@@ -241,7 +241,7 @@ What's left of the LCP time is render delay from the site-wide third-party scrip
 ### Open questions
 
 12. **Meta description is empty** on the live Events page. AGENTS.md says to keep meta tags exactly, so it's empty here too, but this is the one page where writing one would clearly help SEO. Want me to draft one for approval?
-13. **Tech on Tap** needs its next date and Eventbrite event; until then it doesn't show (its Oct 22 date has passed).
+13. **Tech on Tap** needs its next date and Eventbrite event; until then it doesn't show (its Oct 22 date has passed). The live Tech on Tap page now has November 19; see question 16.
 
 ## About (`/about`)
 
@@ -306,3 +306,103 @@ The Events page was rebuilt from concept A ("Series + agenda") on the design can
 - **Content model:** recurring and community events are separate shapes in `src/content/events/`, documented in CONTENT.md.
 
 Open question 15: **Silicon Swamp's cadence** is shown as "THURSDAY EVENINGS". The live site doesn't say how often it meets; confirm with its organizers (`src/content/events/silicon-swamp.yaml`).
+
+## Site-wide fix: canonical and og:url (2026-10-29)
+
+In the production build, every page's canonical link and `og:url` ended in `.html` (for example `https://boydinnovation.org/about.html`, and `/index.html` for the homepage), because the build writes one `.html` file per page. The dev server doesn't show this, which is why the earlier checks missed it. [BaseLayout.astro](src/layouts/BaseLayout.astro) now drops the `.html`, so all pages match live again (`https://boydinnovation.org`, `https://boydinnovation.org/about`, ...). The sitemap was already correct.
+
+## Tech on Tap (`/tech-on-tap`)
+
+Reference: live site captured 2026-10-29 at 1440 and 390px. Title, (empty) meta description, canonical and social tags are copied exactly.
+
+**Kept as it is on live, at Kennedy's request (2026-10-29):** the "Recent Event: October Tech on Tap" recap is out of date. It will be the first thing updated after launch, as a trial of the editing workflow. Everything is in `src/content/tech-on-tap.yaml` (see CONTENT.md).
+
+### Rebuilt and fixed
+
+- **Video:** on live it was a Squarespace-hosted stream (2 min 20 s, with sound, click to play). It's now a self-hosted MP4 (`public/video/tech-on-tap.mp4`, 1080p, 23 MB, under the 25 MiB per-file limit some hosts set). It downloads only when someone presses play; until then only the poster loads. The poster now fills the frame as on live (it's a 3:2 photo in a 16:9 player).
+- **Captions added (needs review):** the video is an interview with no captions on live, which fails WCAG 1.2.2. A captions track (`public/video/tech-on-tap.en.vtt`) was made from a machine transcript. It is off until a viewer turns on CC, so nothing looks different. **Someone should proofread it before launch**; in particular 0:33 reads "people led to hand", probably "people lent a hand".
+- **Speakers:** photos link to LinkedIn and logos to each company, as on live. On live every one of those images had empty alt text, so the links had no names. They now read, for example, "Laura Boccanfuso on LinkedIn (opens in a new tab)" and "VAN Robotics website (opens in a new tab)". Speaker order is the visible order (Laura, Ben, Dan); the live HTML order was different.
+- **Headings:** the recap heading was two `<h2>`s; it's now one heading on two lines. Speaker names are `<h3>`s, and "Tech on Tap is for you if:" and "Event Details" are `<h2>`s instead of bold paragraphs. The look doesn't change.
+- **Register buttons:** both are real links to the Eventbrite event and open Eventbrite's checkout pop-up, as on live. On live the two buttons shared one element id and `eb_widgets.js` loaded twice, blocking rendering. Now the script loads once when the page is idle, and each button works on its own. The pop-up code is shared with the Events page ([EventbriteCheckout.astro](src/components/EventbriteCheckout.astro)).
+- The ➡️ markers in Event Details are decorative, so screen readers skip them.
+- In the right-hand box, the Register button lines up with the text. On live it was indented about 25px.
+
+### Small-screen fixes
+
+| Widths | Problem on the live site | Change |
+|---|---|---|
+| under 768px | Speaker photo and name cards zig-zagged in a cramped 2-column grid; the VAN Robotics logo was cut off and "Laura Boccanfuso" broke over two lines | Each speaker is a row of photo and card; three across from 576px |
+| under 768px | The intro box had a fixed height with a large empty area below the text | Boxes fit their text |
+| under 768px | The second Register button sat outside its box | Inside the box, as on desktop |
+| 768–1023px | (Two boxes side by side would be cramped) | Boxes stacked until 1024px |
+
+Checked every 8px from 320 to 1440 with no horizontal scroll; screenshots at 320, 390, 768, 1024 and 1440.
+
+### Structured data
+
+`BreadcrumbList`, plus an `Event` for the session in the hero (date, times, BIC as place and organizer, Eventbrite link) while that date is still ahead.
+
+### Performance (Lighthouse, mobile, 2026-10-29)
+
+| | Live | Astro (local preview) |
+|---|---|---|
+| Performance | 27 / 27 | 94 / 94 / 94 |
+| LCP | 25.2–25.3 s | 2.7–2.8 s |
+| FCP | 10.8–11.1 s | 1.1 s |
+| Total blocking time | 2,610–2,640 ms | 120–150 ms |
+| Accessibility | 97 (unnamed image links) | 97 (blue "Thank you" line, question 19) |
+| Page weight | 56.7 MB | 1.8–2.0 MB |
+
+On live, Squarespace's player downloads the whole video as soon as the page opens; that's most of the 56.7 MB. The LCP element is now the video poster (960px WebP, 84 KB, preloaded). What's left of its time is bandwidth shared with the site-wide Google scripts, as on the Events page.
+
+### Open questions
+
+16. **The two live pages disagree about the next Tech on Tap.** This page says Thursday, November 19 (Eventbrite event `2003836042545`). The live Events page still shows October 22 (`2001623057447`), so on the rebuilt Events page the card says "Next date coming soon". Each page is kept as it is on live. Should the Events card get November 19 too?
+17. **The November Eventbrite event isn't live.** Its page returns 404, and the Register pop-up says "the page or event you are looking for was not found". This happens on the live site too. Publish the event on Eventbrite, or update the link.
+18. **Empty band below the boxes:** on live there's about 290px of empty navy below the two boxes on desktop (left over from Squarespace's grid). It's kept for fidelity. Tighten it to match the space above (about 95px)?
+19. **Contrast:** "Thank you to our panel speakers!" is brand blue on the light background (2.7:1; large text needs 3:1). It's the same issue as question 10.
+
+## Startup Sprint (`/startup-sprint`)
+
+Reference: live site captured 2026-10-29 at 1440 and 390px. Title, meta description, canonical and social tags are copied exactly.
+
+### Rebuilt and fixed
+
+- **Sponsor logos:** on live, a code block of JavaScript built the scrolling logos. They're now plain HTML with a CSS animation, at the same speed (35px per second), with no script.
+  - **The live logo links were broken:** each pointed to placeholder text (`SWEETWATERS_SITE_URL`, `INTEGER_SITE_URL`, ...), which leads to a 404 page. Until real addresses are added, the logos aren't links. Add a `url` to each sponsor in `startup-sprint.yaml` to link them (see question 20).
+  - The scroll pauses on mouse hover and when a keyboard user tabs into it. Visitors who have reduced motion turned on see one still, centered row. On live the animation simply stopped, leaving logos cut off at the edges.
+  - Screen readers hear each sponsor once. The repeated copies that make the loop seamless are hidden from them.
+- **Application form:** the same HubSpot form (`08b4d195-…`) at `#application`. Its height is reserved before it loads (882px on desktop, 1114px on phones, as measured on live), so the page doesn't jump. HubSpot's form script was loaded twice on live (in this embed and in the newsletter); it's now loaded once.
+- **Apply Now** links to `#application`. On live it linked to `/startup-sprint#application`, which goes to the same place.
+- **Alt text:** every image on live had empty alt text. The CIU × BIC logo now reads "Columbia International University × Boyd Innovation Center", and the photos are described. The flywheel graphic stays decorative.
+- **Headings:** h1, then h2 for each section, with "Startup Sprint is for you if:" kept as an h3 as on live (no levels skipped).
+- **Images:** the team photo was a 1.1 MB PNG; it's stored as a JPEG and served as responsive WebP like the rest of the site.
+
+### Small-screen fixes
+
+| Widths | Problem on the live site | Change |
+|---|---|---|
+| under 768px | The CIU × BIC logo was placed above the page title | Desktop order: title and tagline first, then the logo, with the flywheel in the bottom corner (same order on every screen, and the h1 comes first for screen readers) |
+| 320px | (The title would break onto two lines) | Title size lowered at the narrowest widths so "Startup Sprint" stays on one line |
+
+Checked every 8px from 320 to 1440 with no horizontal scroll; screenshots at 320, 390, 768, 1024 and 1440.
+
+### Structured data
+
+`BreadcrumbList`, plus an `Event` for November 13–14 (5:30 pm Friday to 5 pm Saturday, from the Day 1 and Day 2 text): description, team photo, BIC as place and organizer, and the four sponsors. The start and end are in `event` in `startup-sprint.yaml`; update them with the dates in the text (see CONTENT.md).
+
+### Performance (Lighthouse, mobile, 2026-10-29)
+
+| | Live | Astro (local preview) |
+|---|---|---|
+| Performance | 53 / 55 | 98 / 99 |
+| LCP | 23.7–24.6 s | 1.1 s |
+| FCP | 5.7–5.8 s | 1.1 s |
+| Total blocking time | 190–230 ms | 120–130 ms |
+| Accessibility | 100 | 100 |
+| Page weight | 3.9–4.1 MB | 1.7–1.9 MB |
+
+### Open questions
+
+20. **Sponsor website addresses:** what are the links for Sweetwaters Coffee & Tea, Integer Technologies, Security Federal Bank and Snaply Sites? Their logos become links once these are added.
+21. **Pausing the sponsor scroll (WCAG 2.2.2):** moving content that runs longer than 5 seconds needs a way to pause it. Hover and keyboard focus now pause it, but phone users have no way to. A small pause button beside the logos would fully meet the guideline. It would be a visible addition, so it needs approval.

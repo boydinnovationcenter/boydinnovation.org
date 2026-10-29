@@ -5,7 +5,10 @@
  *   status; community events dim, then disappear 48 hours after ending);
  * - turns Eventbrite Register links into Eventbrite's checkout pop-up.
  */
+import EventbriteCheckout from '../EventbriteCheckout.astro';
 ---
+
+<EventbriteCheckout />
 
 <script>
 	import { eventStatus } from '../../lib/event-dates';
@@ -26,36 +29,4 @@
 	});
 	const agenda = document.querySelector('.agenda');
 	if (agenda && !agenda.querySelector('.agenda-item')) agenda.remove();
-
-	// Eventbrite checkout pop-ups. The widget script is heavy, so it loads only
-	// if the page needs it, once the page is idle. Until then (or without
-	// JavaScript) Register links open the event on Eventbrite.
-	type EBWidgets = { createWidget: (options: Record<string, unknown>) => void };
-	const triggers = document.querySelectorAll<HTMLAnchorElement>('a[data-eventbrite-id]');
-
-	const loadEventbrite = () => {
-		const script = document.createElement('script');
-		script.src = 'https://www.eventbrite.com/static/widgets/eb_widgets.js';
-		script.async = true;
-		script.onload = () => {
-			const eb = (window as Window & { EBWidgets?: EBWidgets }).EBWidgets;
-			if (!eb) return;
-			triggers.forEach((link) => {
-				const eventId = link.dataset.eventbriteId!;
-				link.id ||= `eventbrite-widget-modal-trigger-${eventId}`;
-				link.addEventListener('click', (e) => e.preventDefault());
-				link.removeAttribute('target');
-				link.setAttribute('aria-haspopup', 'dialog');
-				eb.createWidget({ widgetType: 'checkout', eventId, modal: true, modalTriggerElementId: link.id });
-			});
-		};
-		document.head.append(script);
-	};
-
-	if (triggers.length) {
-		const whenIdle = () =>
-			'requestIdleCallback' in window ? requestIdleCallback(loadEventbrite, { timeout: 4000 }) : setTimeout(loadEventbrite, 2000);
-		if (document.readyState === 'complete') whenIdle();
-		else addEventListener('load', whenIdle, { once: true });
-	}
 </script>
