@@ -1,0 +1,20 @@
+# Links page (https://boydinnovation.org/links), the "link in bio" for social media.
+# Title and social image are copied exactly from the live page (no description on live).
+
+links:
+  seo:
+    title: "LINKS | Boyd Innovation"
+    description: ""
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+  logo: ../assets/images/links/logo-stacked.png
+  logoAlt: "Boyd Innovation Center"
+  # Top to bottom, in the desktop order of the live page.
+  buttons:
+    - { label: "STARTUP SPRINT NOV 13-14", href: "/startup-sprint" }
+    - { label: "TECH ON TAP", href: "/tech-on-tap" }
+    - { label: "BIC YOUTUBE", href: "https://www.youtube.com/@BoydInnovationCenter" }
+    - { label: "BECOME A MEMBER", href: "/space" }
+    - { label: "HOST YOUR EVENT AT THE BIC", href: "/space#eventspace" }
+    - { label: "COMMUNITY EVENTS", href: "/events" }
+    - { label: "BOOK A TOUR", href: "/book-a-tour" }
+    - { label: "PARTNER WITH THE BIC", href: "https://partnerships.boydinnovation.org/" }

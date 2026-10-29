@@ -1,0 +1,31 @@
+# Carolina Ventures page (https://boydinnovation.org/programs/carolina-ventures).
+# Title and social image are copied exactly from the live page. The live page
+# has no description; this one is taken from the page's own first sentences.
+
+carolinaVentures:
+  seo:
+    title: "USC Faber Center for Entrepreneurship Carolina Ventures | Boyd Innovation"
+    description: "Carolina Ventures is a semester-long cohort for student founders. You meet on a set schedule with the same group."
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+  hero:
+    eyebrow: "Faber Center for Entrepreneurship"
+    heading: "Carolina Ventures"
+    # The button opens the HubSpot "Carolina Ventures application" pop-up.
+    cta:
+      label: "APPLY NOW"
+      hubspotCta: carolinaVenturesApplication
+      srContext: "to Carolina Ventures"
+  intro:
+    heading: "Startup Support for Student Founders"
+    text: "Carolina Ventures is a semester-long cohort for student founders. You meet on a set schedule with the same group.  People building at the same stage and dealing with the same thing, from balancing a startup against a full course load to figuring out what comes first."
+    image: ../assets/images/carolina-ventures/student-founders.jpg
+    alt: "A group of Carolina Ventures student founders at the Boyd Innovation Center"
+  schedule:
+    heading: "Carolina Ventures Fall Cohort Schedule"
+    sessions:
+      - { date: "SEPTEMBER 8", label: "Fall Cohort Kickoff" }
+      - { date: "SEPTEMBER 22", label: "Session 2" }
+      - { date: "OCTOBER 6", label: "Session 3" }
+      - { date: "OCTOBER 20", label: "Session 4" }
+      - { date: "NOVEMBER 3", label: "Session 5" }
+      - { date: "NOVEMBER 17", label: "Fall Cohort Finale" }

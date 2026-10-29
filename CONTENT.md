@@ -227,6 +227,20 @@ Pick the size you want, as in Squarespace: `##` large, `###` normal (most posts)
 
 Edit its `index.mdx`. To take a post down without deleting it, set `draft: true`. If you delete a post or rename its folder, add a line to `public/_redirects` sending the old address to a new one, so links to it keep working.
 
+## Contact, Deep Dive Workshops, Carolina Ventures, Event Guide and Links
+
+Each of these pages has one content file in `src/content/`:
+
+| Page | File | What's in it |
+|---|---|---|
+| /contact | `contact.yaml` | Heading, intro line, and the HubSpot form ID (`hubspotFormId`). |
+| /deep-dive-workshops | `deep-dive-workshops.yaml` | Hero, the workshop text (`*Returning Fall 2026!*` is in italics), the Apply button and the five strip photos. |
+| /programs/carolina-ventures | `carolina-ventures.yaml` | Hero, intro and photo, and the cohort schedule. Each session is one line under `schedule.sessions` with a `date` and `label`; add, remove or reorder lines for a new semester. |
+| /event-guide | `event-guide.yaml` | Quick facts (address, phone, Wi-Fi), parking options, arrival notes, AV and kitchen info. In parking options, `**bold**` and `[link text](https://…)` work. |
+| /links | `links.yaml` | The buttons on the "link in bio" page, top to bottom. Each has a `label` and an `href`; links starting with `http` open in a new tab. Update the Startup Sprint button's date when the next one is announced. |
+
+The Apply buttons on Deep Dive and Carolina Ventures open HubSpot pop-up forms. `hubspotCta` names which one (`programInterest`, `eventSpaceInquiry` or `carolinaVenturesApplication`). The pop-ups themselves are edited in HubSpot.
+
 ## Site-wide details
 
 The navigation menu, footer links, address, phone number and social media links are in **`src/config/site.ts`**. Edit the text between the quotation marks and leave the rest alone.

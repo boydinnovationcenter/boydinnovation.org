@@ -1,0 +1,64 @@
+# Event Guide page (https://boydinnovation.org/event-guide): practical info for
+# people hosting or attending an event at the BIC.
+# Title and social image are copied exactly from the live page (no description on live).
+
+eventGuide:
+  seo:
+    title: "EVENT GUIDE | Boyd Innovation"
+    description: ""
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+  hero:
+    heading: "Welcome to the BIC"
+    intro: "Whether you’re hosting or attending, here’s everything you need to get connected and have a great time in our 5 Points space."
+    image: ../assets/images/event-guide/hero.jpg
+    facts:
+      - { label: "ADDRESS", value: "711 Saluda Ave" }
+      - { label: "EVENT CONTACT", value: "(803) 529-1112" }
+      - { label: "WIFI NETWORK", value: "BIC-Guest" }
+      - { label: "WIFI PASSWORD", value: "None" }
+  parking:
+    eyebrow: "PARKING AND GETTING HERE"
+    heading: "711 Saluda Ave, Columbia SC"
+    options:
+      - "**Metered Parking** throughout Five Points. Enforced Monday–Saturday, 9am–7pm. Pay with the [Passport Parking app](https://apps.apple.com/us/app/passport-parking/id501324867)."
+      - "**Paid Lot** enforced 24/7 — pay via the QR codes on signs in the lot within 10 minutes of arriving."
+      - "**Free Parking** at 2221 Devine St. Lot (~2.5 blocks) or along Saluda Ave. in the Wales Garden neighborhood starting at the 600 block."
+    map: ../assets/images/event-guide/parking-map.png
+    mapAlt: "Map of parking near the BIC at 711 Saluda Ave: metered parking on the surrounding streets, a paid lot at 706 Saluda Ave, a free parking lot at 2221 Devine St. (2.5 blocks' walk), and free parking farther down Saluda Ave."
+  arrival:
+    eyebrow: "IN THE HEART OF 5 POINTS"
+    heading: "Arrival & Entry"
+    cards:
+      - title: "Event Attendees"
+        paragraphs:
+          - "The front door will be unlocked during your event. Head inside and follow signage to your event space."
+      - title: "Event Hosts"
+        paragraphs:
+          - "The BIC team coordinator will confirm door access and setup time ahead of your event."
+      - title: "Conference Rooms"
+        paragraphs:
+          - "Booked a conference room? Walk in through the front door, go all the way through the Lounge/Bar, down the hallway in the back following signs that direct you toward the “BIC Offices & Cowork”."
+          - "Enter the second space and continue past all of the offices to the very back. That’s where you’ll find the Conference Room on the left, the Training Room on the right, and the kitchen just beyond."
+    image: ../assets/images/event-guide/front-door.jpg
+    alt: "The bright blue storefront of the Boyd Innovation Center on Saluda Avenue"
+  av:
+    heading: "AV & Tech"
+    boxes:
+      - "The event space is equipped with a projector and drop-down screen with HDMI input, plus a full speaker system with two wireless microphones — everything you need to present, host a panel, or run a program."
+      - "**Presenting?** We recommend arriving early to test your laptop, slides, mics, and any audio you plan to play."
+    note: "*WiFi: BIC-Guest"
+    photos:
+      - image: ../assets/images/event-guide/av-laptop.jpg
+        alt: "A laptop on a table showing a Tech on Tap panel slide"
+      - image: ../assets/images/event-guide/av-speaker.jpg
+        alt: "A speaker with a wireless microphone presenting in front of the projector screen"
+  kitchen:
+    heading: "Kitchen Access"
+    intro: "Event guests have full access to the kitchen, which is equipped with a refrigerator, sink, and filtered water. If your host has arranged catering or snacks, they'll be set up in or near your event space."
+    tips:
+      - "Use the fridge to store any food or drinks you bring."
+      - "Filtered water and a sink are available for guests."
+      - "Keep food and drinks in the kitchen, event space, or outdoor seating areas."
+      - "Toss trash and recyclables in the bins provided before you leave."
+    image: ../assets/images/event-guide/kitchen.jpg
+    alt: "The BIC kitchen with a refrigerator, counters and a coffee station"

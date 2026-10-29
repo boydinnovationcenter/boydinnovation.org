@@ -1,0 +1,36 @@
+# Deep Dive Workshops page (https://boydinnovation.org/deep-dive-workshops).
+# Title, description and social image are copied exactly from the live page.
+
+deepDive:
+  seo:
+    title: "Business Strategy Workshops for Startups | Boyd Innovation"
+    description: "Sharpen your startup's business strategy at the BIC's Deep Dive Workshops. Finance, legal, fundraising, and more. Apply now for Fall 2026!"
+    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+  hero:
+    heading: "Deep Dive Workshops"
+    tagline: "Hands on, actionable help for founders in Columbia."
+  intro:
+    heading: "Deep Dive Workshop Series"
+    paragraphs:
+      - "We host a regular workshop series diving deep into specific tech founder topics, including finance, legal, fundraising, and more."
+      - "They are modular in nature but flow together and build on one another. Come to the one you need right now, or collect them all!"
+      - "*Returning Fall 2026!*"
+    image: ../assets/images/deep-dive/workshop.jpg
+    alt: "Founders taking notes at tables during a Boyd Innovation Center workshop"
+    # The button opens the HubSpot "Program Interest" pop-up form.
+    cta:
+      label: "APPLY"
+      hubspotCta: programInterest
+      srContext: "for Deep Dive Workshops"
+  # Edge-to-edge strip of five photos (narrow, wide, wide, wide, narrow).
+  photos:
+    - image: ../assets/images/deep-dive/strip-1-networking.jpg
+      alt: "Attendees talking in a crowded room at the Boyd Innovation Center"
+    - image: ../assets/images/deep-dive/strip-2-participants.jpg
+      alt: "Two participants smiling and waving at the camera"
+    - image: ../assets/images/deep-dive/strip-3-room.jpg
+      alt: "A full room of founders at tables under string lights"
+    - image: ../assets/images/deep-dive/strip-4-speaker.jpg
+      alt: "A participant speaking into a microphone while others listen"
+    - image: ../assets/images/deep-dive/strip-5-session.jpg
+      alt: "Founders watching a presentation on a projector screen"

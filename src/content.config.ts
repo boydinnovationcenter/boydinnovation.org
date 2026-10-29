@@ -534,6 +534,119 @@ const blogPage = defineCollection({
 		}),
 });
 
+/** Picks one of the HubSpot pop-ups in src/config/site.ts (tracking.hubspotCtas). */
+const hubspotCtaName = z.enum(['programInterest', 'eventSpaceInquiry', 'carolinaVenturesApplication']);
+
+/** Contact page. One entry ("contact") in src/content/contact.yaml. */
+const contact = defineCollection({
+	loader: file('src/content/contact.yaml'),
+	schema: z.object({
+		seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+		heading: z.string(),
+		intro: z.string(),
+		/** HubSpot form shown on the page. */
+		hubspotFormId: z.string(),
+	}),
+});
+
+/** Deep Dive Workshops page. One entry ("deepDive") in src/content/deep-dive-workshops.yaml. */
+const deepDive = defineCollection({
+	loader: file('src/content/deep-dive-workshops.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+			hero: z.object({ heading: z.string(), tagline: z.string() }),
+			intro: z.object({
+				heading: z.string(),
+				/** Paragraphs; *italics* and **bold** allowed. */
+				paragraphs: z.array(z.string()),
+				image: image(),
+				alt: z.string(),
+				/** The button opens a HubSpot pop-up form. */
+				cta: z.object({ label: z.string(), hubspotCta: hubspotCtaName, srContext: z.string().optional() }),
+			}),
+			photos: z.array(z.object({ image: image(), alt: z.string() })).length(5),
+		}),
+});
+
+/** Carolina Ventures page (/programs/carolina-ventures). One entry ("carolinaVentures") in src/content/carolina-ventures.yaml. */
+const carolinaVentures = defineCollection({
+	loader: file('src/content/carolina-ventures.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+			hero: z.object({
+				eyebrow: z.string(),
+				heading: z.string(),
+				cta: z.object({ label: z.string(), hubspotCta: hubspotCtaName, srContext: z.string().optional() }),
+			}),
+			intro: z.object({ heading: z.string(), text: z.string(), image: image(), alt: z.string() }),
+			schedule: z.object({
+				heading: z.string(),
+				/** One box per session, in date order. */
+				sessions: z.array(z.object({ date: z.string(), label: z.string() })),
+			}),
+		}),
+});
+
+/** Event Guide page (/event-guide). One entry ("eventGuide") in src/content/event-guide.yaml. */
+const eventGuide = defineCollection({
+	loader: file('src/content/event-guide.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+			hero: z.object({
+				heading: z.string(),
+				intro: z.string(),
+				image: image(),
+				/** The four quick-facts tiles (address, contact, Wi-Fi). */
+				facts: z.array(z.object({ label: z.string(), value: z.string() })),
+			}),
+			parking: z.object({
+				eyebrow: z.string(),
+				heading: z.string(),
+				/** One box each; **bold** and [links](https://…) allowed. */
+				options: z.array(z.string()),
+				map: image(),
+				mapAlt: z.string(),
+			}),
+			arrival: z.object({
+				eyebrow: z.string(),
+				heading: z.string(),
+				cards: z.array(z.object({ title: z.string(), paragraphs: z.array(z.string()) })),
+				image: image(),
+				alt: z.string(),
+			}),
+			av: z.object({
+				heading: z.string(),
+				/** One box each; **bold** allowed. */
+				boxes: z.array(z.string()),
+				note: z.string(),
+				photos: z.array(z.object({ image: image(), alt: z.string() })).length(2),
+			}),
+			kitchen: z.object({
+				heading: z.string(),
+				intro: z.string(),
+				tips: z.array(z.string()),
+				image: image(),
+				alt: z.string(),
+			}),
+		}),
+});
+
+/** Links page (/links, the "link in bio" page). One entry ("links") in src/content/links.yaml. */
+const links = defineCollection({
+	loader: file('src/content/links.yaml'),
+	schema: ({ image }) =>
+		z.object({
+			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
+			logo: image(),
+			logoAlt: z.string(),
+			/** One button each, top to bottom. Links starting with http open in a new tab. */
+			buttons: z.array(z.object({ label: z.string(), href: z.string() })),
+		}),
+});
+
 export const collections = {
 	home,
 	programs,
@@ -549,4 +662,9 @@ export const collections = {
 	startupSprint,
 	blog,
 	blogPage,
+	contact,
+	deepDive,
+	carolinaVentures,
+	eventGuide,
+	links,
 };

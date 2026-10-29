@@ -1,0 +1,86 @@
+---
+/**
+ * Navy hero with a centered headline and green tagline, and the flywheel mark
+ * cut off by the bottom-right corner (Contact, Deep Dive Workshops).
+ */
+import { Image } from 'astro:assets';
+import flywheel from '../assets/images/startup-sprint/flywheel-cropped.png';
+
+interface Props {
+	heading: string;
+	tagline: string;
+	/** Contact's tagline is body size; Deep Dive's is Squarespace "large". */
+	taglineSize?: 'base' | 'large';
+	/** Flywheel width at 1440px, in px (Contact 269, Deep Dive 325). */
+	flywheelWidth?: number;
+	/** Hero height at 1440px including the header, in px (Contact 629, Deep Dive 668). */
+	height?: number;
+}
+
+const { heading, tagline, taglineSize = 'base', flywheelWidth = 325, height = 629 } = Astro.props;
+---
+
+<section
+	class="corner-hero"
+	aria-labelledby="page-title"
+	style={`--flywheel-width: clamp(8.5rem, ${((flywheelWidth / 1440) * 100).toFixed(2)}vw, ${(flywheelWidth / 16).toFixed(2)}rem); --hero-height: ${(height / 16).toFixed(2)}rem`}
+>
+	<div class="corner-hero__text">
+		<h1 id="page-title">{heading}</h1>
+		<p class:list={['corner-hero__tagline', `corner-hero__tagline--${taglineSize}`]}>{tagline}</p>
+	</div>
+	<Image class="corner-hero__flywheel" src={flywheel} alt="" widths={[300, 500, 700]} sizes="23vw" loading="eager" />
+</section>
+
+<style>
+	/* Live at 1440: 629px (Contact) / 668px (Deep Dive) tall including the header. */
+	.corner-hero {
+		position: relative;
+		overflow: hidden;
+		/* Phones: the flywheel sits under the text instead of behind it. */
+		padding: calc(var(--header-height) + clamp(2rem, 10vw, 9.8rem)) var(--gutter) calc(var(--flywheel-width) * 1.13 + 1rem);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+		text-align: center;
+	}
+
+	.corner-hero__text {
+		width: min(100%, 41rem);
+		margin-inline: auto;
+	}
+
+	h1 {
+		font-size: var(--text-hero);
+		line-height: 1.09;
+	}
+
+	.corner-hero__tagline {
+		width: min(100%, 34.5rem);
+		margin: 1rem auto 0;
+		font-weight: 700;
+		color: var(--color-accent);
+	}
+
+	.corner-hero__tagline--large {
+		width: 100%;
+		margin-top: 0.5rem;
+		font-size: clamp(1.1rem, 1.05rem + 0.25vw, 1.41rem);
+	}
+
+	.corner-hero__flywheel {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		width: var(--flywheel-width);
+		aspect-ratio: 325 / 368;
+		object-fit: cover;
+		object-position: left top;
+	}
+
+	@media (min-width: 64rem) {
+		.corner-hero {
+			min-height: var(--hero-height);
+			padding-bottom: 8rem;
+		}
+	}
+</style>

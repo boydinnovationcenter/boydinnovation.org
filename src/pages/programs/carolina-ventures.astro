@@ -1,0 +1,221 @@
+---
+import { Image } from 'astro:assets';
+import { getEntry } from 'astro:content';
+import texture from '../../assets/images/brand/texture-swirl.jpg';
+import tailfeathers from '../../assets/images/carolina-ventures/tailfeathers.png';
+import CtaButton from '../../components/CtaButton.astro';
+import { site, tracking } from '../../config/site';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const entry = await getEntry('carolinaVentures', 'carolinaVentures');
+if (!entry) throw new Error('Missing Carolina Ventures content: src/content/carolina-ventures.yaml');
+const { seo, hero, intro, schedule } = entry.data;
+const pageUrl = `${site.url}/programs/carolina-ventures`;
+
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+		{ '@type': 'ListItem', position: 2, name: 'Programs', item: `${site.url}/programs` },
+		{ '@type': 'ListItem', position: 3, name: hero.heading, item: pageUrl },
+	],
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+	<section class="cv-hero" aria-labelledby="page-title">
+		<Image class="cv-hero__bg" src={texture} alt="" widths={[640, 1024, 1440, 1920]} sizes="100vw" loading="eager" fetchpriority="high" />
+		<div class="cv-hero__text">
+			<!-- An h2 above the h1 on live; a plain line here so the h1 comes first. -->
+			<p class="cv-hero__eyebrow">{hero.eyebrow}</p>
+			<h1 id="page-title">{hero.heading}</h1>
+			<CtaButton
+				class="cv-hero__cta"
+				variant="glass"
+				label={hero.cta.label}
+				hubspotCta={tracking.hubspotCtas[hero.cta.hubspotCta]}
+				srContext={hero.cta.srContext}
+			/>
+		</div>
+		<Image class="cv-hero__feathers" src={tailfeathers} alt="" widths={[220, 440, 660]} sizes="15vw" loading="eager" />
+	</section>
+
+	<section class="cv-intro" aria-labelledby="cv-intro-heading">
+		<div class="container cv-intro__inner">
+			<div>
+				<h2 id="cv-intro-heading">{intro.heading}</h2>
+				<p>{intro.text}</p>
+			</div>
+			<Image class="cv-intro__image" src={intro.image} alt={intro.alt} widths={[480, 720, 1000]} sizes="(min-width: 48rem) 34vw, 100vw" />
+		</div>
+	</section>
+
+	<section class="cv-schedule" aria-labelledby="cv-schedule-heading">
+		<div class="container">
+			<h2 id="cv-schedule-heading">{schedule.heading}</h2>
+			<ol class="cv-schedule__grid">
+				{
+					schedule.sessions.map((s) => (
+						<li>
+							<span class="cv-schedule__date">{s.date}</span>
+							<span class="cv-schedule__label">{s.label}</span>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	/* Hero. Live at 1440: 708px tall including the header, on the swirl texture. */
+	.cv-hero {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		padding: calc(var(--header-height) + clamp(3rem, 13.6vw, 12.3rem)) var(--gutter) calc(clamp(7rem, 21.2vw, 19.1rem) * 0.55 + 2rem);
+		color: var(--color-text-on-dark);
+		text-align: center;
+	}
+
+	.cv-hero__bg {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.cv-hero__eyebrow {
+		font-size: var(--text-h2);
+		font-weight: 500;
+		line-height: var(--leading-tight);
+		color: var(--color-accent);
+	}
+
+	/* 91px @1440; on phones it stays on one line, as live. */
+	h1 {
+		font-size: min(clamp(2.2rem, 1.4rem + 5.2vw, 5.67rem), 9.6vw);
+		line-height: 1;
+	}
+
+	.cv-hero :global(.cv-hero__cta) {
+		width: 13.25rem;
+		min-height: 4.25rem;
+		margin-top: 1.7rem;
+		border-radius: var(--radius);
+		font-size: var(--text-base);
+	}
+
+	/* USC tailfeathers, cut off by the bottom-right corner (214 × 305 @1440). */
+	.cv-hero__feathers {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		width: clamp(5.5rem, 14.9vw, 13.4rem);
+		aspect-ratio: 214 / 305;
+		object-fit: cover;
+		object-position: left top;
+	}
+
+	@media (min-width: 64rem) {
+		.cv-hero {
+			min-height: 44.25rem;
+			padding-bottom: 6rem;
+		}
+	}
+
+	/* Intro. Live at 1440: text 601px wide at the left, photo 490 × 305 at the right. */
+	.cv-intro {
+		padding-block: clamp(var(--space-6), 10vw, 9rem);
+		color: var(--color-text);
+	}
+
+	.cv-intro__inner {
+		display: grid;
+		gap: var(--space-5);
+		align-items: center;
+	}
+
+	.cv-intro h2 + p {
+		margin-top: 1.5rem;
+	}
+
+	.cv-intro__image {
+		width: 100%;
+		aspect-ratio: 490 / 305;
+		border-radius: var(--radius);
+		object-fit: cover;
+	}
+
+	@media (max-width: 47.99rem) {
+		/* Live on phones: photo first, then the text. */
+		.cv-intro__image {
+			order: -1;
+		}
+	}
+
+	@media (min-width: 48rem) {
+		.cv-intro__inner {
+			grid-template-columns: minmax(0, 601fr) minmax(0, 490fr);
+			gap: clamp(var(--space-5), 8.6vw, 7.7rem);
+		}
+	}
+
+	/* Schedule. Live at 1440: three 212 × 107 boxes per row, 66px apart. */
+	.cv-schedule {
+		padding-block: clamp(var(--space-6), 8.3vw, 7.4rem) clamp(var(--space-7), 9.4vw, 8.4rem);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+		text-align: center;
+	}
+
+	.cv-schedule h2 {
+		font-size: clamp(1.5rem, 1.2rem + 1.3vw, 2.57rem);
+		line-height: 1;
+		color: var(--color-accent);
+	}
+
+	.cv-schedule__grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.6rem;
+		width: min(100%, 48rem);
+		margin: clamp(var(--space-5), 3.7vw, 3.3rem) auto 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.cv-schedule__grid li {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		min-height: 6.7rem;
+		padding: 0.75rem 0.5rem;
+		border: 1px solid var(--color-text-on-dark);
+		border-radius: var(--radius);
+	}
+
+	.cv-schedule__date {
+		font-size: clamp(0.8rem, 0.75rem + 0.25vw, 1rem);
+		font-weight: 700;
+		color: var(--color-blue);
+	}
+
+	.cv-schedule__label {
+		font-size: clamp(1.1rem, 1.05rem + 0.25vw, 1.41rem);
+		line-height: 1.35;
+	}
+
+	@media (min-width: 48rem) {
+		.cv-schedule__grid {
+			grid-template-columns: repeat(3, minmax(0, 13.25rem));
+			justify-content: space-between;
+			row-gap: 3.2rem;
+		}
+	}
+</style>

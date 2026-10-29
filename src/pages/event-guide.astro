@@ -1,0 +1,411 @@
+---
+import { Image } from 'astro:assets';
+import { getEntry } from 'astro:content';
+import flywheel from '../assets/images/brand/flywheel.png';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { inlineMarkdown } from '../lib/inline-markdown';
+
+const entry = await getEntry('eventGuide', 'eventGuide');
+if (!entry) throw new Error('Missing Event Guide content: src/content/event-guide.yaml');
+const { seo, hero, parking, arrival, av, kitchen } = entry.data;
+
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+		{ '@type': 'ListItem', position: 2, name: 'Event Guide', item: `${site.url}/event-guide` },
+	],
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+	<section class="eg-hero" aria-labelledby="page-title">
+		<Image class="eg-hero__bg" src={hero.image} alt="" widths={[640, 1024, 1440, 1600]} sizes="100vw" loading="eager" fetchpriority="high" />
+		<Image class="eg-hero__flywheel" src={flywheel} alt="" width={100} densities={[1, 2, 3]} loading="eager" />
+		<div class="eg-hero__text">
+			<h1 id="page-title">{hero.heading}</h1>
+			<p class="eg-hero__intro">{hero.intro}</p>
+		</div>
+		<dl class="eg-facts">
+			{
+				hero.facts.map((f) => (
+					<div>
+						<dt>{f.label}</dt>
+						<dd>{f.value}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</section>
+
+	<section class="eg-parking" aria-labelledby="eg-parking-heading">
+		<div class="container eg-split">
+			<div>
+				<p class="eg-eyebrow eg-eyebrow--blue">{parking.eyebrow}</p>
+				<h2 id="eg-parking-heading">{parking.heading}</h2>
+				<ul class="eg-boxes">
+					{parking.options.map((o) => <li set:html={inlineMarkdown(o)} />)}
+				</ul>
+			</div>
+			<Image class="eg-parking__map" src={parking.map} alt={parking.mapAlt} widths={[640, 1000, 1500]} sizes="(min-width: 48rem) 50vw, 100vw" />
+		</div>
+	</section>
+
+	<section class="eg-arrival eg-dark" aria-labelledby="eg-arrival-heading">
+		<div class="container eg-split eg-split--image-first">
+			<div class="eg-arrival__text">
+				<p class="eg-eyebrow">{arrival.eyebrow}</p>
+				<h2 id="eg-arrival-heading">{arrival.heading}</h2>
+				<div class="eg-cards">
+					{
+						arrival.cards.map((c) => (
+							<div class="eg-card">
+								<h3>{c.title}</h3>
+								{c.paragraphs.map((p) => (
+									<p>{p}</p>
+								))}
+							</div>
+						))
+					}
+				</div>
+			</div>
+			<Image class="eg-arrival__image" src={arrival.image} alt={arrival.alt} widths={[400, 700, 900]} sizes="(min-width: 48rem) 30vw, 100vw" />
+		</div>
+	</section>
+
+	<section class="eg-av" aria-labelledby="eg-av-heading">
+		<div class="container eg-split">
+			<div class="eg-av__photos">
+				{
+					av.photos.map((p, i) => (
+						<Image
+							class={`eg-av__photo eg-av__photo--${i + 1}`}
+							src={p.image}
+							alt={p.alt}
+							widths={[360, 600, 900]}
+							sizes="(min-width: 48rem) 30vw, 60vw"
+						/>
+					))
+				}
+			</div>
+			<div class="eg-av__text">
+				<h2 id="eg-av-heading">{av.heading}</h2>
+				<ul class="eg-boxes eg-boxes--roomy">
+					{av.boxes.map((b) => <li set:html={inlineMarkdown(b)} />)}
+				</ul>
+				<p class="eg-av__note"><strong>{av.note}</strong></p>
+			</div>
+		</div>
+	</section>
+
+	<section class="eg-kitchen eg-dark" aria-labelledby="eg-kitchen-heading">
+		<div class="container eg-split eg-split--image-first">
+			<div>
+				<h2 id="eg-kitchen-heading">{kitchen.heading}</h2>
+				<div class="eg-card eg-card--left">
+					<p>{kitchen.intro}</p>
+					<ul>
+						{kitchen.tips.map((t) => <li>{t}</li>)}
+					</ul>
+				</div>
+			</div>
+			<Image class="eg-kitchen__image" src={kitchen.image} alt={kitchen.alt} widths={[480, 720, 1000]} sizes="(min-width: 48rem) 34vw, 100vw" />
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	/* Hero. Live at 1440: 803px tall, photo under a navy wash, four fact tiles at the bottom. */
+	.eg-hero {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		/* Phones: start below the flywheel mark so the two don't overlap. */
+		padding: calc(var(--header-height) + max(clamp(2.5rem, 13vw, 11.8rem), 2.5rem + clamp(3.5rem, 7vw, 6.25rem))) var(--gutter)
+			clamp(var(--space-6), 3.3vw, 3rem);
+		color: var(--color-text-on-dark);
+		text-align: center;
+	}
+
+	.eg-hero__bg {
+		position: absolute;
+		inset: 0;
+		z-index: -2;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.eg-hero::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: rgb(4 30 52 / 0.7);
+	}
+
+	.eg-hero__flywheel {
+		position: absolute;
+		top: calc(var(--header-height) + 1.5rem);
+		right: var(--gutter);
+		width: clamp(3.5rem, 7vw, 6.25rem);
+	}
+
+	.eg-hero__text {
+		width: min(100%, 55rem);
+		margin-inline: auto;
+	}
+
+	h1 {
+		font-size: var(--text-hero);
+		font-weight: 700;
+		line-height: 1.09;
+	}
+
+	.eg-hero__intro {
+		width: min(100%, 40rem);
+		margin: 1.5rem auto 0;
+		font-size: clamp(1rem, 0.95rem + 0.3vw, 1.41rem);
+		line-height: 1.8;
+	}
+
+	/* Live: four 212 × 107 tiles, 11px apart. */
+	.eg-facts {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.7rem;
+		width: min(100%, 55rem);
+		margin: clamp(var(--space-6), 11vw, 10.5rem) auto 0;
+	}
+
+	@media (min-width: 48rem) {
+		.eg-facts {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+
+	.eg-facts div {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		min-height: 6.7rem;
+		padding: 0.75rem 0.5rem;
+		background: var(--color-paper);
+		color: var(--color-black);
+	}
+
+	.eg-facts dt {
+		font-size: clamp(0.8rem, 0.75rem + 0.25vw, 1rem);
+		font-weight: 700;
+		color: var(--color-blue);
+	}
+
+	.eg-facts dd {
+		margin: 0;
+		font-size: clamp(1.05rem, 1rem + 0.3vw, 1.41rem);
+		line-height: 1.5;
+	}
+
+	/* Shared layout: two columns from tablet width. */
+	.eg-split {
+		display: grid;
+		gap: var(--space-5);
+		align-items: center;
+	}
+
+	@media (min-width: 48rem) {
+		.eg-split {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			gap: clamp(var(--space-5), 5vw, 4.4rem);
+		}
+
+		/* The photo is on the left on wide screens; on phones it follows the text (as live). */
+		.eg-split--image-first > :global(img) {
+			grid-row: 1;
+			grid-column: 1;
+		}
+	}
+
+	section:not(.eg-hero) {
+		padding-block: clamp(var(--space-6), 6vw, 5.4rem);
+	}
+
+	.eg-dark {
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.eg-eyebrow {
+		font-size: var(--text-sm);
+		font-weight: 700;
+		color: var(--color-accent);
+	}
+
+	.eg-eyebrow--blue {
+		font-size: clamp(1rem, 0.95rem + 0.3vw, 1.41rem);
+		font-weight: 400;
+		color: var(--color-blue);
+	}
+
+	h2 {
+		margin-bottom: var(--space-5);
+	}
+
+	.eg-boxes {
+		display: grid;
+		gap: 0.7rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.eg-boxes li {
+		padding: 1.9rem 0.9rem;
+		border: 1px solid var(--color-black);
+		border-radius: var(--radius);
+		color: var(--color-black);
+	}
+
+	.eg-boxes--roomy li {
+		padding: 2.1rem;
+		border-radius: 10px;
+	}
+
+	.eg-boxes :global(a) {
+		color: var(--color-blue);
+	}
+
+	/* Parking. Live: the boxes are 434px wide beside a 713px map. */
+	@media (min-width: 64rem) {
+		.eg-parking .eg-split {
+			grid-template-columns: minmax(0, 434fr) minmax(0, 713fr);
+			align-items: end;
+		}
+	}
+
+	/* Live: cropped to 713 × 463, level with the boxes. */
+	.eg-parking__map {
+		width: 100%;
+		aspect-ratio: 713 / 463;
+		border-radius: var(--radius);
+		object-fit: cover;
+	}
+
+	/* Arrival. Live: two cards side by side, then one wide card. */
+	.eg-cards {
+		display: grid;
+		gap: 0.7rem;
+	}
+
+	@media (min-width: 36rem) {
+		.eg-cards {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.eg-cards .eg-card:last-child {
+			grid-column: 1 / -1;
+		}
+	}
+
+	.eg-card {
+		padding: 0.7rem 0.9rem 1.4rem;
+		border: 1px solid var(--color-text-on-dark);
+		border-radius: var(--radius);
+		text-align: center;
+	}
+
+	.eg-card h3 {
+		margin-bottom: 0.6rem;
+		font-size: clamp(1.1rem, 1.05rem + 0.25vw, 1.41rem);
+		font-weight: 500;
+		line-height: 1.8;
+	}
+
+	.eg-card p + p {
+		margin-top: 1rem;
+	}
+
+	.eg-arrival__image {
+		width: min(100%, 27rem);
+		justify-self: center;
+		aspect-ratio: 434 / 620;
+		object-fit: cover;
+	}
+
+	@media (min-width: 48rem) {
+		.eg-arrival .eg-split {
+			grid-template-columns: minmax(0, 434fr) minmax(0, 657fr);
+		}
+	}
+
+	/* AV. Live: the laptop photo overlaps the corner of the larger speaker photo. */
+	.eg-av__photos {
+		position: relative;
+		width: min(100%, 41rem);
+		aspect-ratio: 656 / 794;
+		justify-self: center;
+	}
+
+	.eg-av__photo {
+		position: absolute;
+		object-fit: cover;
+	}
+
+	.eg-av__photo--1 {
+		top: 0;
+		left: 0;
+		z-index: 1;
+		width: 40.7%;
+		aspect-ratio: 267 / 344;
+		border-radius: var(--radius);
+	}
+
+	.eg-av__photo--2 {
+		right: 0;
+		bottom: 0;
+		width: 66.2%;
+		aspect-ratio: 434 / 660;
+	}
+
+	@media (min-width: 48rem) {
+		.eg-av .eg-split {
+			grid-template-columns: minmax(0, 546fr) minmax(0, 656fr);
+		}
+
+		.eg-av .eg-split > .eg-av__photos {
+			grid-column: 2;
+			grid-row: 1;
+		}
+	}
+
+	.eg-av__note {
+		margin-top: 0.7rem;
+		font-size: clamp(1.05rem, 1rem + 0.3vw, 1.41rem);
+	}
+
+	/* Kitchen. */
+	.eg-card--left {
+		padding: 1.7rem 0.9rem;
+		text-align: start;
+	}
+
+	.eg-card--left ul {
+		margin-top: 1rem;
+		padding-left: 2.5rem;
+	}
+
+	.eg-kitchen__image {
+		width: 100%;
+		aspect-ratio: 490 / 384;
+		object-fit: cover;
+	}
+
+	@media (min-width: 48rem) {
+		.eg-kitchen .eg-split {
+			grid-template-columns: minmax(0, 490fr) minmax(0, 657fr);
+		}
+	}
+</style>

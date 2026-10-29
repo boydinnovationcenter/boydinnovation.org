@@ -503,3 +503,48 @@ Left as-is: the misspelled URL `/blog/tech-on-tap-novemeber-2025`, which is live
 ### Testing note
 
 On 320px phones, HubSpot's popup overlay (`#hs-interactives-modal-overlay`, injected on every page) is 3px wider than the window. That makes `scrollWidth` report up to 341px, but the page can't be scrolled sideways, because `body { overflow-x: clip }` contains it (checked by trying to scroll). No change is needed. Remember this when an automated width check flags a page only some of the time.
+
+## Contact, Deep Dive Workshops, Carolina Ventures, Event Guide, Links (2026-10-29)
+
+All five live URLs are rebuilt. Titles, canonicals and social images match live, as do descriptions where live has one. Copy lives in one YAML file per page (see CONTENT.md). `/5points` and `/uscqr`, the QR code landing pages, are no longer needed (Kennedy, 2026-10-29) and now redirect 301 to `/`.
+
+### Rebuilt and fixed
+
+- **Contact:** the same HubSpot form, with its rendered height (532px desktop) reserved so the page doesn't jump. Adds `ContactPage` and breadcrumb structured data.
+- **Deep Dive Workshops:** the Apply button is a real `<button>` that opens the same HubSpot Program Interest pop-up. Live wires a link with an empty `href` through the footer script.
+- **Carolina Ventures:** Apply Now opens the Carolina Ventures application pop-up, the same way. On live, "Faber Center for Entrepreneurship" is an `<h2>` above the page's `<h1>`; it's now a styled line with the same look, so the `<h1>` comes first. The six schedule boxes are an ordered list in date order. Live's markup has them out of order, though they display in order.
+- **Carolina Ventures description:** live has none. It now has one taken from the page's own first two sentences, as with the blog.
+- **Links:** a logo `<h1>`, the three social icons (from the site config) and eight buttons. The live page has no heading.
+- **Event Guide:** the quick-facts tiles are a description list (`<dl>`), and the AV photos keep live's overlapping pair. The parking section's background is the brand light mint `#ECF6F2` instead of live's off-brand gray `#F1F5F9`; the two are nearly identical.
+- **Typos fixed (Event Guide):** "heres everything" is now "here’s everything". "The BIC team will coordinator will confirm" is now "The BIC team coordinator will confirm".
+- **Alt text** written for every photo and the parking map. The map's alt text lists the parking spots it shows.
+
+### Small-screen fixes
+
+- **Deep Dive, phones:** live leaves about 150px of empty space above the Apply button. It now follows the text directly.
+- **Carolina Ventures, ≤414px:** the headline is sized to stay on one line, as on live's phone layout.
+- **Event Guide, phones:** the hero starts below the flywheel mark, so the mark doesn't overlap the headline.
+- All five pages checked every 8px from 320 to 1440: no sideways scrolling.
+
+### Deviations
+
+- **Links button order:** the phone layout on live shows the buttons in a different order (Tech on Tap first). The rebuild uses the desktop order on every screen, per "same order on every screen". The order is in `links.yaml`.
+- **Event Guide reading order:** on wide screens the photo sits on the left as on live, but the HTML (and screen readers) has the text first, which also matches live's phone layout.
+
+### Performance (Lighthouse, mobile, 2026-10-29)
+
+| Page | Live | Astro (local Cloudflare) |
+|---|---|---|
+| /contact | 48 perf, LCP 24.8 s, 3.3 MB | 97 perf, LCP 1.3 s, 1.6 MB |
+| /programs/carolina-ventures | 50 perf, LCP 21.7 s, 4.2 MB | 97 perf, LCP 2.1 s, 2.2 MB |
+| /deep-dive-workshops | 53 perf, LCP 23.8 s, 3.4 MB | 98 perf, LCP 1.5 s, 2.1 MB |
+| /event-guide | 53 perf, LCP 23.8 s, 3.5 MB, a11y 96 | 96 perf, LCP 2.5 s, 1.8 MB, a11y 97 |
+| /links | (live run failed) | 98 perf, LCP 1.5 s, 1.7 MB |
+
+Accessibility is 100 on all except the Event Guide (97). Its one failure is the brand blue `#0099FF` on the light background ("PARKING AND GETTING HERE", the Passport Parking link), at 2.7:1, the same as live. See open question 1.
+
+### Open questions
+
+24. **Event Guide blue text contrast (2.7:1):** darken it, as asked in question 1 for the homepage labels?
+25. **Links page:** "STARTUP SPRINT NOV 13-14" will go out of date after November 14; update or remove that button then.
+

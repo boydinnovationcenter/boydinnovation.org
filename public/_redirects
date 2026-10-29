@@ -76,6 +76,12 @@
 /home / 301
 /programs-1-1 /programs 301
 
+# --- Retired QR code landing pages (no longer needed, per Kennedy 2026-10-29) ---
+/5points / 301
+/5points/ / 301
+/uscqr / 301
+/uscqr/ / 301
+
 # --- Search Console 404s with no exact match (export 2026-10-23) ---
 # Unused event-page drafts and deleted events go to the Events page.
 /meetups /events 301

@@ -1,0 +1,59 @@
+---
+import { getEntry } from 'astro:content';
+import CornerFlywheelHero from '../components/CornerFlywheelHero.astro';
+import { site, tracking } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const entry = await getEntry('contact', 'contact');
+if (!entry) throw new Error('Missing Contact content: src/content/contact.yaml');
+const { seo, heading, intro, hubspotFormId } = entry.data;
+
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'ContactPage',
+			name: heading,
+			url: `${site.url}/contact`,
+			about: { '@id': `${site.url}/#organization` },
+		},
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+				{ '@type': 'ListItem', position: 2, name: heading, item: `${site.url}/contact` },
+			],
+		},
+	],
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	<CornerFlywheelHero heading={heading} tagline={intro} flywheelWidth={269} />
+	<section class="contact-form" aria-label="Contact form">
+		<!-- HubSpot form; HubSpot's form script (loaded for the newsletter) renders it here. -->
+		<div class="hs-form-frame contact-form__frame" data-region="na1" data-form-id={hubspotFormId} data-portal-id={tracking.hubspotPortalId}>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	/* Live at 1440: a 768px form, 95px below the hero, in an 890px band. */
+	.contact-form {
+		padding: clamp(var(--space-6), 6.6vw, 5.95rem) var(--gutter) clamp(var(--space-7), 15vw, 14rem);
+	}
+
+	/* Rendered form height, reserved so the page doesn't jump when it loads. */
+	.contact-form__frame {
+		width: min(100%, 48rem);
+		min-height: 36rem;
+		margin-inline: auto;
+	}
+
+	@media (min-width: 48rem) {
+		.contact-form__frame {
+			min-height: 33.25rem;
+		}
+	}
+</style>

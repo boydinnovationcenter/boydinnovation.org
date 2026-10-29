@@ -12,7 +12,7 @@ Third-party code found on the live Squarespace site (boydinnovation.org), checke
 | GA4 | `G-PEHD1QDBW8` | Analytics.astro | Carried over. On Squarespace this came from the built-in Google Analytics setting (it carried Squarespace's `developer_id`). **Open question:** does GTM also fire GA4? If so, one of the two should go. |
 | HubSpot tracking code | portal `50188189` | Analytics.astro | Carried over. It was included **twice** on the live site; it is now loaded once. This script also serves HubSpot pop-ups, including the "Join Our Newsletter" pop-up that opens on page load. |
 | LinkedIn Insight Tag | partner IDs `7841314` **and** `7872946` | Analytics.astro | Carried over. Both IDs are kept, and the loader script now loads once instead of twice. **Open question:** is one of these IDs obsolete? |
-| HubSpot CTA pop-up triggers | `217138433433` Program Interest form; `217149021356` event space inquiry; `218290064008` Carolina Ventures application | `tracking.hubspotCtas` in site.ts, rendered by [CtaButton.astro](src/components/CtaButton.astro) | The Squarespace footer script added `hs-cta-trigger-button` classes to button blocks by block ID. It's replaced by real `<button>`s that carry the class in the HTML; content files pick the pop-up by name (`hubspotCta: programInterest`). Used on /programs and /space. |
+| HubSpot CTA pop-up triggers | `217138433433` Program Interest form; `217149021356` event space inquiry; `218290064008` Carolina Ventures application | `tracking.hubspotCtas` in site.ts, rendered by [CtaButton.astro](src/components/CtaButton.astro) | The Squarespace footer script added `hs-cta-trigger-button` classes to button blocks by block ID. It's replaced by real `<button>`s that carry the class in the HTML; content files pick the pop-up by name (`hubspotCta: programInterest`). Used on /programs, /space, /deep-dive-workshops and /programs/carolina-ventures. |
 | Lovable support chat widget | `bic-support-widget.lovable.app/embed.js` | Not carried over | Commented out (disabled) on the live site |
 | Existing JSON-LD `LocalBusiness` | | Replaced, see [MIGRATION-NOTES.md](MIGRATION-NOTES.md) | |
 
@@ -80,3 +80,16 @@ No page-specific Code Injection on /tech-on-tap or /startup-sprint (checked 2026
 ## Still to inventory
 
 - Per-page Code Injection on every other page, including Eventbrite widgets, the Google Calendar subscribe button, and the pages that use the HubSpot CTA triggers. Each page will be added here as it is migrated.
+
+## Contact, Deep Dive Workshops, Carolina Ventures, Event Guide, Links (2026-10-29)
+
+| Page | Integration | Details | Astro location |
+|---|---|---|---|
+| /contact | HubSpot embedded form | "Contact Us" form `01e3e8fb-62dd-4505-8cb6-ebcbc16492af`, region `na1`, rendered by the form script already loaded for the newsletter | `hubspotFormId` in [contact.yaml](src/content/contact.yaml) |
+| /deep-dive-workshops | HubSpot Program Interest pop-up | CTA `217138433433` on the Apply button (live: footer script, block `yui_3_17_2_1_1784581105619_1506`) | `cta.hubspotCta: programInterest` in [deep-dive-workshops.yaml](src/content/deep-dive-workshops.yaml) |
+| /programs/carolina-ventures | HubSpot Carolina Ventures application pop-up | CTA `218290064008` on Apply Now (live: footer script, block `yui_3_17_2_1_1785335815449_4259`) | `hero.cta.hubspotCta: carolinaVenturesApplication` in [carolina-ventures.yaml](src/content/carolina-ventures.yaml) |
+| /links | Outbound links | YouTube channel, partnerships site, social profiles | [links.yaml](src/content/links.yaml), social links from site.ts |
+| /event-guide | Outbound link | Passport Parking app (App Store) | [event-guide.yaml](src/content/event-guide.yaml) |
+
+No page-level Code Injection was found on these pages.
+
