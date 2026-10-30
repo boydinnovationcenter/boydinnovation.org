@@ -4,7 +4,7 @@ startupSprint:
   seo:
     title: "Build a Startup in 24 Hours | Startup Sprint | Boyd Innovation"
     description: "Learn how to build a startup in 24 hours at Boyd Innovation Center's Startup Sprint. Team up, pitch ideas, and build with industry experts. Apply now."
-    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+    ogImage: "https://boydinnovation.org/og/boyd-innovation-logo.png"
 
   hero:
     heading: "Startup Sprint"

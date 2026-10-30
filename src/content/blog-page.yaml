@@ -4,7 +4,7 @@ blog:
   seo:
     title: "Tech Startup Blog for Founders | Boyd Innovation"
     description: "Tech startup stories, founder spotlights, and free SEO tips for builders in the Midlands. Read the Boyd Innovation Center blog and start growing today."
-    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+    ogImage: "https://boydinnovation.org/og/boyd-innovation-logo.png"
   hero:
     eyebrow: "BLOG"
     headline:

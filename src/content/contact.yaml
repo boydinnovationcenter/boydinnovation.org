@@ -5,7 +5,7 @@ contact:
   seo:
     title: "Contact Us | Boyd Innovation"
     description: "Contact the Boyd Innovation Center about membership, coworking, or startup programs. Fill out the form and we'll get back to you."
-    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+    ogImage: "https://boydinnovation.org/og/boyd-innovation-logo.png"
   heading: "Contact Us"
   intro: "Interested in membership or have questions about the Boyd Innovation Center? Fill out the form and we’ll be in touch."
   # HubSpot "Contact Us" form. Swap the ID to use a different form.

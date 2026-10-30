@@ -6,7 +6,7 @@ space:
   seo:
     title: "Office and Coworking Space Columbia SC | Boyd Innovation"
     description: "Find office space for rent in Columbia SC at the Boyd Innovation Center. Coworking from $50/mo, private offices, and conference rooms. Book a tour today."
-    ogImage: "http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w"
+    ogImage: "https://boydinnovation.org/og/boyd-innovation-logo.png"
 
   hero:
     heading: "Office, Coworking, & Tech Community in Columbia, South Carolina"

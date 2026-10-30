@@ -620,3 +620,7 @@ Any URL with no page and no redirect now gets `src/pages/404.astro` with a real 
 - **Title:** "Page Not Found | Boyd Innovation" instead of live's bare "Boyd Innovation", so the browser tab says what happened. The page isn't indexed, so this has no SEO effect.
 - **Headings:** live's 404 has none. A visually hidden `<h1>` ("Page not found") gives screen-reader users a heading; nothing visible changes.
 - **Link text:** "clicking here" stays as on live, with hidden text added for screen readers ("to go to the homepage").
+
+## Share images self-hosted (2026-10-30)
+
+15 pages used Squarespace's CDN copy of the wide logo as their `og:image`/`twitter:image`. That file would disappear once the Squarespace subscription ends, so it's now served from this site at `/og/boyd-innovation-logo.png` (the same image, resized to the 1500 × 226 that live serves). The tags read `https://boydinnovation.org/og/boyd-innovation-logo.png`, so link previews from the preview domain won't show the image until DNS moves; after launch they work. The two blog links to the old `boydinnovationcenter.squarespace.com/launchpad-cola` address now go straight to `/programs`, where `/launchpad-cola` already redirects. The built site no longer references Squarespace anywhere.
