@@ -3,7 +3,7 @@
 // "name" must match the Worker's name in the Cloudflare dashboard.
 {
 	"$schema": "https://unpkg.com/wrangler@4/config-schema.json",
-	"name": "boydinnovation-org",
+	"name": "boydinnovation",
 	"compatibility_date": "2026-10-29",
 	"assets": {
 		"directory": "./dist",
