@@ -517,6 +517,38 @@ const blog = defineCollection({
 		}),
 });
 
+/**
+ * Past event pages kept from the Squarespace event calendar (/event-calendar/<slug>).
+ * One folder per event in src/content/event-calendar/<slug>/: index.mdx (details
+ * above the --- line, then the description) and the poster. Upcoming events
+ * go on /events instead (src/content/events). See CONTENT.md ("Past event pages").
+ */
+const pastEvents = defineCollection({
+	loader: glob({
+		pattern: '[!_]*/index.mdx',
+		base: './src/content/event-calendar',
+		generateId: ({ entry }) => entry.split('/')[0],
+	}),
+	schema: ({ image }) =>
+		z.object({
+			/** Name shown on the page. */
+			title: z.string(),
+			/** Browser-tab/search title, if different from the name. " | Boyd Innovation" is added. */
+			seoTitle: z.string().optional(),
+			/** Search-result snippet. */
+			description: z.string(),
+			start: localDateTime,
+			end: localDateTime,
+			/** Only for events away from the BIC. */
+			venue: z.string().optional(),
+			address: z.string().optional(),
+			/** The event poster, also used when the page is shared. */
+			image: image(),
+			imageAlt: z.string(),
+			tags: z.array(z.string()).default([]),
+		}),
+});
+
 /** Blog list page (/blog) copy. One entry ("blog") in src/content/blog-page.yaml. */
 const blogPage = defineCollection({
 	loader: file('src/content/blog-page.yaml'),
@@ -662,6 +694,7 @@ export const collections = {
 	startupSprint,
 	blog,
 	blogPage,
+	pastEvents,
 	contact,
 	deepDive,
 	carolinaVentures,

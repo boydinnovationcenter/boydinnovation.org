@@ -1,0 +1,321 @@
+---
+/**
+ * A past event kept from the Squarespace event calendar, e.g. /event-calendar/tech-on-tap-mar-2026.
+ * Content: src/content/event-calendar/<slug>/index.mdx. Upcoming events live on /events.
+ */
+import type { GetStaticPaths } from 'astro';
+import { getImage, Image } from 'astro:assets';
+import { render } from 'astro:content';
+import { site } from '../../config/site';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { toEasternIso } from '../../lib/event-dates';
+import { eventDate, eventDateShort, eventTime, getPastEvents, pastEventUrl, type PastEvent } from '../../lib/past-events';
+
+export const getStaticPaths = (async () => {
+	const events = await getPastEvents();
+	return events.map((event, i) => ({
+		params: { slug: event.id },
+		props: { event, previous: events[i - 1], next: events[i + 1] },
+	}));
+}) satisfies GetStaticPaths;
+
+const { event, previous, next } = Astro.props as { event: PastEvent; previous?: PastEvent; next?: PastEvent };
+const { data } = event;
+const { Content } = await render(event);
+
+const venue = data.venue ?? site.name;
+const address = data.address ?? '711 Saluda Avenue, Columbia, SC, 29205';
+const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${venue}, ${address}`)}`;
+const sameDay = data.start.slice(0, 10) === data.end.slice(0, 10);
+
+const shareImage = await getImage({ src: data.image, width: 1200, format: 'jpeg' });
+const shareImageUrl = new URL(shareImage.src, site.url).href;
+const shareWidth = Math.min(1200, data.image.width);
+const shareHeight = Math.round((shareWidth * data.image.height) / data.image.width);
+
+const url = `${site.url}${pastEventUrl(event)}`;
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'Event',
+			name: data.title,
+			description: data.description,
+			url,
+			startDate: toEasternIso(data.start),
+			endDate: toEasternIso(data.end),
+			eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+			eventStatus: 'https://schema.org/EventScheduled',
+			image: shareImageUrl,
+			location: data.venue
+				? { '@type': 'Place', name: data.venue, address: data.address }
+				: { '@id': `${site.url}/#place` },
+		},
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+				{ '@type': 'ListItem', position: 2, name: 'Events', item: `${site.url}/events` },
+				{ '@type': 'ListItem', position: 3, name: data.title, item: url },
+			],
+		},
+	],
+};
+---
+
+<BaseLayout
+	title={`${data.seoTitle ?? data.title} | Boyd Innovation`}
+	description={data.description}
+	ogImage={shareImageUrl}
+	ogImageWidth={shareWidth}
+	ogImageHeight={shareHeight}
+>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	<div class="event">
+		<a class="event__back" href="/events"><span aria-hidden="true">←</span> Back to All Events</a>
+		<article class="event__grid">
+			<header class="event__meta">
+				<h1>{data.title}</h1>
+				<p class="event__status">Past event</p>
+				<p class="event__when">
+					{
+						sameDay ? (
+							<>
+								<time datetime={toEasternIso(data.start)}>{eventDate(data.start)}</time>
+								<br />
+								{eventTime(data.start)} – <time datetime={toEasternIso(data.end)}>{eventTime(data.end)}</time>
+							</>
+						) : (
+							<>
+								<time datetime={toEasternIso(data.start)}>
+									{eventDate(data.start)}
+									<br />
+									{eventTime(data.start)}
+								</time>
+								<span class="visually-hidden"> to </span>
+								<br />
+								<time datetime={toEasternIso(data.end)}>
+									{eventDate(data.end)}
+									<br />
+									{eventTime(data.end)}
+								</time>
+							</>
+						)
+					}
+				</p>
+				<address class="event__where">
+					{venue}
+					<br />
+					{address}, United States (<a href={mapUrl} target="_blank" rel="noopener"
+						>map<span class="visually-hidden"> of {venue}, opens in a new tab</span></a
+					>)
+				</address>
+			</header>
+			<Image
+				class="event__poster"
+				src={data.image}
+				alt={data.imageAlt}
+				widths={[300, 500, 750]}
+				sizes="(min-width: 64rem) 16rem, (min-width: 48rem) 34vw, min(100vw, 24rem)"
+				loading="eager"
+			/>
+			<div class="event__body prose">
+				<Content />
+				{data.tags.length > 0 && <p class="event__tags">Tagged: {data.tags.join(', ')}</p>}
+			</div>
+		</article>
+		{
+			(previous || next) && (
+				<nav class="event__pager" aria-label="Other past events">
+					{previous && (
+						<a class="event__pager-link" href={pastEventUrl(previous)} rel="prev">
+							<span class="event__pager-date">
+								<span class="visually-hidden">Previous event: </span>
+								{eventDateShort(previous.data.start)}
+							</span>
+							<span class="event__pager-title">{previous.data.title}</span>
+						</a>
+					)}
+					{next && (
+						<a class="event__pager-link event__pager-link--next" href={pastEventUrl(next)} rel="next">
+							<span class="event__pager-date">
+								<span class="visually-hidden">Next event: </span>
+								{eventDateShort(next.data.start)}
+							</span>
+							<span class="event__pager-title">{next.data.title}</span>
+						</a>
+					)}
+				</nav>
+			)
+		}
+	</div>
+</BaseLayout>
+
+<style>
+	/* Live at 1440: a 1242px column; details 373px, poster 256px, text 546px. */
+	.event {
+		padding: calc(var(--header-height) + clamp(2rem, 6vw, 5.5rem)) var(--gutter) clamp(var(--space-6), 6vw, 5.5rem);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.event__back,
+	.event__grid,
+	.event__pager {
+		width: min(100%, 77.6rem);
+		margin-inline: auto;
+	}
+
+	.event__back {
+		display: block;
+		width: fit-content;
+		min-height: 1.8rem;
+		margin-inline: max(0px, (100% - 77.6rem) / 2) auto;
+		text-decoration: none;
+	}
+
+	.event__back:hover {
+		color: var(--color-accent);
+	}
+
+	.event__grid {
+		display: grid;
+		gap: var(--space-5);
+		margin-top: clamp(var(--space-5), 4vw, 3.3rem);
+	}
+
+	h1 {
+		font-size: 1.75rem;
+		font-weight: 500;
+		line-height: 1.2;
+		overflow-wrap: break-word;
+	}
+
+	.event__status {
+		margin-top: 0.75rem;
+		font-size: var(--text-sm);
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--color-accent);
+	}
+
+	.event__when,
+	.event__where {
+		margin-top: 0.75rem;
+		font-size: 0.9rem;
+		font-style: normal;
+		line-height: 1.6;
+	}
+
+	.event__where a {
+		color: inherit;
+	}
+
+	.event__poster {
+		width: min(100%, 24rem);
+		height: auto;
+	}
+
+	/* The page's first heading sits level with the top of the poster on live. */
+	.event__body > :global(:first-child) {
+		margin-top: 0;
+	}
+
+	.event__tags {
+		font-size: var(--text-sm);
+	}
+
+	@media (min-width: 48rem) {
+		.event__grid {
+			grid-template-columns: minmax(0, 256fr) minmax(0, 546fr);
+			column-gap: clamp(var(--space-5), 2.6vw, 2.1rem);
+		}
+
+		.event__meta {
+			grid-column: 1 / -1;
+		}
+
+		.event__poster {
+			width: 100%;
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.event__grid {
+			grid-template-columns: minmax(0, 373fr) minmax(0, 256fr) minmax(0, 546fr);
+			align-items: start;
+		}
+
+		.event__meta {
+			grid-column: auto;
+		}
+	}
+
+	/* Previous / next past event. */
+	.event__pager {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: var(--space-5);
+		margin-top: var(--space-6);
+		padding-top: var(--space-5);
+	}
+
+	/* Live: a chevron beside each date and title. */
+	.event__pager-link {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		align-items: center;
+		gap: 0.3rem 1.25rem;
+		max-width: min(100%, 31rem);
+		text-decoration: none;
+	}
+
+	.event__pager-link::before,
+	.event__pager-link--next::after {
+		grid-row: 1 / span 2;
+		font-size: 2.5rem;
+		font-weight: 300;
+		line-height: 1;
+	}
+
+	.event__pager-link::before {
+		content: '‹';
+	}
+
+	.event__pager-link--next {
+		grid-template-columns: minmax(0, 1fr) auto;
+		margin-left: auto;
+		text-align: end;
+	}
+
+	.event__pager-link--next::before {
+		content: none;
+	}
+
+	.event__pager-link--next::after {
+		content: '›';
+		grid-column: 2;
+		grid-row: 1 / span 2;
+	}
+
+	.event__pager-link--next > span {
+		grid-column: 1;
+	}
+
+	.event__pager-date {
+		font-size: var(--text-sm);
+	}
+
+	.event__pager-title {
+		font-size: 1.2rem;
+		font-weight: 500;
+		line-height: 1.3;
+		overflow-wrap: break-word;
+	}
+
+	.event__pager-link:hover .event__pager-title {
+		color: var(--color-accent);
+	}
+</style>

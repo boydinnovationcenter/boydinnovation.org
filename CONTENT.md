@@ -155,6 +155,31 @@ actions:
 
 The hero, section headings, calendar links, "Host your event" box and photo strip are in `src/content/events-page.yaml`.
 
+## Past event pages
+
+Twenty past events from the old Squarespace calendar have their own page at `/event-calendar/<name>` (every Tech on Tap, both Launchpad COLA pitch nights, both Startup Sprints and a few one-off events). They're kept because other sites and search results link to them. Upcoming events don't go here: put those on the Events page (above).
+
+Each one is a folder in **`src/content/event-calendar/`** holding `index.mdx` and the poster. The details sit between the two `---` lines at the top:
+
+```yaml
+---
+title: "Tech on Tap Mar. 2026"              # shown on the page
+seoTitle: "Laura Boccanfuso | Tech on Tap March 2026"   # browser tab and Google; optional
+description: "One or two sentences for search results."
+start: "2026-03-19T17:00"                   # Columbia time, 24-hour clock
+end: "2026-03-19T18:30"
+image: ./poster.jpg
+imageAlt: "What the poster says, in a sentence."
+---
+```
+
+Below that is the event description, written in Markdown like a blog post (see "Blog posts" for headings, bold and links). For an event away from the BIC, add `venue:` and `address:` lines.
+
+- **Fixing a typo:** edit the text in `index.mdx`.
+- **Removing a page:** delete its folder, then add a line to `public/_redirects` (for example `/event-calendar/old-name /events 301`) so old links still land somewhere. Ask a developer if unsure.
+- The "Previous" and "Next" links at the bottom of each page update themselves.
+- Old event pages that weren't kept (Tech Beans, Advisor Fridays, Silicon Swamp, Launchpad sessions and others) redirect to Events, Programs or Tech on Tap. Those rules are in `public/_redirects`.
+
 ## About page: team and board
 
 - **Staff** are in **`src/content/team.yaml`**: name, role, order, photo, photo description, and optional email and LinkedIn link.

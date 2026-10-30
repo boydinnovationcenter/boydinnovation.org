@@ -409,7 +409,7 @@ Checked every 8px from 320 to 1440 with no horizontal scroll; screenshots at 320
 
 ## Redirects (2026-10-29)
 
-All redirects are in [public/_redirects](public/_redirects), which Cloudflare reads at deploy time. 101 rules, tested against `wrangler dev`. Sources:
+All redirects are in [public/_redirects](public/_redirects), which Cloudflare reads at deploy time. 343 rules (as of 2026-10-30), tested against `wrangler dev`. Sources:
 
 - **Squarespace URL Mappings** (export pasted by Kennedy, 2026-10-29): all 29 rules carried over unchanged, including the two external ones (`/showcase` to Eventbrite and `/friendsgiving` to a Google Sheet, which stays a 302). Squarespace redirected to `http://`; the new rules go to relative paths, so visitors stay on `https` with no extra hop.
 - **Trailing slashes:** Squarespace matched `/about-us` and `/about-us/` alike, but Cloudflare matches exactly. Each mapping therefore has a second line with the slash, plus `/events/` to `/events`. Real pages need no rule, because `/about/` already redirects to `/about` (Cloudflare uses a 307 there).
@@ -417,13 +417,14 @@ All redirects are in [public/_redirects](public/_redirects), which Cloudflare re
 - **Search Console "Not found (404)" export** (last crawled through 2026-10-23): 149 rows, 111 unique paths once `www`, `http` and tracking parameters are removed.
   - 56 are event pages that moved from `/events/<slug>` to `/event-calendar/<slug>`. These are handled by a single `/events/*` pattern rule, which also catches old event links Google hasn't reported.
   - 42 have Squarespace duplicate suffixes (`-xxxxx`, sometimes chained). 16 blog ones were already in the URL Mappings. The 26 event ones were generated from the export, each pointing to the page that exists in the live sitemap.
-  - `/events/startups-on-tap-july-22-2026` goes to its renamed page, `/event-calendar/startups-on-tap-2026-07-22`.
+  - `/events/startups-on-tap-july-22-2026` went to its renamed page, `/event-calendar/startups-on-tap-2026-07-22`. That page wasn't kept (see "Past event pages"), so it now goes to `/tech-on-tap`.
   - Unused event-page drafts (`/meetups`, `/trial-event-coworks`, per Kennedy) and four deleted events go to `/events`. Google may report these as soft 404s, which is harmless.
   - `/blog/category/*` goes to `/blog`.
   - The deleted sponsorship PDF `/s/startup-sprint-sponsorhsip-bic.pdf` goes to `/startup-sprint`. If the PDF turns up, host it at that path and remove the rule.
   - `/events/tech-`, `/office-` and `/new-dropdown` are half-typed drafts and are left as 404s on purpose.
   - Result: 109 of the 111 paths redirect to a URL in the live sitemap; the other 2 return 404.
 - **Not handled here:** `www.boydinnovation.org` to `boydinnovation.org`. Squarespace does this today; on Cloudflare it is a domain-level redirect rule, set up at launch.
+- **Old event pages (2026-10-30):** see "Past event pages" below. The 26 suffix rules that pointed at an event page that wasn't kept now go straight to its final target.
 - **Order matters:** the first matching rule wins, and Cloudflare checks plain rules before rules with `*`, so the two pattern rules stay at the bottom of the file.
 
 
@@ -548,3 +549,62 @@ Accessibility is 100 on all except the Event Guide (97). Its one failure is the 
 24. **Event Guide blue text contrast (2.7:1):** darken it, as asked in question 1 for the homepage labels?
 25. **Links page:** "STARTUP SPRINT NOV 13-14" will go out of date after November 14; update or remove that button then.
 
+
+
+## Past event pages (`/event-calendar/<slug>`) (2026-10-30)
+
+Squarespace's event calendar had 79 event pages, all for past events (May 2025 to August 2026; it shows 0 upcoming). Kennedy decided (2026-10-30) to rebuild the significant ones and redirect the rest, instead of migrating all 79 or none.
+
+### Kept (20 pages)
+
+- **Tech on Tap:** all 11 (July 2025 to August 2026, with no session in December, April or June). Each names its speaker.
+- **Launchpad COLA:** Pitch Night (Dec 2025) and the Spring '26 Startup Showcase.
+- **Startup Sprint:** Fall 2025 and Spring 2026.
+- **One-off events:** Carolina Entrepreneurship Summit, Gridlock Hackathon, Finance Deep Dive (Lanford Holloway), SEO Power Hour (HelloSEO) and Seeds vs. Silos (Adina Maynard). The rule for these "your call" events was to keep the ones whose page names a speaker or member host.
+
+### Redirected (59 pages)
+
+Repeated sessions whose pages share the same description: Tech Beans (13), Silicon Swamp (8), the AI workshops, the AWS, WordPress and Coffee & Connections meetups, and the remaining one-offs (BIC intro webinar, Founder Friday, Nelson Mullins office hours, Pitch It for Filmmakers, the Veteran workshop, SCRA fundraising workshop and USC internship fair). These go to `/events`. Advisor Fridays (13) and the Launchpad COLA sessions, application and kickoff pages (10) go to `/programs`, where Advisor Fridays is listed. Startups on Tap goes to `/tech-on-tap`. `/event-calendar` itself goes to `/events`.
+
+Each slug has four rules (`/event-calendar/x`, `/events/x`, and both with a trailing slash), so no old link takes two hops. All 387 old event URLs were tested on `wrangler dev`: 20 return 200, and the rest reach a 200 page in one redirect.
+
+**Changed from the list agreed on 2026-10-29**, after reading the pages:
+- **BCSIA Cohort 5 Demo Day:** redirected. Its live description is a copy of the AWS User Group text, so there's nothing about the demo day to rebuild. If the real description turns up, it can be added back.
+- **Startups on Tap (July 22, 2026):** redirected to `/tech-on-tap`. Its page is 30 words of generic series copy with no speaker.
+- **Launchpad COLA Cohort 1 Kickoff:** redirected to `/programs`. Its text is the same as the Launchpad application pages.
+
+### How it's built
+
+- One folder per event, `src/content/event-calendar/<slug>/` with `index.mdx` and the poster (see CONTENT.md, "Past event pages"). Imported by a one-off script from Squarespace's JSON, like the blog. Don't re-run it; the files have been edited since.
+- Same layout as live: back link, then details, poster and description in three columns at 1024px and up. Previous/next links run through the kept events in date order.
+- Titles, descriptions and canonicals match live exactly (checked against the live HTML).
+- `Event` (with the date, the place and the poster) and `BreadcrumbList` structured data.
+- The Markdown text styles moved from the blog post page into a shared `.prose` class in `global.css`, used by both. Blog posts render the same (checked with computed styles and page height).
+
+### Deviations
+
+- **Register buttons and Eventbrite checkouts removed:** the events are over. Two non-registration links stay: "See the Recap" (Startup Sprint Spring 2026, to the blog) and "Learn More" on the Carolina Entrepreneurship Summit, because its text refers to "the link below".
+- **"Past event" label** under each title, so the removed Register buttons don't leave visitors wondering. It's new text, so remove it in `src/pages/event-calendar/[slug].astro` if unwanted.
+- **Copy that still reads as upcoming** ("Space is limited. Reserve your spot now!", live meta descriptions ending "Register now") is kept word for word, as with all migrated copy.
+- **Share image:** the event poster, self-hosted. Live's share image is a separate thumbnail that is sometimes wrong (Gridlock's is the internship fair image; July 2025's is August's).
+- **"Dark accent" text** (labels like "Tech on Tap is for you if:"), which is navy on navy on live, is visible, as with the blog (decision 22).
+- **Tags** (only the Spring '26 showcase has them) are plain text. On live they link to calendar filter pages that no longer exist.
+- **Google Calendar / ICS links** are in live's HTML but hidden; not carried over.
+
+### Typos fixed
+
+- Startup Sprint Fall 2025: "build a start in 24 hours" is now "build a startup in 24 hours".
+- Gridlock and SEO Power Hour: "inquires" is now "inquiries".
+- Carolina Entrepreneurship Summit: "the university of South Carolina" is now "the University of South Carolina".
+- Tech on Tap (6 pages): "successful companies ." is now "successful companies." (no space before the period).
+- Gridlock: an empty link left over in the "Note" line is removed. Matt Vaadi's LinkedIn link no longer carries HubSpot email tracking parameters.
+
+### Checks
+
+- All 20 pages: one `<h1>`, no skipped heading levels, alt text on every poster (written from the poster text), valid JSON-LD, no sideways scrolling at any width from 320 to 1440 (every 8px).
+- Lighthouse, mobile, `/event-calendar/tech-on-tap-mar-2026`: live 52 performance, LCP 17.0 s, CLS 0.12, 3.1 MB, accessibility 95. Astro: 99 performance, LCP 1.7 s, CLS 0, 1.6 MB, accessibility 100. (The preview's SEO score is 69 only because of its intentional `noindex`.)
+
+### Open questions
+
+26. **BCSIA Cohort 5 Demo Day:** is there real copy for this event? Live shows the AWS User Group description by mistake.
+27. **Past speakers list:** nothing on the site links to these pages yet. A "Past speakers" list on `/tech-on-tap` would help visitors and search engines find them. It's new content, so it needs approval.

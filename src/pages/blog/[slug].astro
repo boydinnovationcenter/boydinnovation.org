@@ -77,7 +77,7 @@ const structuredData = {
 			<h1>{data.title}</h1>
 			<time class="post__date" datetime={data.date.toISOString()}>{longDate(data.date)}</time>
 		</header>
-		<div class="post__body">
+		<div class="post__body prose">
 			<Content />
 		</div>
 		{
@@ -220,64 +220,6 @@ const structuredData = {
 		content: '';
 		display: block;
 		clear: both;
-	}
-
-	/* Post copy comes from Markdown, so it's styled from here. */
-	/* Plain Markdown lists only; component lists (the gallery) have a class. */
-	.post__body :global(p),
-	.post__body :global(:is(ul, ol):not([class])) {
-		margin-block: 1rem;
-	}
-
-	.post__body :global(:is(ul, ol):not([class])) {
-		padding-left: 2.5rem;
-	}
-
-	.post__body :global(:is(ul, ol):not([class]) li + li) {
-		margin-top: 0.25rem;
-	}
-
-	/* Long URLs written out as link text wrap instead of widening the page. */
-	.post__body :global(a) {
-		color: var(--color-accent);
-		overflow-wrap: anywhere;
-	}
-
-	.post__body :global(:is(h2, h3, h4, h5, h6)) {
-		margin-block: 2rem;
-	}
-
-	/* Sizes follow what the author picked (##, ###, ####), not the outline level. */
-	.post__body :global(.is-h2) {
-		font-size: var(--text-h2);
-	}
-
-	.post__body :global(.is-h3) {
-		font-size: var(--text-h3);
-	}
-
-	.post__body :global(.is-h4) {
-		font-size: var(--text-sm);
-		line-height: var(--leading-tight);
-	}
-
-	.post__body :global(.center) {
-		text-align: center;
-	}
-
-	.post__body :global(.large) {
-		font-size: clamp(1.1rem, 1.05rem + 0.25vw, 1.41rem);
-	}
-
-	.post__body :global(.text-accent) {
-		color: var(--color-accent);
-	}
-
-	.post__body :global(hr) {
-		clear: both;
-		margin-block: 1.6rem;
-		border: 0;
-		border-top: 1px solid currentColor;
 	}
 
 	.post__body :global(.gallery) {

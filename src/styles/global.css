@@ -272,3 +272,63 @@ a {
 		animation-iteration-count: 1 !important;
 	}
 }
+
+/*
+ * Copy written in Markdown (blog posts, past event pages). Heading sizes follow
+ * what the author picked (##, ###, ####) via the is-hN class, not the outline level.
+ */
+.prose p,
+.prose :is(ul, ol):not([class]) {
+	margin-block: 1rem;
+}
+
+/* Plain Markdown lists only; component lists (the gallery) have a class. */
+.prose :is(ul, ol):not([class]) {
+	padding-left: 2.5rem;
+}
+
+.prose :is(ul, ol):not([class]) li + li {
+	margin-top: 0.25rem;
+}
+
+/* Long URLs written out as link text wrap instead of widening the page. */
+.prose a {
+	color: var(--color-accent);
+	overflow-wrap: anywhere;
+}
+
+.prose :is(h2, h3, h4, h5, h6) {
+	margin-block: 2rem;
+}
+
+.prose .is-h2 {
+	font-size: var(--text-h2);
+}
+
+.prose .is-h3 {
+	font-size: var(--text-h3);
+}
+
+.prose .is-h4 {
+	font-size: var(--text-sm);
+	line-height: var(--leading-tight);
+}
+
+.prose .center {
+	text-align: center;
+}
+
+.prose .large {
+	font-size: clamp(1.1rem, 1.05rem + 0.25vw, 1.41rem);
+}
+
+.prose .text-accent {
+	color: var(--color-accent);
+}
+
+.prose hr {
+	clear: both;
+	margin-block: 1.6rem;
+	border: 0;
+	border-top: 1px solid currentColor;
+}
