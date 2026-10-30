@@ -127,6 +127,9 @@ import SocialIcon from './SocialIcon.astro';
 
 	.site-footer__group a {
 		display: inline-block;
+		/* 1px padding offset by -1px margin: the tap area reaches 24px (WCAG 2.5.8) without moving anything. */
+		padding-block: 1px;
+		margin-block: -1px;
 		line-height: 1.8;
 		text-transform: uppercase;
 	}

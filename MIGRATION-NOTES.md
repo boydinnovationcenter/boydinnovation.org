@@ -626,3 +626,35 @@ Any URL with no page and no redirect now gets `src/pages/404.astro` with a real 
 ## Share images self-hosted (2026-10-30)
 
 15 pages used Squarespace's CDN copy of the wide logo as their `og:image`/`twitter:image`. That file would disappear once the Squarespace subscription ends, so it's now served from this site at `/og/boyd-innovation-logo.png` (the same image, resized to the 1500 × 226 that live serves). The tags read `https://boydinnovation.org/og/boyd-innovation-logo.png`, so link previews from the preview domain won't show the image until DNS moves; after launch they work. The two blog links to the old `boydinnovationcenter.squarespace.com/launchpad-cola` address now go straight to `/programs`, where `/launchpad-cola` already redirects. The built site no longer references Squarespace anywhere.
+
+## Pre-launch check (2026-10-30)
+
+Run against the preview on Cloudflare before the DNS switch.
+
+**Layout.** Checked 16 pages (home, About, Programs, Space, Events, Tech on Tap, Startup Sprint, Book a Tour, Contact, Deep Dive Workshops, Carolina Ventures, Event Guide, Links, Blog, one past event page, 404):
+- At every 8px step from 320 to 1440px wide, no page scrolls sideways and nothing sticks out past the screen.
+- At 320, 375, 414, 768, 1024, 1280 and 1440px, and in phone (844 × 390) and tablet (1180 × 820) landscape, there is no clipped text, no text under 12px, no broken images, and no overlapping text apart from the hero cluster, which overlaps by design.
+- The mobile menu opens, keeps keyboard focus inside it, closes with Escape and returns focus to the menu button.
+
+**Small fix: footer link tap targets.**
+- Pages affected: all of them, at widths of 1024px and up.
+- Problem: the footer links were 23px tall and stacked with no gap, 1px under the WCAG 2.5.8 minimum of 24px.
+- Change: each link gets 1px of padding above and below, cancelled by a −1px margin, so the tap area is 25px. Footer height and text position are unchanged.
+
+**Forms and embeds.** Tested on the preview without sending any submissions:
+- **Newsletter (homepage and About):** renders with its 3 fields and shows errors on empty submit.
+- **Contact and Startup Sprint application:** render with all their fields. Contact shows the same email-format error as live, and the same reCAPTCHA loads.
+- **HubSpot pop-ups:** all four open their forms.
+  - Program Interest: the 6 buttons on /programs and the button on /deep-dive-workshops.
+  - Event space inquiry: /space.
+  - Carolina Ventures application: /programs/carolina-ventures.
+- **Eventbrite checkout:** opens on /events and /tech-on-tap.
+- **HubSpot Meetings scheduler:** loads its calendar.
+- **Google Calendar subscribe links:** all four point to the right calendar.
+- **Tracking:** GTM, HubSpot, LinkedIn and gtag all load.
+
+On the workers.dev preview, HubSpot's reCAPTCHA shows "for testing purposes only", because reCAPTCHA is tied to approved domains. On boydinnovation.org it runs as it does on live.
+
+**Content issues, the same on live:**
+- The November Tech on Tap Eventbrite event (`2003836042545`, used by both Register buttons on /tech-on-tap) returns 404 on Eventbrite itself, so its checkout says "event not found". It probably hasn't been published yet.
+- The Tech on Tap card on /events still links to the October event (`2001623057447`), which ended on Oct 22, so its checkout says "This event has ended".
