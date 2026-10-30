@@ -369,6 +369,11 @@
 /events/veteran-entrepreneurship-workshop /events 301
 /events/veteran-entrepreneurship-workshop/ /events 301
 
+# --- Sitemap ---
+# Squarespace's sitemap was /sitemap.xml, which Search Console has on file. Serve the
+# new sitemap index there too (200 = same content at this address, no redirect).
+/sitemap.xml /sitemap-index.xml 200
+
 # --- Patterns. Keep these last: rules with * are checked after plain ones. ---
 # Old blog category pages (e.g. /blog/category/Press Releases).
 /blog/category/* /blog 301

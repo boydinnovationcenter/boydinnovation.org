@@ -425,6 +425,8 @@ All redirects are in [public/_redirects](public/_redirects), which Cloudflare re
   - Result: 109 of the 111 paths redirect to a URL in the live sitemap; the other 2 return 404.
 - **Not handled here:** `www.boydinnovation.org` to `boydinnovation.org`. Squarespace does this today; on Cloudflare it is a domain-level redirect rule, set up at launch.
 - **Old event pages (2026-10-30):** see "Past event pages" below. The 26 suffix rules that pointed at an event page that wasn't kept now go straight to its final target.
+- **Sitemap address (2026-10-30):** Squarespace's sitemap was `/sitemap.xml`, which Search Console has on file. Astro writes `/sitemap-index.xml`, so `/sitemap.xml` serves the same file (a 200 rewrite, not a redirect).
+- **Preview check (2026-10-30):** against the Cloudflare preview, all 147 live sitemap URLs work (82 directly, 65 retired event pages in one redirect), all 341 redirect rules land on a working page in one hop, and 109 of 112 unique Search Console 404 paths now redirect to working pages; the other 3 are the intentional 404s above.
 - **Order matters:** the first matching rule wins, and Cloudflare checks plain rules before rules with `*`, so the two pattern rules stay at the bottom of the file.
 
 
