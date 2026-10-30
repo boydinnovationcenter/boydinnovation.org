@@ -8,6 +8,8 @@
 	"assets": {
 		"directory": "./dist",
 		// Serves about.html at /about and redirects /about/ to /about, matching the live URLs.
-		"html_handling": "auto-trailing-slash"
+		"html_handling": "auto-trailing-slash",
+		// Unknown URLs get dist/404.html (src/pages/404.astro) with a 404 status.
+		"not_found_handling": "404-page"
 	}
 }

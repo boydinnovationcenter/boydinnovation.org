@@ -1,0 +1,44 @@
+---
+/**
+ * Shown for any URL that doesn't exist (Cloudflare serves it with a 404 status;
+ * see not_found_handling in wrangler.jsonc). Copy is Squarespace's default 404
+ * text from the live site, minus its link to site search, which this site doesn't have.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const ogImage =
+	'http://static1.squarespace.com/static/6a4d2c0b0c4bd85b13f2fb70/t/6a60f8c207523b451d01380e/1784740034771/boyd-innovation-logo_wide_one-color+%282%29.png?format=1500w';
+---
+
+<BaseLayout title="Page Not Found | Boyd Innovation" description="" {ogImage} noindex>
+	<section class="not-found" aria-labelledby="page-title">
+		<div class="not-found__inner prose">
+			<!-- Live has no heading; this one is for screen readers and the outline. -->
+			<h1 id="page-title" class="visually-hidden">Page not found</h1>
+			<p>We couldn’t find the page you were looking for. This is either because:</p>
+			<ul>
+				<li>There is an error in the URL entered into your web browser. Please check the URL and try again.</li>
+				<li>The page you are looking for has been moved or deleted.</li>
+			</ul>
+			<p>You can return to our homepage by <a href="/">clicking here<span class="visually-hidden"> to go to the homepage</span></a>.</p>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	/* Live: the default Squarespace 404 text, left-aligned in the page's 1324px column. */
+	.not-found {
+		padding: calc(var(--header-height) + clamp(2rem, 5vw, 4.5rem)) var(--gutter) clamp(var(--space-6), 8vw, 7rem);
+		background: var(--color-navy-deep);
+		color: var(--color-text-on-dark);
+	}
+
+	.not-found__inner {
+		width: min(100%, 82.75rem);
+		margin-inline: auto;
+	}
+
+	.not-found__inner > :first-child + p {
+		margin-top: 0;
+	}
+</style>

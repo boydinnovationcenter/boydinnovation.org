@@ -608,3 +608,15 @@ Each slug has four rules (`/event-calendar/x`, `/events/x`, and both with a trai
 
 26. **BCSIA Cohort 5 Demo Day:** is there real copy for this event? Live shows the AWS User Group description by mistake.
 27. **Past speakers list:** nothing on the site links to these pages yet. A "Past speakers" list on `/tech-on-tap` would help visitors and search engines find them. It's new content, so it needs approval.
+
+## 404 page (2026-10-30)
+
+Any URL with no page and no redirect now gets `src/pages/404.astro` with a real 404 status (`not_found_handling: "404-page"` in `wrangler.jsonc`). Tested on `wrangler dev`: unknown paths return 404, real pages 200, and redirects still apply first. The page is left out of the sitemap and always has `noindex` and no canonical URL, even after launch (new `noindex` option on `BaseLayout`).
+
+### Deviations
+
+- **Header fixed:** live uses Squarespace's default 404 on a light background, where the white logo and menu are nearly invisible. The text now sits on the navy band used by the blog and event pages, so the header reads as on every other page.
+- **Search link removed:** live ends "…or you can try searching for the content you are seeking by clicking here", linking to Squarespace's site search. This site has no search, so the sentence now ends after the homepage link.
+- **Title:** "Page Not Found | Boyd Innovation" instead of live's bare "Boyd Innovation", so the browser tab says what happened. The page isn't indexed, so this has no SEO effect.
+- **Headings:** live's 404 has none. A visually hidden `<h1>` ("Page not found") gives screen-reader users a heading; nothing visible changes.
+- **Link text:** "clicking here" stays as on live, with hidden text added for screen readers ("to go to the homepage").

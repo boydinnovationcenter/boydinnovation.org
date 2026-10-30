@@ -22,6 +22,8 @@ interface Props {
 	twitterCard?: 'summary' | 'summary_large_image';
 	/** Canonical URL; defaults to the current path without a trailing slash. */
 	canonical?: string;
+	/** Keeps the page out of search results even after launch, with no canonical URL (the 404 page). */
+	noindex?: boolean;
 }
 
 const {
@@ -32,6 +34,7 @@ const {
 	ogImageHeight = 226,
 	ogType = 'website',
 	twitterCard = 'summary',
+	noindex = false,
 	// The build writes /about.html (build.format: 'file'); live URLs are /about.
 	canonical = new URL(Astro.url.pathname.replace(/(\/index)?\.html$/, ''), site.url).href.replace(/\/$/, ''),
 } = Astro.props;
@@ -47,15 +50,15 @@ const isProduction = import.meta.env.PUBLIC_SITE_ENV === 'production';
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>{title}</title>
 		{description && <meta name="description" content={description} />}
-		<link rel="canonical" href={canonical} />
-		{!isProduction && <meta name="robots" content="noindex, nofollow" />}
+		{!noindex && <link rel="canonical" href={canonical} />}
+		{(!isProduction || noindex) && <meta name="robots" content="noindex, nofollow" />}
 
 		<link rel="icon" type="image/x-icon" media="(prefers-color-scheme: light)" href="/favicon-light.ico" />
 		<link rel="icon" type="image/x-icon" media="(prefers-color-scheme: dark)" href="/favicon-dark.ico" />
 
 		<meta property="og:site_name" content={site.ogSiteName} />
 		<meta property="og:title" content={title} />
-		<meta property="og:url" content={canonical} />
+		{!noindex && <meta property="og:url" content={canonical} />}
 		<meta property="og:type" content={ogType} />
 		<meta property="og:description" content={description} />
 		<meta property="og:image" content={ogImage} />
@@ -63,7 +66,7 @@ const isProduction = import.meta.env.PUBLIC_SITE_ENV === 'production';
 		<meta property="og:image:height" content={String(ogImageHeight)} />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:image" content={ogImage} />
-		<meta name="twitter:url" content={canonical} />
+		{!noindex && <meta name="twitter:url" content={canonical} />}
 		<meta name="twitter:card" content={twitterCard} />
 		<meta name="twitter:description" content={description} />
 
