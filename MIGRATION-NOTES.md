@@ -658,3 +658,8 @@ On the workers.dev preview, HubSpot's reCAPTCHA shows "for testing purposes only
 **Content issues, the same on live:**
 - The November Tech on Tap Eventbrite event (`2003836042545`, used by both Register buttons on /tech-on-tap) returns 404 on Eventbrite itself, so its checkout says "event not found". It probably hasn't been published yet.
 - The Tech on Tap card on /events still links to the October event (`2001623057447`), which ended on Oct 22, so its checkout says "This event has ended".
+
+## Fixes requested by Kennedy (2026-11-02)
+
+- **Programs, Tech on Tap "LEARN MORE":** now goes to `/tech-on-tap`. It went to `/events`, matching the live site.
+- **Homepage "What are you looking for?" cards (all widths):** clicking the Programs, Space or Events image did nothing. The hover fade (`opacity: 0.75`) lifted the image above the card's full-size link, so clicks landed on the image. The link layer now has `z-index: 1`. Looks the same; tested with mouse clicks at 320–1440px.

@@ -212,10 +212,12 @@ const headlineLabel = headline.map((line) => line.replace(/[[\]]/g, '').trim()).
 		text-decoration: none;
 	}
 
+	/* z-index keeps the link above the image, which the hover fade (opacity) would otherwise lift on top of it. */
 	.explore-card a::after {
 		content: '';
 		position: absolute;
 		inset: 0;
+		z-index: 1;
 	}
 
 	.explore-card a:focus-visible {
