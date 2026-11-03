@@ -1,5 +1,6 @@
 // Cloudflare Workers config: serves the static Astro build (dist/).
-// Cloudflare builds from main on every push (npm run build, then wrangler deploy).
+// Cloudflare builds from main on every push (npm run build, then wrangler deploy),
+// and builds a preview of every other branch (npx wrangler preview).
 // "name" must match the Worker's name in the Cloudflare dashboard.
 {
 	"$schema": "https://unpkg.com/wrangler@4/config-schema.json",
@@ -11,5 +12,8 @@
 		"html_handling": "auto-trailing-slash",
 		// Unknown URLs get dist/404.html (src/pages/404.astro) with a 404 status.
 		"not_found_handling": "404-page"
-	}
+	},
+	// Required by "npx wrangler preview", which Cloudflare runs to build previews of
+	// branches other than main. Empty: previews use the same settings as production.
+	"previews": {}
 }
