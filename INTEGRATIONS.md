@@ -2,6 +2,16 @@
 
 Third-party code found on the live Squarespace site (boydinnovation.org), checked on 2026-10-27, and where each item lives in the Astro build. All public IDs are kept in [src/config/site.ts](src/config/site.ts).
 
+## Google accounts (checked with Kennedy, 2026-11-04)
+
+- **GTM `GTM-KKRR74S3`** (Tag Manager account "Boyd Innovation Center"; kennedy@ has access) holds two tags:
+  - *HubSpot Meeting Listener*: Custom HTML, all pages. Watches the HubSpot Meetings scheduler and pushes a `tour_booked` event.
+  - *GA4 - Tour Booked*: GA4 Event, fires on `tour_booked`, sends to `G-PEHD1QDBW8`.
+- **GA4 `G-PEHD1QDBW8`**, stream "boydinnovation.org": the active property (community@ has access).
+- **GA4 `G-RFZNRE6XNQ`** (Google tag "Boyd Center", also `GT-NC834QGX`), stream "Boyd Center (Archive)" for the old boydinnovationcenter.org: receives no data. Nothing on the site loads it; kept for history.
+- **Google Ads `AW-18304813097`**: the current Ads account. Its Google tag appears in Tag Manager under the account "Grow Columbia Inc".
+- **Proposed, not done:** move GA4 page views and the Ads tags into GTM so the site loads only GTM. Needs approval, because it changes how tracking loads.
+
 ## Site-wide (Squarespace Code Injection: header and footer)
 
 | Integration | Live ID | Astro location | Status |
@@ -9,7 +19,7 @@ Third-party code found on the live Squarespace site (boydinnovation.org), checke
 | Google Tag Manager | `GTM-KKRR74S3` | [Analytics.astro](src/components/Analytics.astro), plus the `<noscript>` iframe in [BaseLayout.astro](src/layouts/BaseLayout.astro) | Carried over, same timing (async in `<head>`) |
 | Google Ads tag | `AW-18304813097` | Analytics.astro | Carried over |
 | Google Ads newsletter conversion | `AW-18304813097/hQMsCNu--OMcEKmQtZhE`, fired on HubSpot form `ff76cdbb-…` submit | Analytics.astro | Carried over unchanged (legacy and v4 HubSpot form events) |
-| GA4 | `G-PEHD1QDBW8` | Analytics.astro | Carried over. On Squarespace this came from the built-in Google Analytics setting (it carried Squarespace's `developer_id`). **Open question:** does GTM also fire GA4? If so, one of the two should go. |
+| GA4 | `G-PEHD1QDBW8` | Analytics.astro | Carried over. On Squarespace this came from the built-in Google Analytics setting (it carried Squarespace's `developer_id`). GTM does not send page views to GA4, so nothing is counted twice (checked 2026-11-04, see below). |
 | HubSpot tracking code | portal `50188189` | Analytics.astro | Carried over. It was included **twice** on the live site; it is now loaded once. This script also serves HubSpot pop-ups, including the "Join Our Newsletter" pop-up that opens on page load. |
 | LinkedIn Insight Tag | partner IDs `7841314` **and** `7872946` | Analytics.astro | Carried over. Both IDs are kept, and the loader script now loads once instead of twice. **Open question:** is one of these IDs obsolete? |
 | HubSpot CTA pop-up triggers | `217138433433` Program Interest form; `217149021356` event space inquiry; `218290064008` Carolina Ventures application | `tracking.hubspotCtas` in site.ts, rendered by [CtaButton.astro](src/components/CtaButton.astro) | The Squarespace footer script added `hs-cta-trigger-button` classes to button blocks by block ID. It's replaced by real `<button>`s that carry the class in the HTML; content files pick the pop-up by name (`hubspotCta: programInterest`). Used on /programs, /space, /deep-dive-workshops and /programs/carolina-ventures. |
