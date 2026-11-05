@@ -28,8 +28,6 @@ const parseLine = (line: string) =>
 		.filter(Boolean)
 		.map((part) => (part.startsWith('[') ? { text: part.slice(1, -1), accent: true } : { text: part, accent: false }));
 
-// Accessible name without the indentation used for the visual layout.
-const headlineLabel = headline.map((line) => line.replace(/[[\]]/g, '').trim()).join(' ');
 ---
 
 <section class="hero">
@@ -49,11 +47,13 @@ const headlineLabel = headline.map((line) => line.replace(/[[\]]/g, '').trim()).
 		</video>
 	</div>
 
-	<h1 class="hero__title" aria-label={headlineLabel}>
+	<h1 class="hero__title">
 		<Image class="hero__flywheel" src={flywheel} alt="" width={160} loading="eager" />
 		{
-			headline.map((line) => (
+			headline.map((line, i) => (
 				<span class="hero__line">
+					{/* Hidden space so search engines read "THE COLUMBIA…", not "THECOLUMBIA…". */}
+					{i > 0 && <span class="visually-hidden"> </span>}
 					{parseLine(line).map((part) => (part.accent ? <span class="hero__accent">{part.text}</span> : part.text))}
 				</span>
 			))

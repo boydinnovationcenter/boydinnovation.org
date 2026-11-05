@@ -710,3 +710,12 @@ Still to do from that audit, waiting on the team:
 - Concrete times and costs per event.
 - Whether to change the H1 to include "events".
 - /tech-on-tap, /event-guide and /links still have no meta description.
+
+## Homepage: headline text for search engines (2026-11-05, post-launch)
+
+The hero headline is built from separate lines with no space between them in the HTML. Search engines and SEO tools read it as "THECOLUMBIA TECHSTARTUP HUB"; screen readers were fine, because of an `aria-label`. Each line after the first now starts with a visually hidden space, so it reads "THE COLUMBIA TECH STARTUP HUB" everywhere, and the `aria-label` is gone. Nothing changes on screen: the headline is the same size at 375 and 1440px.
+
+The same audit flagged "heading levels skipped", "images missing alt text" and "invalid structured data". All three are false positives:
+- the headings go H1 → H2 → H3;
+- the three flagged images are decorative, with `alt=""`;
+- validator.schema.org reports zero errors.
