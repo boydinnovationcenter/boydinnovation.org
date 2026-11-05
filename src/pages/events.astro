@@ -5,6 +5,7 @@ import CommunityAgenda from '../components/events/CommunityAgenda.astro';
 import EventScripts from '../components/events/EventScripts.astro';
 import EventsClosing from '../components/events/EventsClosing.astro';
 import EventsHero from '../components/events/EventsHero.astro';
+import EventsProof from '../components/events/EventsProof.astro';
 import SeriesSection from '../components/events/SeriesSection.astro';
 import PhotoStrip from '../components/PhotoStrip.astro';
 import { site } from '../config/site';
@@ -13,7 +14,7 @@ import { eventStatus, toEasternIso } from '../lib/event-dates';
 
 const entry = await getEntry('eventsPage', 'eventsPage');
 if (!entry) throw new Error('Missing Events page content: src/content/events-page.yaml');
-const { seo, hero, recurring, community, calendar, host, photos } = entry.data;
+const { seo, hero, recurring, proof, community, calendar, host, photos } = entry.data;
 
 const events = (await getCollection('events')).map((e) => e.data);
 const series = events.filter((e) => e.section === 'recurring');
@@ -71,7 +72,8 @@ const structuredData = {
 	<EventsHero {...hero} />
 	<SeriesSection {...recurring} series={series} />
 	<CommunityAgenda {...community} events={communityEvents} />
-	<EventsClosing calendar={calendar} host={host} />
+	<EventsProof {...proof} />
 	<PhotoStrip photos={photos} />
+	<EventsClosing calendar={calendar} host={host} />
 	<EventScripts />
 </BaseLayout>

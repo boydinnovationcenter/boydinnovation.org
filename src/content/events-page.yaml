@@ -3,9 +3,8 @@
 
 eventsPage:
   seo:
-    title: "Events | Boyd Innovation"
-    # Empty on the live site; worth writing one (see MIGRATION-NOTES.md).
-    description: ""
+    title: "Tech Startup Events in Columbia, SC | Boyd Innovation"
+    description: "Free networking events for founders and tech builders in Columbia, SC. Tech on Tap, Tech Beans, Silicon Swamp and more at the Boyd Innovation Center."
     ogImage: "https://boydinnovation.org/og/boyd-innovation-logo.png"
 
   hero:
@@ -19,6 +18,20 @@ eventsPage:
   recurring:
     heading: "Recurring Networking Events"
     subheading: "Hosted at the Boyd Innovation Center, 711 Saluda Ave"
+
+  # Shown after "Around Columbia", above the photo strip. Quotes are real answers from
+  # BIC's anonymous post-event survey (all three from Tech on Tap attendees). Shortened
+  # only by leaving out whole sentences, never by rewording.
+  proof:
+    heading: "What attendees say"
+    stat: { value: "270+", label: "Unique tech entrepreneurs served" }
+    quotes:
+      # Aspiring Founder. Survey answer began "It was the best event at the BIC thus far."
+      - "The speaker was knowledgeable and delivered valuable information, experience, and tips in a short time. I received multiple tips and met contacts. Excellent overall."
+      # Ecosystem Partner
+      - "I come to interact with people within my network and to meet interesting people; mission accomplished."
+      # Ecosystem Partner
+      - "Place looks great. Good energy at the event."
 
   community:
     heading: "Around Columbia"
@@ -38,7 +51,7 @@ eventsPage:
       - label: "Office 365"
         href: "https://outlook.office.com/calendar/0/addfromweb/?url=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fc_5432f27ddc5f70ccb3d3f4e36ae247c15feec8e2ab598e24e9828d86d4b40681%2540group.calendar.google.com%2Fpublic%2Fbasic.ics&name=Boyd%20Innovation%20Center%20Events"
 
-  # Shown beside the calendar feed at the bottom of the page.
+  # Shown beside the calendar feed, in the navy band under the photo strip.
   host:
     heading: "Host your event at the BIC"
     text: "The Lounge seats up to 100 and the Main Hall up to 150, with flexible arrangements and AV available."

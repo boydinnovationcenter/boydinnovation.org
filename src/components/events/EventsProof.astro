@@ -1,0 +1,154 @@
+---
+/**
+ * Attendee numbers and quotes on /events, between "Around Columbia" and the photo strip.
+ * Content comes from `proof` in src/content/events-page.yaml.
+ */
+interface Props {
+	heading: string;
+	stat: { value: string; label: string };
+	quotes: string[];
+}
+
+const { heading, stat, quotes } = Astro.props;
+---
+
+<section class="proof" aria-labelledby="proof-heading">
+	<div class="container proof__grid">
+		<div class="proof__intro">
+			<h2 id="proof-heading">{heading}</h2>
+			<div class="proof__rule" aria-hidden="true"></div>
+			<p class="proof__stat"><strong>{stat.value}</strong> <span>{stat.label}</span></p>
+		</div>
+		<ul class="proof__quotes" role="list">
+			{
+				quotes.map((quote) => (
+					<li class="quote">
+						<svg class="quote__mark" aria-hidden="true" viewBox="0 0 64 48">
+							<path d="M0 48V28C0 12 8 2 26 0l2 7C19 10 15 15 14 22h12v26H0zm36 0V28c0-16 8-26 26-28l2 7c-9 3-13 8-14 15h12v26H36z" />
+						</svg>
+						<blockquote>
+							<p>{quote}</p>
+						</blockquote>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.proof {
+		padding-block: clamp(2.5rem, 5vw, 4.5rem);
+		background: var(--color-black);
+		color: var(--color-text-on-dark);
+	}
+
+	.proof__grid {
+		display: grid;
+		gap: var(--space-5);
+		align-items: center;
+	}
+
+	@media (min-width: 64rem) {
+		.proof__grid {
+			grid-template-columns: 20rem minmax(0, 1fr);
+			gap: 4rem;
+		}
+	}
+
+	.proof__intro {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	/* Tablet: the stat sits beside the heading instead of under it, to keep the section short. */
+	@media (min-width: 40rem) and (max-width: 63.99rem) {
+		.proof__intro {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) auto;
+			align-items: end;
+			column-gap: 2rem;
+		}
+
+		.proof__intro > :not(.proof__stat) {
+			grid-column: 1;
+		}
+
+		.proof__stat {
+			grid-column: 2;
+			grid-row: 1 / span 2;
+			align-items: flex-end;
+			text-align: right;
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.proof__intro {
+			gap: 1.25rem;
+		}
+	}
+
+	.proof__rule {
+		width: 7.5rem;
+		height: 4px;
+		border-radius: 2px;
+		background: linear-gradient(to right, var(--color-green), var(--color-blue) 50%, var(--color-navy));
+	}
+
+	.proof__stat {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.proof__stat strong {
+		font-size: clamp(3rem, 2rem + 4vw, 6rem);
+		line-height: 0.9;
+		letter-spacing: -0.04em;
+		color: var(--color-green);
+	}
+
+	/* Device monospace font for the "console" label, so no extra web font loads. */
+	.proof__stat span {
+		font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: rgb(236 246 242 / 0.78);
+	}
+
+	.proof__quotes {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.quote {
+		display: grid;
+		grid-template-columns: clamp(1.125rem, 1rem + 0.4vw, 1.375rem) minmax(0, 1fr);
+		gap: clamp(0.75rem, 0.5rem + 0.8vw, 1rem);
+		align-items: start;
+		padding: clamp(1rem, 0.8rem + 0.8vw, 1.25rem) clamp(1rem, 0.7rem + 1.2vw, 1.75rem);
+		border: 1px solid rgb(236 246 242 / 0.14);
+		border-radius: 14px;
+		background: rgb(236 246 242 / 0.04);
+	}
+
+	.quote__mark {
+		width: 100%;
+		margin-top: 0.25rem;
+		fill: var(--color-blue);
+	}
+
+	.quote blockquote {
+		margin: 0;
+		font-size: clamp(1rem, 0.95rem + 0.2vw, 1.0625rem);
+		font-weight: 500;
+		line-height: 1.5;
+	}
+
+</style>

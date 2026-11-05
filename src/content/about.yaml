@@ -3,7 +3,7 @@
 about:
   seo:
     title: "Tech Startup Hub in Columbia, SC | Boyd Innovation"
-    description: "Meet the team helping 230+ founders build scalable tech companies in Columbia, SC. Workspace, programs, and community. Come build with us."
+    description: "Meet the team helping 270+ founders build scalable tech companies in Columbia, SC. Workspace, programs, and community. Come build with us."
     ogImage: "https://boydinnovation.org/og/boyd-innovation-logo.png"
 
   hero:
@@ -29,7 +29,7 @@ about:
       - { value: "1000+", label: "PROGRAM ENGAGEMENT" }
       - { value: "120+", label: "JOBS CREATED" }
       - { value: "1.80M+", label: "FUNDING RAISED" }
-      - { value: "230+", label: "FOUNDERS SERVED" }
+      - { value: "270+", label: "FOUNDERS SERVED" }
 
   teamHeading: "Our Team"
   boardHeading: "Board of Directors"

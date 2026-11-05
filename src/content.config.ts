@@ -311,6 +311,11 @@ const eventsPage = defineCollection({
 				actions: z.array(link),
 			}),
 			recurring: z.object({ heading: z.string(), subheading: z.string() }),
+			proof: z.object({
+				heading: z.string(),
+				stat: z.object({ value: z.string(), label: z.string() }),
+				quotes: z.array(z.string()).min(1),
+			}),
 			community: z.object({ heading: z.string(), subheading: z.string() }),
 			calendar: z.object({
 				heading: z.string(),

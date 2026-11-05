@@ -667,3 +667,46 @@ On the workers.dev preview, HubSpot's reCAPTCHA shows "for testing purposes only
 ## Footer copy change approved by Kennedy (2026-11-04)
 
 - **Footer nonprofit line (all pages):** now reads "Boyd Innovation Center is a registered dba of GrowCo Columbia, Inc., a registered South Carolina 501(c)(3) nonprofit organization." It differs from the live Squarespace footer ("...a nonprofit organization officially recognized as a 501(c)(3).").
+
+## Events page: attendee proof section (2026-11-05, post-launch)
+
+Added at Kennedy's request, following an SEO audit that flagged "no trust signals" on /events. It sits after "Around Columbia" and above the photo strip; Kennedy moved it there from under "Recurring Networking Events", and the calendar and host band now follows the photos. Contents:
+- The heading "What attendees say".
+- The stat "270+ Unique tech entrepreneurs served", BIC's current figure.
+- Three real quotes from BIC's anonymous post-event survey, all from Tech on Tap attendees.
+  - They're shown without attribution, as in the chosen design. Each quote's source is noted in a comment in the content file.
+  - The first quote leaves out its opening sentence ("It was the best event at the BIC thus far."), as Kennedy asked. Nothing else is reworded.
+
+Design: "Option E · Dark console", chosen from the canvas https://claude.ai/artifact/M8AY7PMLSojp6hiM2bveZs.
+- A near-black (`--color-black`) band, with the heading, a gradient rule and a large green 270+ on the left.
+- The quotes are in outlined cards with blue quotation marks on the right.
+- Below 64rem it stacks into one column. Between 40rem and 64rem, the stat sits to the right of the heading.
+- Later the same day, Kennedy asked for smaller quote text, smaller quotation marks and a shorter section. It's now about two-thirds of its first height: 652 to 422px at 1440, 762 to 494px at 768 and 948 to 644px at 375. All three quotes are the same size; an earlier larger first quote looked like a mistake.
+
+Deviations from the mockup:
+- The mockup's label font, JetBrains Mono, is replaced by the device's own monospace font (SF Mono, Consolas and so on). That avoids loading a second web font outside the brand typeface.
+
+Details:
+- The content is in `proof:` in `src/content/events-page.yaml`. The component is `src/components/events/EventsProof.astro`, with each quote a `blockquote`.
+- Checked with no overflow from 320 to 1440px.
+- No Review or AggregateRating structured data was added. Google doesn't show review stars for an organization's reviews of itself, and marking them up anyway risks a manual action.
+- The About page was updated from 230+ to 270+ founders served, in both the stat and the meta description, as Kennedy approved on 2026-11-05.
+
+
+## Events page: calendar and host band moved below the photos (2026-11-05, post-launch)
+
+As Kennedy requested, the navy band with "Sign Up for Our Calendar Feed" and "Host your event at the BIC" moved from above the attendee quotes to under the photo strip. It's unchanged otherwise: the same two boxes side by side, stacking on smaller screens.
+- The page order is now: hero, recurring events, Around Columbia, attendee quotes, photo strip, the calendar and host band, then the site-wide newsletter.
+- The hero's "Subscribe to our calendar" link (`#calendarfeed`) still lands on the calendar box.
+
+## Events page: title and meta description (2026-11-05, post-launch)
+
+Following the SEO audit, and approved by Kennedy:
+- The title changed from "Events | Boyd Innovation" to "Tech Startup Events in Columbia, SC | Boyd Innovation".
+- The page had no meta description on Squarespace or here. It now has "Free networking events for founders and tech builders in Columbia, SC. Tech on Tap, Tech Beans, Silicon Swamp and more at the Boyd Innovation Center." (149 characters), written from the page's existing copy.
+
+Still to do from that audit, waiting on the team:
+- A visible FAQ with question headings and FAQPage markup, which also covers "answer-shaped schema" and "extractable formatting".
+- Concrete times and costs per event.
+- Whether to change the H1 to include "events".
+- /tech-on-tap, /event-guide and /links still have no meta description.

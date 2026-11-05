@@ -155,6 +155,23 @@ actions:
 
 The hero, section headings, calendar links, "Host your event" box and photo strip are in `src/content/events-page.yaml`.
 
+### Attendee numbers and quotes ("What attendees say")
+
+These are under `proof:` in `src/content/events-page.yaml`:
+
+```yaml
+proof:
+  heading: "What attendees say"
+  stat: { value: "270+", label: "Unique tech entrepreneurs served" }
+  quotes:
+    - "The quote, without quotation marks."
+```
+
+- Each quote gets a blue quotation mark automatically. Quotes show in the order listed, so put the strongest first.
+- Only use real quotes, worded as people wrote them. You can leave out whole sentences to shorten a quote, but don't reword it. The quotes don't show who said them, so note the source in a `#` comment above each one.
+- Three quotes fit well; any number works. On desktop they stack beside the stat; on phones everything is one column.
+- When you update the stat, also update "FOUNDERS SERVED" on the About page (`src/content/about.yaml`) so the two numbers match.
+
 ## Past event pages
 
 Twenty past events from the old Squarespace calendar have their own page at `/event-calendar/<name>` (every Tech on Tap, both Launchpad COLA pitch nights, both Startup Sprints and a few one-off events). They're kept because other sites and search results link to them. Upcoming events don't go here: put those on the Events page (above).
