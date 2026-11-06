@@ -729,3 +729,8 @@ The same audit flagged "heading levels skipped", "images missing alt text" and "
   - **Who it affected:** visitors with reduced motion on, at widths up to about 1024px.
   - **What they saw:** logos cut off at both edges and not visible at all.
   - **Change:** the track is now a block in reduced-motion mode. All five logos are fully visible at 320, 375, 768 and 1440px. The scrolling marquee is unchanged.
+
+## Event Guide parking change requested by Sam (2026-11-06)
+
+- **Event Guide, parking list:** removed the "**Free Parking** at 2221 Devine St. Lot (~2.5 blocks) or along Saluda Ave. in the Wales Garden neighborhood starting at the 600 block." item. This no longer matches the live page. File: [event-guide.yaml](src/content/event-guide.yaml).
+- **Open:** the parking map image still marks the 2221 Devine St. lot and the free parking on Saluda Ave. Its alt text describes the image as it is. Replace the map, or keep it?

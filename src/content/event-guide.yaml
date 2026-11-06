@@ -22,7 +22,6 @@ eventGuide:
     options:
       - "**Metered Parking** throughout Five Points. Enforced Monday–Saturday, 9am–7pm. Pay with the [Passport Parking app](https://apps.apple.com/us/app/passport-parking/id501324867)."
       - "**Paid Lot** enforced 24/7 — pay via the QR codes on signs in the lot within 10 minutes of arriving."
-      - "**Free Parking** at 2221 Devine St. Lot (~2.5 blocks) or along Saluda Ave. in the Wales Garden neighborhood starting at the 600 block."
     map: ../assets/images/event-guide/parking-map.png
     mapAlt: "Map of parking near the BIC at 711 Saluda Ave: metered parking on the surrounding streets, a paid lot at 706 Saluda Ave, a free parking lot at 2221 Devine St. (2.5 blocks' walk), and free parking farther down Saluda Ave."
   arrival:
