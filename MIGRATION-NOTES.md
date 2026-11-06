@@ -663,3 +663,7 @@ On the workers.dev preview, HubSpot's reCAPTCHA shows "for testing purposes only
 
 - **Programs, Tech on Tap "LEARN MORE":** now goes to `/tech-on-tap`. It went to `/events`, matching the live site.
 - **Homepage "What are you looking for?" cards (all widths):** clicking the Programs, Space or Events image did nothing. The hover fade (`opacity: 0.75`) lifted the image above the card's full-size link, so clicks landed on the image. The link layer now has `z-index: 1`. Looks the same; tested with mouse clicks at 320–1440px.
+
+## Footer copy change requested by Sam (2026-11-02)
+
+- **Global footer, nonprofit status line (all pages):** changed from "Boyd Innovation Center is a registered dba of GrowCo Columbia, Inc., a nonprofit organization officially recognized as a 501(c)(3)." to "Boyd Innovation Center is a registered dba of GrowCo Columbia, Inc., a registered South Carolina 501(c)(3) nonprofit organization." This no longer matches the live Squarespace footer. File: [SiteFooter.astro](src/components/SiteFooter.astro).
