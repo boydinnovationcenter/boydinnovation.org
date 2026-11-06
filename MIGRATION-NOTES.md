@@ -667,3 +667,8 @@ On the workers.dev preview, HubSpot's reCAPTCHA shows "for testing purposes only
 ## Footer copy change requested by Sam (2026-11-02)
 
 - **Global footer, nonprofit status line (all pages):** changed from "Boyd Innovation Center is a registered dba of GrowCo Columbia, Inc., a nonprofit organization officially recognized as a 501(c)(3)." to "Boyd Innovation Center is a registered dba of GrowCo Columbia, Inc., a registered South Carolina 501(c)(3) nonprofit organization." This no longer matches the live Squarespace footer. File: [SiteFooter.astro](src/components/SiteFooter.astro).
+
+## Event Guide parking change requested by Sam (2026-11-06)
+
+- **Event Guide, parking list:** removed the "**Free Parking** at 2221 Devine St. Lot (~2.5 blocks) or along Saluda Ave. in the Wales Garden neighborhood starting at the 600 block." item. This no longer matches the live page. File: [event-guide.yaml](src/content/event-guide.yaml).
+- **Open:** the parking map image still marks the 2221 Devine St. lot and the free parking on Saluda Ave. Its alt text describes the image as it is. Replace the map, or keep it?
