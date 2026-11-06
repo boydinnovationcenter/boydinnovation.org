@@ -482,6 +482,8 @@ const startupSprint = defineCollection({
 						url: z.url().optional(),
 						/** For stacked logos that need more height to look balanced. */
 						tall: z.boolean().default(false),
+						/** Shrinks or grows one logo, e.g. 0.75 for a long wordmark that looks too big. */
+						scale: z.number().min(0.4).max(1.5).default(1),
 					}),
 				),
 			}),

@@ -52,6 +52,7 @@ startupSprint:
         logo: ../assets/images/startup-sprint/sponsors/sweetwaters.png
       - name: "Integer Technologies"
         logo: ../assets/images/startup-sprint/sponsors/integer.png
+        scale: 0.75 # long wordmark; full height looks bigger than the others
       - name: "Security Federal Bank"
         logo: ../assets/images/startup-sprint/sponsors/security-federal.png
         tall: true

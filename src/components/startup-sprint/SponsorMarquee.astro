@@ -10,7 +10,7 @@ import { Image } from 'astro:assets';
 
 interface Props {
 	heading: string;
-	items: { name: string; logo: ImageMetadata; url?: string; tall: boolean }[];
+	items: { name: string; logo: ImageMetadata; url?: string; tall: boolean; scale: number }[];
 }
 
 const { heading, items } = Astro.props;
@@ -33,7 +33,8 @@ const halves = [false, true].map((clone) => Array.from({ length: REPEAT }, (_, r
 										class:list={{ 'is-tall': s.tall }}
 										src={s.logo}
 										alt={hidden ? '' : s.name}
-										height={s.tall ? 72 : 44}
+										height={Math.round((s.tall ? 72 : 44) * s.scale)}
+										style={s.scale !== 1 ? `--logo-scale: ${s.scale}` : undefined}
 										densities={[1, 2]}
 									/>
 								);
@@ -105,11 +106,11 @@ const halves = [false, true].map((clone) => Array.from({ length: REPEAT }, (_, r
 	.sponsors__set img {
 		width: auto;
 		max-width: none;
-		height: var(--logo-height);
+		height: calc(var(--logo-height) * var(--logo-scale, 1));
 	}
 
 	.sponsors__set img.is-tall {
-		height: calc(var(--logo-height) * 72 / 44); /* stacked logos need more height to look balanced */
+		height: calc(var(--logo-height) * 72 / 44 * var(--logo-scale, 1)); /* stacked logos need more height to look balanced */
 	}
 
 	@media (prefers-reduced-motion: no-preference) {

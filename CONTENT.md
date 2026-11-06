@@ -230,7 +230,7 @@ Everything on the Startup Sprint page is in **`src/content/startup-sprint.yaml`*
 
 - **Dates** appear in the text in three places: the Day 1 and Day 2 paragraphs and the "will be back" box (`callout`). Also update `event` (start and end, Columbia time), which tells Google when the event is.
 - **Application form**: `application.hubspotFormId` is the HubSpot form. To use a different form, paste its ID from HubSpot.
-- **Sponsors**: one entry each under `sponsors.items`, with name and logo (white on transparent; put the file in `src/assets/images/startup-sprint/sponsors/`). Add `url: "https://..."` to make a logo a link. Add `tall: true` for logos that are stacked over several lines, so they don't look small. The logos scroll on their own; there's no speed or copy count to adjust.
+- **Sponsors**: one entry each under `sponsors.items`, with name and logo (white on transparent; put the file in `src/assets/images/startup-sprint/sponsors/`). Add `url: "https://..."` to make a logo a link. Add `tall: true` for logos that are stacked over several lines, so they don't look small. If one logo still looks too big or too small next to the others, add `scale:` with a number. For example, `scale: 0.75` makes it a quarter smaller (Integer uses this). The logos scroll on their own; there's no speed or copy count to adjust.
 
 ## Blog posts
 
