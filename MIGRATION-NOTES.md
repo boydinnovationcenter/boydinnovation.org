@@ -719,3 +719,13 @@ The same audit flagged "heading levels skipped", "images missing alt text" and "
 - the headings go H1 → H2 → H3;
 - the three flagged images are decorative, with `alt=""`;
 - validator.schema.org reports zero errors.
+
+## Startup Sprint sponsors: new logo, sizing, and a reduced-motion fix (2026-11-09, post-launch)
+
+- Added Bang Back Pinball Lounge, the fifth sponsor, at the end of the list.
+- Sweetwaters now has `scale: 1.3`. Its file has no empty space to crop; it's a stacked logo, so at the standard height its parts looked small.
+- **Fix for visitors with reduced motion on.** These visitors see the logos as one still row that wraps, instead of the scrolling marquee.
+  - **Problem:** the row couldn't wrap, because the flex track kept it as wide as all the logos together.
+  - **Who it affected:** visitors with reduced motion on, at widths up to about 1024px.
+  - **What they saw:** logos cut off at both edges and not visible at all.
+  - **Change:** the track is now a block in reduced-motion mode. All five logos are fully visible at 320, 375, 768 and 1440px. The scrolling marquee is unchanged.

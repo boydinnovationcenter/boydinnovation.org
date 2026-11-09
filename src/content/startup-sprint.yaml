@@ -50,6 +50,7 @@ startupSprint:
     items:
       - name: "Sweetwaters Coffee & Tea"
         logo: ../assets/images/startup-sprint/sponsors/sweetwaters.png
+        scale: 1.3 # stacked logo; standard height makes it look small
       - name: "Integer Technologies"
         logo: ../assets/images/startup-sprint/sponsors/integer.png
         scale: 0.75 # long wordmark; full height looks bigger than the others
@@ -58,6 +59,8 @@ startupSprint:
         tall: true
       - name: "Snaply Sites"
         logo: ../assets/images/startup-sprint/sponsors/snaply-sites.png
+      - name: "Bang Back Pinball Lounge"
+        logo: ../assets/images/startup-sprint/sponsors/bang-back.png
 
   photos:
     - image: ../assets/images/startup-sprint/strip-1.jpg

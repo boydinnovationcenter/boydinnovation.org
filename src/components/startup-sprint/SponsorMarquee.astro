@@ -137,9 +137,10 @@ const halves = [false, true].map((clone) => Array.from({ length: REPEAT }, (_, r
 			mask-image: none;
 		}
 
+		/* Block, not flex: the row must be free to take the screen width so it can wrap. */
 		.sponsors__track {
+			display: block;
 			width: auto;
-			justify-content: center;
 		}
 
 		.sponsors__set {
