@@ -8,6 +8,12 @@ image: ./cover.jpg
 draft: false
 ---
 
+import { Gallery } from '../../../components/blog';
+
+---
+
+<Gallery priority label="Photos from PalmettoHacks 2026" photos={import.meta.glob("./gallery/*.{jpg,png,webp,gif}", { eager: true, import: "default" })} />
+
 For 24 hours on October 10–11, 95 students took over USC's Molinaroli College of Engineering and Computing to build something from scratch. PalmettoHacks 2026 was hosted by Kappa Theta Pi at USC and presented by the Boyd Innovation Center. It was also the University of South Carolina's first official Major League Hacking (MLH) event, and it showed exactly what a Columbia, SC hackathon can look like when you put talented students in a room with a deadline.
 
 ### PalmettoHacks 2026 by the numbers
