@@ -1,0 +1,12 @@
+# Hosted at BIC by the Columbia Chamber. Copy and time from
+# https://www.columbiachamber.com/event/spark803-founders-focus (image supplied by BIC)
+section: community
+title: "SPARK803: Founders In Focus"
+start: "2026-12-09T17:00"
+end: "2026-12-09T20:00"
+location: "Boyd Innovation Center"
+description: "Join us for SPARK803 Founders in Focus showcasing the entrepreneurs of the 2026 SPARK803 cohort. Meet all 15 startup companies, explore their businesses at interactive exhibit tables, and help us recognize their graduation from the program. The evening will also feature a live pitch competition, with select founders presenting before a panel of judges and the audience for prizes and recognition."
+image: ../../assets/images/events/spark803-founders-in-focus.jpg
+imageAlt: "SPARK803 Founders in Focus: SPARK803 Pitch Night & Graduation, December 9, 2026"
+actions:
+  - { label: "Register", href: "https://columbiasc.chambermaster.com/eventregistration/register/18342" }
