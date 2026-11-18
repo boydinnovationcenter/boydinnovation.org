@@ -12,22 +12,23 @@ startupSprint:
     partnerLogo: ../assets/images/startup-sprint/ciu-x-bic.png
     partnerLogoAlt: "Columbia International University × Boyd Innovation Center"
 
-  # Eastern time. Only used to tell search engines when the event is; update it
-  # along with the dates in the text below.
-  event:
-    start: "2026-11-13T17:30"
-    end: "2026-11-14T17:00"
+  # Eastern time. Only used to tell search engines when the event is; add it back
+  # (and the dates in the text below) once the next Sprint is scheduled:
+  # event:
+  #   start: "2026-11-13T17:30"
+  #   end: "2026-11-14T17:00"
 
   intro:
     heading: "Ready to See If the Startup Journey Is For You?"
     paragraphs:
       - "Startup Sprint is a fast-paced, 24-hour event where aspiring entrepreneurs, developers, designers, and innovators come together to experience what it takes to build a startup."
-      - "Day 1 | Friday, November 13th, 5:30 - 8 pm: Kick things off with dinner, networking, and team formation. Share your ideas and join a team that inspires you!"
-      - "Day 2 | Saturday, November 14th, 8:30 am - 5 pm: Get ready for an action packed day. You’ll dive into intensive sprint blocks, led by industry experts, where your team will take your idea through the entire startup journey."
+      - "Day 1: Kick things off with dinner, networking, and team formation. Share your ideas and join a team that inspires you!"
+      - "Day 2: Get ready for an action packed day. You’ll dive into intensive sprint blocks, led by industry experts, where your team will take your idea through the entire startup journey."
 
   callout:
-    text: "Startup Sprint will be back November 13-14, 2026!"
-    cta: { label: "APPLY NOW", href: "#application" }
+    text: "The Spring 2027 Startup Sprint date is coming soon!"
+    # Add back when applications open (with the application section below):
+    # cta: { label: "APPLY NOW", href: "#application" }
 
   audience:
     heading: "Startup Sprint is for you if:"
@@ -39,13 +40,15 @@ startupSprint:
     image: ../assets/images/startup-sprint/team-photo.jpg
     alt: "Startup Sprint participants gathered in front of a screen showing the Startup Sprint logo"
 
-  application:
-    heading: "Apply for Startup Sprint"
-    intro: "All skill levels welcome, no startup experience needed."
-    hubspotFormId: "08b4d195-3cbe-4e9f-96fc-2ae0953ae4c5"
+  # Application form, hidden while applications are closed. To bring it back,
+  # remove the # at the start of these four lines (and the callout's cta above).
+  # application:
+  #   heading: "Apply for Startup Sprint"
+  #   intro: "All skill levels welcome, no startup experience needed."
+  #   hubspotFormId: "08b4d195-3cbe-4e9f-96fc-2ae0953ae4c5"
 
   sponsors:
-    heading: "Startup Sprint is made possible by"
+    heading: "Startup Sprint Fall 2026 was made possible by:"
     # Add `url: "https://..."` to a sponsor to link its logo.
     items:
       - name: "Sweetwaters Coffee & Tea"
@@ -61,6 +64,9 @@ startupSprint:
         logo: ../assets/images/startup-sprint/sponsors/snaply-sites.png
       - name: "Bang Back Pinball Lounge"
         logo: ../assets/images/startup-sprint/sponsors/bang-back.png
+      - name: "bluetile"
+        logo: ../assets/images/startup-sprint/sponsors/bluetile.png
+        scale: 0.7 # bold wordmark; full height looks bigger than the others
 
   photos:
     - image: ../assets/images/startup-sprint/strip-1.jpg

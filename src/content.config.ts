@@ -460,17 +460,21 @@ const startupSprint = defineCollection({
 				partnerLogo: image(),
 				partnerLogoAlt: z.string(),
 			}),
-			/** Start and end, for search engines only; the dates people see are in the text below. */
-			event: z.object({ start: localDateTime, end: localDateTime }),
+			/** Start and end, for search engines only; the dates people see are in the text below. Leave out between Sprints. */
+			event: z.object({ start: localDateTime, end: localDateTime }).optional(),
 			intro: z.object({ heading: z.string(), paragraphs: z.array(z.string()) }),
-			callout: z.object({ text: z.string(), cta: link }),
+			/** `cta` (the Apply button) is optional: leave it out while applications are closed. */
+			callout: z.object({ text: z.string(), cta: link.optional() }),
 			audience: z.object({ heading: z.string(), items: z.array(z.string()), image: image(), alt: z.string() }),
-			application: z.object({
-				heading: z.string(),
-				intro: z.string(),
-				/** HubSpot form ID for the application form. */
-				hubspotFormId: z.string(),
-			}),
+			/** The application form section. Leave out while applications are closed. */
+			application: z
+				.object({
+					heading: z.string(),
+					intro: z.string(),
+					/** HubSpot form ID for the application form. */
+					hubspotFormId: z.string(),
+				})
+				.optional(),
 			sponsors: z.object({
 				heading: z.string(),
 				items: z.array(

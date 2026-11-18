@@ -10,7 +10,7 @@ links:
   logoAlt: "Boyd Innovation Center"
   # Top to bottom, in the desktop order of the live page.
   buttons:
-    - { label: "STARTUP SPRINT NOV 13-14", href: "/startup-sprint" }
+    - { label: "STARTUP SPRINT", href: "/startup-sprint" }
     - { label: "TECH ON TAP", href: "/tech-on-tap" }
     - { label: "BIC YOUTUBE", href: "https://www.youtube.com/@BoydInnovationCenter" }
     - { label: "BECOME A MEMBER", href: "/space" }

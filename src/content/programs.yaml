@@ -47,11 +47,9 @@ programs:
       color: blue
       programs:
         - title: "Startup Sprint"
-          badge: "NOV 13–14"
           description:
             - "Startup Sprint is a fast-paced, 24-hour event where aspiring entrepreneurs, developers, designers, and innovators come together to experience what it takes to build a startup."
           actions:
-            - { label: "APPLY", href: /startup-sprint#application }
             - { label: "LEARN MORE", href: /startup-sprint }
         - title: "Deep Dive Workshops"
           badge: "MONTHLY"

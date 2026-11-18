@@ -1,14 +1,15 @@
 ---
 /**
  * "Ready to See If the Startup Journey Is For You?": the event description
- * and schedule beside an outlined box with the dates and Apply button.
+ * and schedule beside an outlined box with the dates and (when applications
+ * are open) the Apply button.
  */
 import CtaButton from '../CtaButton.astro';
 
 interface Props {
 	heading: string;
 	paragraphs: string[];
-	callout: { text: string; cta: { label: string; href: string } };
+	callout: { text: string; cta?: { label: string; href: string } };
 }
 
 const { heading, paragraphs, callout } = Astro.props;
@@ -22,7 +23,9 @@ const { heading, paragraphs, callout } = Astro.props;
 		</div>
 		<div class="sprint-intro__callout">
 			<p>{callout.text}</p>
-			<CtaButton variant="outline" label={callout.cta.label} href={callout.cta.href} srContext="for Startup Sprint" />
+			{callout.cta && (
+				<CtaButton variant="outline" label={callout.cta.label} href={callout.cta.href} srContext="for Startup Sprint" />
+			)}
 		</div>
 	</div>
 </section>
@@ -55,7 +58,7 @@ const { heading, paragraphs, callout } = Astro.props;
 		gap: 1.25rem;
 		padding: 1.5rem;
 		border: 1px solid var(--color-black);
-		border-radius: 2px;
+		border-radius: 10px;
 		text-align: center;
 	}
 
