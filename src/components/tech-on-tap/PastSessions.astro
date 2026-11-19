@@ -1,0 +1,261 @@
+---
+/**
+ * "Past Tech on Tap": heading (and optional button) in a left column, the
+ * sessions on the right, newest first. The newest is shown large; the rest
+ * sit two across, split by a hairline. Each card shows the speaker with
+ * their company and the month; a panel shows its title, then the panelists'
+ * names. (Single speakers' talk titles are kept in the content but not shown.) Cards aren't links and have
+ * no hover effect. Sessions without a photo get a branded placeholder.
+ * One column on phones; the left column moves above from 64rem down.
+ */
+import { Image } from 'astro:assets';
+import CtaButton from '../CtaButton.astro';
+
+interface Session {
+	date: string;
+	speakers: { name: string; company?: string }[];
+	talk?: string;
+	image?: ImageMetadata;
+	imageAlt?: string;
+}
+
+interface Props {
+	heading: string;
+	cta?: { label: string; href: string };
+	events: Session[];
+}
+
+const { heading, cta, events } = Astro.props;
+const sessions = [...events].sort((a, b) => b.date.localeCompare(a.date));
+const featured = sessions[0];
+/** Panels show the title where a speaker's name would be, with the names (comma-separated) below. */
+const isPanel = (s: Session) => s.speakers.length > 1;
+
+const monthYear = (date: string) =>
+	new Date(`${date}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const fullDate = (date: string) =>
+	new Date(`${date}T12:00:00Z`).toLocaleDateString('en-US', {
+		month: 'long',
+		day: 'numeric',
+		year: 'numeric',
+		timeZone: 'UTC',
+	});
+---
+
+{
+	featured && (
+		<section class="past" aria-labelledby="past-heading">
+			<div class="container past__inner">
+				<div class="past__intro">
+					<h2 id="past-heading">{heading}</h2>
+					{cta && <CtaButton class="past__cta" variant="primary" label={cta.label} href={cta.href} />}
+				</div>
+
+				<ul class="past__list" role="list">
+					{sessions.map((s, i) => (
+						<li class:list={['session', { 'session--featured': i === 0 }]}>
+							<div class="session__media">
+								{s.image ? (
+									<Image
+										src={s.image}
+										alt={s.imageAlt ?? ''}
+										widths={i === 0 ? [640, 960, 1400] : [400, 640, 900]}
+										sizes={i === 0 ? '(min-width: 64rem) 52rem, 100vw' : '(min-width: 64rem) 25rem, (min-width: 36rem) 50vw, 100vw'}
+									/>
+								) : (
+									<div class="session__placeholder" aria-hidden="true">
+										<span>Tech on Tap</span>
+									</div>
+								)}
+							</div>
+							<div class="session__meta">
+								{isPanel(s) && s.talk ? (
+									<h3 class="session__speakers">
+										<span class="session__name">{s.talk}</span>
+										<span class="session__company">
+											<span class="visually-hidden">, with </span>
+											{s.speakers.map((p) => p.name).join(', ')}
+										</span>
+									</h3>
+								) : (
+									<h3 class="session__speakers">
+										{s.speakers.map((p, j) => (
+											<span class="session__speaker">
+												<span class="session__name">{p.name}</span>
+												{p.company && (
+													<span class="session__company">
+														<span class="visually-hidden">, </span>
+														{p.company}
+													</span>
+												)}
+												{j < s.speakers.length - 1 && <span class="visually-hidden">; </span>}
+											</span>
+										))}
+									</h3>
+								)}
+								<time class="session__date" datetime={s.date} title={fullDate(s.date)}>
+									{monthYear(s.date)}
+								</time>
+							</div>
+						</li>
+					))}
+				</ul>
+			</div>
+		</section>
+	)
+}
+
+<style>
+	.past {
+		padding-block: clamp(3rem, 6vw, 5.45rem);
+		color: var(--color-text);
+	}
+
+	.past__inner {
+		display: grid;
+		gap: var(--space-5);
+		padding-top: var(--space-5);
+		border-top: var(--border);
+	}
+
+	.past__intro {
+		display: grid;
+		align-content: start;
+		justify-items: start;
+		gap: var(--space-4);
+	}
+
+	h2 {
+		font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+		font-weight: 500;
+		line-height: 1.05;
+	}
+
+	/* Sessions: one column on phones, two from small tablets; the featured
+	   (newest) session spans both. */
+	.past__list {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-5) 0;
+		margin: 0;
+		padding: 0;
+	}
+
+	.session {
+		position: relative;
+		display: grid;
+		align-content: start;
+		gap: 0.6rem;
+	}
+
+	.session__media {
+		overflow: hidden;
+		border-radius: 10px;
+		aspect-ratio: 3 / 2;
+	}
+
+	.session--featured .session__media {
+		aspect-ratio: 16 / 9;
+	}
+
+	.session__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.session__placeholder {
+		display: grid;
+		place-items: end start;
+		height: 100%;
+		padding: var(--space-3);
+		background:
+			radial-gradient(120% 90% at 85% 10%, rgb(0 153 255 / 0.45), transparent 60%),
+			linear-gradient(160deg, var(--color-navy) 0%, var(--color-navy-deep) 55%, var(--color-black) 100%);
+		color: var(--color-green);
+		font-family: var(--font-display);
+		font-size: var(--text-xs);
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.session__meta {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: var(--space-3);
+	}
+
+	.session__speakers {
+		display: grid;
+		gap: 0.5rem;
+		font-size: var(--text-h3);
+		font-weight: 500;
+		line-height: var(--leading-tight);
+	}
+
+	.session--featured .session__speakers {
+		font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.55rem);
+	}
+
+	.session__speaker,
+	.session__name,
+	.session__company {
+		display: block;
+	}
+
+	.session__company {
+		margin-top: 0.15rem;
+		font-size: var(--text-sm);
+		font-weight: 400;
+	}
+
+	.session__date {
+		flex: none;
+		padding-top: 0.3em;
+		font-family: var(--font-display);
+		font-size: var(--text-xs);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+	@media (min-width: 36rem) {
+		.past__list {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.session--featured {
+			grid-column: 1 / -1;
+			padding-bottom: var(--space-5);
+			border-bottom: var(--border);
+		}
+
+		/* Hairline between the two columns, as in the grid's left/right split. */
+		.session:not(.session--featured):nth-child(even) {
+			padding-right: var(--space-4);
+		}
+
+		.session:not(.session--featured):nth-child(odd) {
+			padding-left: var(--space-4);
+			border-left: var(--border);
+		}
+
+	}
+
+	@media (min-width: 64rem) {
+		.past__inner {
+			grid-template-columns: minmax(14rem, 1fr) 2.6fr;
+			gap: 0;
+		}
+
+		.past__intro {
+			position: sticky;
+			top: calc(var(--header-height) + var(--space-4));
+			padding-right: var(--space-5);
+		}
+
+		.past__list {
+			padding-left: var(--space-5);
+			border-left: var(--border);
+		}
+	}
+</style>

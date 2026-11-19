@@ -3,7 +3,7 @@ import { getImage } from 'astro:assets';
 import { getEntry } from 'astro:content';
 import EventbriteCheckout from '../components/EventbriteCheckout.astro';
 import PhotoStrip from '../components/PhotoStrip.astro';
-import SpeakerPanel from '../components/tech-on-tap/SpeakerPanel.astro';
+import PastSessions from '../components/tech-on-tap/PastSessions.astro';
 import TechOnTapAbout from '../components/tech-on-tap/TechOnTapAbout.astro';
 import TechOnTapHero from '../components/tech-on-tap/TechOnTapHero.astro';
 import { site } from '../config/site';
@@ -12,13 +12,11 @@ import { eventStatus, toEasternIso } from '../lib/event-dates';
 
 const entry = await getEntry('techOnTap', 'techOnTap');
 if (!entry) throw new Error('Missing Tech on Tap content: src/content/tech-on-tap.yaml');
-const { seo, hero, recent, about, photos } = entry.data;
+const { seo, hero, past, about, photos } = entry.data;
 
 const pageUrl = `${site.url}/tech-on-tap`;
 const eventName = 'Tech on Tap';
-const eventImage = await getImage({ src: hero.video.poster, width: 1200, format: 'jpeg' });
-// 960px is sharp in the ~600px-wide player and on phones.
-const poster = await getImage({ src: hero.video.poster, width: 960, format: 'webp' });
+const eventImage = await getImage({ src: hero.background.poster, width: 1200, format: 'jpeg' });
 
 const structuredData = {
 	'@context': 'https://schema.org',
@@ -44,7 +42,7 @@ const structuredData = {
 						image: new URL(eventImage.src, site.url).href,
 						location: { '@id': `${site.url}/#place` },
 						organizer: { '@id': `${site.url}/#organization` },
-						url: hero.register.eventbrite.url,
+						url: hero.register?.eventbrite.url ?? pageUrl,
 					},
 				]
 			: []),
@@ -53,11 +51,10 @@ const structuredData = {
 ---
 
 <BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
-	<link slot="head" rel="preload" as="image" href={poster.src} fetchpriority="high" />
 	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-	<TechOnTapHero {...hero} posterSrc={poster.src} />
-	<SpeakerPanel {...recent} />
+	<TechOnTapHero heading={hero.heading} background={hero.background} />
+	<PastSessions {...past} />
 	<TechOnTapAbout {...about} register={hero.register} eventTitle={eventName} />
 	<PhotoStrip photos={photos} />
-	<EventbriteCheckout />
+	{hero.register && <EventbriteCheckout />}
 </BaseLayout>

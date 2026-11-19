@@ -1,104 +1,161 @@
 ---
 /**
- * Tech on Tap hero: next session details and Register button beside the
- * recap video. The video plays only when asked (no autoplay) and loads
- * nothing but its poster until then.
+ * Tech on Tap hero: the page title over a muted background loop of event
+ * footage (as on the homepage). The poster shows first; the video plays only
+ * without prefers-reduced-motion or Save-Data, and a button pauses it
+ * (WCAG 2.2.2).
  */
-import { longDateTime } from '../../lib/event-dates';
-import RegisterButton from './RegisterButton.astro';
+import { Image } from 'astro:assets';
 
 interface Props {
-	eyebrow: string;
 	heading: string;
-	start: string;
-	end: string;
-	location: string[];
-	register: { label: string; eventbrite: { id: string; url: string } };
-	video: { src: string; captions?: string; label: string };
-	/** Optimized poster URL. The page preloads it, as it's the largest thing on screen at first. */
-	posterSrc: string;
+	background: { poster: ImageMetadata; small: string; large: string };
 }
 
-const { eyebrow, heading, start, end, location, register, video, posterSrc } = Astro.props;
-const when = longDateTime(start, end);
+const { heading, background } = Astro.props;
 ---
 
 <section class="tot-hero" aria-labelledby="page-title">
-	<div class="container tot-hero__inner">
-		<div class="tot-hero__text">
-			<p class="tot-hero__eyebrow">{eyebrow}</p>
-			<h1 id="page-title">{heading}</h1>
-			<p>{when.date}<br />{when.time}</p>
-			<p>{location.map((line, i) => (i ? <><br />{line}</> : line))}</p>
-			<RegisterButton {...register} eventTitle={heading} />
-		</div>
-		<video
-			class="tot-hero__video"
-			controls
-			playsinline
-			preload="none"
-			poster={posterSrc}
-			width="1920"
-			height="1080"
-			aria-label={video.label}
-		>
-			<source src={video.src} type="video/mp4" />
-			{video.captions && <track kind="captions" src={video.captions} srclang="en" label="English" />}
+	<div class="tot-hero__bg" aria-hidden="true">
+		<Image
+			class="tot-hero__bg-poster"
+			src={background.poster}
+			alt=""
+			widths={[640, 960, 1440, 1920]}
+			sizes="100vw"
+			loading="eager"
+			fetchpriority="high"
+		/>
+		<video class="tot-hero__bg-video" muted loop playsinline preload="none" disablepictureinpicture>
+			<source src={background.small} type="video/mp4" media="(max-width: 767px)" />
+			<source src={background.large} type="video/mp4" />
 		</video>
 	</div>
+
+	<h1 id="page-title">{heading}</h1>
+
+	<button class="tot-hero__pause" type="button" aria-pressed="false" hidden>
+		<span class="visually-hidden">Pause background video</span>
+		<svg class="tot-hero__pause-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+			<rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"></rect>
+			<rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"></rect>
+		</svg>
+		<svg class="tot-hero__play-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+			<path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" fill="currentColor"></path>
+		</svg>
+	</button>
 </section>
 
+<script>
+	// Play the background loop only when motion is welcome and the visitor isn't saving data.
+	const video = document.querySelector<HTMLVideoElement>('.tot-hero__bg-video');
+	const button = document.querySelector<HTMLButtonElement>('.tot-hero__pause');
+	const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+
+	if (video && button && !reduceMotion && !saveData) {
+		const label = button.querySelector('.visually-hidden')!;
+		video.addEventListener(
+			'playing',
+			() => {
+				video.classList.add('is-playing');
+				button.hidden = false;
+			},
+			{ once: true },
+		);
+		button.addEventListener('click', () => {
+			const pause = !video.paused;
+			if (pause) video.pause();
+			else video.play().catch(() => {});
+			button.setAttribute('aria-pressed', String(pause));
+			label.textContent = pause ? 'Play background video' : 'Pause background video';
+		});
+		video.play().catch(() => {});
+	}
+</script>
+
 <style>
-	/* Live: 661px tall at 1440 including the header, content from y=182. */
 	.tot-hero {
-		padding-block: calc(var(--header-height) + clamp(2.5rem, 6.5vw, 5.9rem)) clamp(4rem, 8vw, 7.1rem);
-		background: var(--color-navy-deep);
-		color: var(--color-text-on-dark);
-	}
-
-	.tot-hero__inner {
+		position: relative;
+		isolation: isolate;
 		display: grid;
-		gap: var(--space-6);
+		place-items: center;
+		min-height: clamp(24rem, 48vw, 40rem);
+		padding: calc(var(--header-height) + var(--space-5)) var(--gutter) var(--space-7);
+		overflow: hidden;
+		background: var(--color-navy-deep);
+		color: #fff;
+		text-align: center;
 	}
 
-	.tot-hero__eyebrow {
-		font-size: clamp(1.27rem, 1.2rem + 0.33vw, 1.41rem);
-		line-height: 1.8;
-		color: var(--color-green);
+	.tot-hero__bg {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+	}
+
+	/* Navy wash so the title stays readable over the footage. */
+	.tot-hero__bg::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: rgb(4 30 51 / 0.62);
+	}
+
+	.tot-hero__bg :global(.tot-hero__bg-poster),
+	.tot-hero__bg-video {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.tot-hero__bg-video {
+		opacity: 0;
+		transition: opacity 0.6s ease;
+	}
+
+	.tot-hero__bg-video.is-playing {
+		opacity: 1;
 	}
 
 	h1 {
-		margin-bottom: 1.75rem;
-		font-size: var(--text-hero);
-		line-height: 1.09;
-		color: #fff;
+		font-size: clamp(3rem, 1.6rem + 6vw, 6.5rem);
+		line-height: 1;
+		text-shadow: 0 2px 24px rgb(0 3 31 / 0.35);
 	}
 
-	.tot-hero__text p + p {
-		margin-top: 1rem;
+	.tot-hero__pause {
+		position: absolute;
+		right: var(--gutter);
+		bottom: var(--space-4);
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		padding: 0;
+		border: 1px solid rgb(236 246 242 / 0.6);
+		border-radius: 50%;
+		background: rgb(0 3 31 / 0.55);
+		color: var(--color-text-on-dark);
+		cursor: pointer;
 	}
 
-	.tot-hero__text :global(.register-btn) {
-		margin-top: 1.6rem;
+	.tot-hero__pause[hidden] {
+		display: none;
 	}
 
-	.tot-hero__video {
-		width: 100%;
-		height: auto;
-		aspect-ratio: 16 / 9;
-		object-fit: cover; /* the poster photo is 3:2; fill the frame as live does */
-		background: var(--color-black);
+	.tot-hero__pause:hover {
+		background: rgb(0 3 31 / 0.8);
 	}
 
-	@media (min-width: 48rem) {
-		.tot-hero__inner {
-			grid-template-columns: 0.9fr 1fr;
-			align-items: start;
-			column-gap: clamp(2rem, 4.6vw, 4.1rem);
-		}
+	.tot-hero__play-icon,
+	.tot-hero__pause[aria-pressed='true'] .tot-hero__pause-icon {
+		display: none;
+	}
 
-		.tot-hero__video {
-			margin-top: 0.3rem;
-		}
+	.tot-hero__pause[aria-pressed='true'] .tot-hero__play-icon {
+		display: block;
 	}
 </style>

@@ -1,6 +1,4 @@
 # Tech on Tap page (https://boydinnovation.org/tech-on-tap). See CONTENT.md.
-# Copied as it is on the live site. The October recap is out of date and will be
-# updated after launch.
 
 techOnTap:
   seo:
@@ -10,51 +8,110 @@ techOnTap:
     ogImage: "https://boydinnovation.org/og/boyd-innovation-logo.png"
 
   hero:
-    eyebrow: "EVERY THIRD THURSDAY"
     heading: "Tech On Tap"
-    # Eastern time. Shown as "Thursday, November 19, 2026" and "5:00 PM to 6:30 PM".
+    # The next session (Eastern time). Not shown on the page; tells search engines the date.
     start: "2026-11-19T17:00"
     end: "2026-11-19T18:30"
-    location:
-      - "Boyd Innovation Center"
-      - "711 Saluda Ave, Columbia, SC 29205"
-    register:
-      label: "REGISTER NOW"
-      eventbrite: { id: "2003836042545", url: "https://www.eventbrite.com/e/tech-on-tap-november-2026-tickets-2003836042545" }
-    video:
-      src: /video/tech-on-tap.mp4
-      captions: /video/tech-on-tap.en.vtt
-      poster: ../assets/images/events/hero.jpg
-      label: "Video: founders on the Boyd Innovation Center community"
+    # Register button in the "Tech on Tap is for you if" box. Switched off until the
+    # next session is on Eventbrite: remove the # from these three lines and put in
+    # the new Eventbrite id and link to bring it back.
+    # register:
+    #   label: "REGISTER NOW"
+    #   eventbrite: { id: "2003836042545", url: "https://www.eventbrite.com/e/tech-on-tap-november-2026-tickets-2003836042545" }
+    # Muted background loop behind the hero (clips from "Alpha Boyd Innovation Center 2").
+    background:
+      poster: ../assets/images/tech-on-tap/hero-video-poster.jpg
+      small: /video/tech-on-tap-hero-720.mp4
+      large: /video/tech-on-tap-hero-1080.mp4
 
-  recent:
-    heading:
-      - "Recent Event: October Tech on Tap"
-      - "“From Founder to CEO”"
-    thanks: "Thank you to our panel speakers!"
-    speakers:
-      - name: "Laura Boccanfuso"
-        role: "Founder & CEO"
-        photo: ../assets/images/tech-on-tap/laura-boccanfuso.jpg
-        linkedin: "https://www.linkedin.com/in/laura-boccanfuso/"
-        company: "VAN Robotics"
-        logo: ../assets/images/tech-on-tap/logo-van-robotics.png
-        companyUrl: "https://www.smartrobottutor.com/"
-      - name: "Ben Rex"
-        role: "Founder & President"
-        photo: ../assets/images/tech-on-tap/ben-rex.webp
-        linkedin: "https://www.linkedin.com/in/benrex/"
-        company: "Cyberwoven"
-        logo: ../assets/images/tech-on-tap/logo-cyberwoven.png
-        companyUrl: "https://www.cyberwoven.com/"
-      - name: "Dan Young"
-        role: "Founder & CEO"
-        photo: ../assets/images/tech-on-tap/dan-young.jpg
-        linkedin: "https://www.linkedin.com/in/dan-young-40473b22a/"
-        company: "PostPixel"
-        logo: ../assets/images/tech-on-tap/logo-postpixel.png
-        companyUrl: "https://www.postpixel.ai/"
 
+  # "Past Tech on Tap". Add a session to `events` (any order; the page sorts by
+  # date and shows the newest one large). Each speaker has a name and, if known,
+  # a company. Add `image:` (put the photo in src/assets/images/tech-on-tap/past/)
+  # and `imageAlt:` to replace the placeholder.
+  past:
+    heading: "Past Tech on Tap Events"
+    cta: { label: "READ THE RECAPS", href: "/blog/tag/Tech+on+Tap" }
+    events:
+      - date: "2026-10-22"
+        talk: "From Founder to CEO"
+        speakers:
+          - { name: "Ben Rex", company: "Cyberwoven" }
+          - { name: "Laura Boccanfuso", company: "Van Robotics" }
+          - { name: "Dan Young", company: "PostPixel" }
+        image: ../assets/images/tech-on-tap/past/founder-to-ceo-oct-2026.jpg
+        imageAlt: "Ben Rex, Laura Boccanfuso and Dan Young on stage with a moderator for the Founder to CEO panel at Tech on Tap at the Boyd Innovation Center"
+      - date: "2026-09-17"
+        talk: "Building in Columbia"
+        speakers:
+          - { name: "Jade Pruett", company: "HelloSEO, MetaMonster" }
+          - { name: "Jeff Savage", company: "USC Faber Center, Monolith" }
+          - { name: "Andrew Daniel", company: "Softdocs, First Palmetto Bank" }
+          - { name: "Karl McCollester", company: "GovPossible, Rampart CIO" }
+        image: ../assets/images/tech-on-tap/past/building-in-columbia-sep-2026.jpg
+        imageAlt: "Jeff Savage, Jade Pruett, Andrew Daniel and Karl McCollester seated on stage for the Building in Columbia panel at Tech on Tap at the Boyd Innovation Center"
+      - date: "2026-08-20"
+        speakers:
+          - { name: "Amanda Clark", company: "Pulmanage" }
+        image: ../assets/images/tech-on-tap/past/amanda-clark-aug-2026.jpg
+        imageAlt: "Amanda Clark speaking at Tech on Tap at the Boyd Innovation Center, beside a slide about her career in respiratory care"
+      - date: "2026-07-16"
+        speakers:
+          - { name: "Colin Griffin", company: "Krumware" }
+        image: ../assets/images/tech-on-tap/past/colin-griffin-jul-2026.jpg
+        imageAlt: "Colin Griffin speaking at Tech on Tap at the Boyd Innovation Center, beside a slide about the history of Krumware"
+      - date: "2026-05-21"
+        talk: "From Garage Startup to $100M in Revenue"
+        speakers:
+          - { name: "Tyler Robertson", company: "Diesel Laptops" }
+        image: ../assets/images/tech-on-tap/past/tyler-robertson-may-2026.jpg
+        imageAlt: "Tyler Robertson speaking to a standing crowd at Tech on Tap at the Boyd Innovation Center, in front of a Diesel Laptops slide"
+      - date: "2026-03-19"
+        talk: "Founder Story"
+        speakers:
+          - { name: "Laura Boccanfuso", company: "Van Robotics" }
+        image: ../assets/images/tech-on-tap/past/laura-boccanfuso-mar-2026.jpg
+        imageAlt: "Laura Boccanfuso smiling while speaking at Tech on Tap at the Boyd Innovation Center"
+      - date: "2026-02-19"
+        talk: "Founder Journey"
+        speakers:
+          - { name: "Duke Hartman", company: "Integer Technologies" }
+        image: ../assets/images/tech-on-tap/past/duke-hartman-feb-2026.jpg
+        imageAlt: "Duke Hartman, seen from behind in a suit, under the string lights at Tech on Tap at the Boyd Innovation Center"
+      - date: "2026-01-15"
+        talk: "Get Clear on Your Vision"
+        speakers:
+          - { name: "Matt Vaadi", company: "guHRoo Payroll & HR" }
+        image: ../assets/images/tech-on-tap/past/matt-vaadi-jan-2026.jpg
+        imageAlt: "Matt Vaadi speaking on stage at Tech on Tap at the Boyd Innovation Center beside a slide titled My Purpose"
+      - date: "2025-11-20"
+        talk: "The Power of Social Capital"
+        speakers:
+          - { name: "Harold Hughes", company: "NFNTE Capital" }
+        image: ../assets/images/tech-on-tap/past/harold-hughes-nov-2025.jpg
+        imageAlt: "Harold Hughes gesturing while speaking at Tech on Tap at the Boyd Innovation Center, in front of a projected slide"
+      - date: "2025-10-16"
+        talk: "From Idea to Exit: A Founder's Journey in Columbia"
+        speakers:
+          - { name: "Lanford Holloway", company: "TerraStride" }
+        image: ../assets/images/tech-on-tap/past/lanford-holloway-oct-2025.jpg
+        imageAlt: "Lanford Holloway holding a product box while speaking at Tech on Tap at the Boyd Innovation Center, in front of a projected slide"
+      - date: "2025-09-18"
+        talk: "Connecting Talent with Ideas"
+        speakers:
+          - { name: "Mason Gates", company: "internships.com" }
+        image: ../assets/images/tech-on-tap/past/mason-gates-sep-2025.jpg
+        imageAlt: "Mason Gates speaking at Tech on Tap at the Boyd Innovation Center, gesturing beside a projected slide"
+      - date: "2025-08-21"
+        speakers:
+          - { name: "Dirk Brown" }
+        image: ../assets/images/tech-on-tap/past/dirk-brown-aug-2025.jpg
+        imageAlt: "Dirk Brown speaking at Tech on Tap in front of an exposed brick wall at the Boyd Innovation Center"
+      - date: "2025-07-17"
+        speakers:
+          - { name: "Sam Herskovitz", company: "Boyd Innovation Center" }
+        image: ../assets/images/tech-on-tap/past/sam-herskovitz-jul-2025.jpg
+        imageAlt: "Sam Herskovitz, seen from behind, speaking to a crowd under string lights at Tech on Tap at the Boyd Innovation Center"
   about:
     paragraphs:
       - "*Tech on Tap* is a monthly community gathering to connect with Columbia’s tech scene and learn from pros who have built, scaled, and exited successful companies ."

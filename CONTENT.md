@@ -215,12 +215,12 @@ Everything on the Tech on Tap page is in **`src/content/tech-on-tap.yaml`**.
 
 For the next session, change these in `hero`:
 
-- **`start` and `end`**: the date and times, in Columbia time on a 24-hour clock (`"2026-12-17T17:00"`). The page writes them out as "Thursday, December 17, 2026" and "5:00 PM to 6:30 PM", so there's no date text to type.
-- **`register`**: the Eventbrite event. The `id` is the number at the end of the Eventbrite link. Both Register buttons on the page use it.
+- **`start` and `end`**: the date and times, in Columbia time on a 24-hour clock (`"2026-12-17T17:00"`). They aren't shown in the hero; they tell search engines when the next session is.
+- **`register`**: the Eventbrite event for the Register button in the "Tech on Tap is for you if" box. The `id` is the number at the end of the Eventbrite link. Between sessions it's switched off by putting `#` in front of its three lines, which hides the button; remove the `#`s and update the link to bring it back.
 
-The **"Recent Event"** section is `recent`: the two heading lines, the thank-you line, and one entry per speaker (name, role, photo, LinkedIn link, company name, logo and company website). Put speaker photos and logos in `src/assets/images/tech-on-tap/`. Square photos work best.
+The hero shows only the title over a looping video (`hero.background`). The video files are `public/video/tech-on-tap-hero-1080.mp4` (desktop) and `tech-on-tap-hero-720.mp4` (phones), and `poster` is the still that shows while it loads. To swap the video, replace those files with short (about 20 seconds), silent, horizontal clips and ask a developer to compress them.
 
-The video file lives in `public/video/`. Its captions are in `tech-on-tap.en.vtt` in the same folder. If you replace the video, replace or remove the captions too.
+The **"Past Tech on Tap"** section is `past`: one entry per session with the `date`, the `speakers` (name and company), an optional `talk` title, and a photo (`image` and `imageAlt`). Sessions with more than one speaker show as a panel: the talk title, then the names. The page sorts by date and shows the newest one large. Put photos in `src/assets/images/tech-on-tap/past/`; wide (landscape) photos work best.
 
 The page doesn't hide itself when the date passes. It shows whatever is in the file. The Tech on Tap card on the Events page is a separate file (`src/content/events/tech-on-tap.yaml`), so update both.
 

@@ -402,38 +402,36 @@ const techOnTap = defineCollection({
 		z.object({
 			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
 			hero: z.object({
-				eyebrow: z.string(),
 				heading: z.string(),
-				/** The next session. The date and times shown on the page are written out from these. */
+				/** The next session. Not shown in the hero; drives the Register button lower on the page and the Event data for search engines. */
 				start: localDateTime,
 				end: localDateTime,
-				/** Venue lines, e.g. name then street address. */
-				location: z.array(z.string()),
-				/** The Register button (both on the page). `url` is the fallback without JavaScript. */
-				register: z.object({ label: z.string(), eventbrite: z.object({ id: z.string(), url: z.url() }) }),
-				video: z.object({
-					/** File in public/video/, e.g. /video/tech-on-tap.mp4 */
-					src: z.string(),
-					/** Captions file (WebVTT) in public/video/. */
-					captions: z.string().optional(),
+				/** The Register button in the "Tech on Tap is for you if" box. `url` is the fallback without JavaScript. Leave out to hide the button. */
+				register: z.object({ label: z.string(), eventbrite: z.object({ id: z.string(), url: z.url() }) }).optional(),
+				/** Muted looping video behind the title. Files in public/video/; `poster` shows until it plays. */
+				background: z.object({
 					poster: image(),
-					/** Name read out by screen readers. */
-					label: z.string(),
+					/** For phones (up to 767px wide). */
+					small: z.string(),
+					large: z.string(),
 				}),
 			}),
-			recent: z.object({
-				/** Shown as one heading on two lines. */
-				heading: z.tuple([z.string(), z.string()]),
-				thanks: z.string(),
-				speakers: z.array(
+			/** "Past Tech on Tap": earlier sessions, newest first on the page (sorted by date). */
+			past: z.object({
+				heading: z.string(),
+				/** Optional button under the heading. */
+				cta: link.optional(),
+				events: z.array(
 					z.object({
-						name: z.string(),
-						role: z.string(),
-						photo: image(),
-						linkedin: z.url(),
-						company: z.string(),
-						logo: image(),
-						companyUrl: z.url(),
+						/** Day of the session, e.g. 2026-08-20. */
+						date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD, e.g. 2026-08-20'),
+						/** Talk title, if there was one. */
+						talk: z.string().optional(),
+						/** One speaker, or several for a panel. `company` is optional. */
+						speakers: z.array(z.object({ name: z.string(), company: z.string().optional() })).min(1),
+						/** Photo from the session. Until one is added, a placeholder shows. */
+						image: image().optional(),
+						imageAlt: z.string().optional(),
 					}),
 				),
 			}),
