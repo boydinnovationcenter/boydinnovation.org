@@ -7,5 +7,6 @@ bookATour:
     ogImage: "https://boydinnovation.org/og/boyd-innovation-logo.png"
   heading: "The Place To Build A Tech Startup In The Midlands"
   image: ../assets/images/space/strip-4-main-space.jpg
+  imageAlt: "Open coworking space at Boyd Innovation Center in Columbia SC featuring communal tables, private offices, and presentation screen"
   # HubSpot Meetings link for tour bookings.
   meetingsUrl: "https://meetings.hubspot.com/kennedy-marren?embed=true"

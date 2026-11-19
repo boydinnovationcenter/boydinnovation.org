@@ -12,6 +12,7 @@ space:
     heading: "Office, Coworking, & Tech Community in Columbia, South Carolina"
     cta: { label: "BOOK A TOUR", href: /book-a-tour }
     image: ../assets/images/space/hero-pods.jpg
+    imageAlt: "Glass-walled private office pods at Boyd Innovation Center, bookable workspace in Columbia SC with exposed wood ceiling and modern design"
 
   spaces:
     heading: "Space"

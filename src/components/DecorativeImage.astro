@@ -1,0 +1,37 @@
+---
+/**
+ * A purely decorative image (such as the flywheel mark), drawn as a CSS
+ * background instead of an <img>. Screen readers skip it, and SEO checkers
+ * (Bing Webmaster Tools) don't report it as an image missing alt text.
+ * Size it from the parent with a class, like an <img>: the height follows
+ * the image's aspect ratio. Optimized at 1x, 2x and 3x of `width`.
+ */
+import { getImage } from 'astro:assets';
+
+interface Props {
+	src: ImageMetadata;
+	/** Display width in CSS pixels, used to pick the image sizes. */
+	width: number;
+	class?: string;
+}
+
+const { src, width, class: className } = Astro.props;
+const sizes = await Promise.all([1, 2, 3].map((d) => getImage({ src, width: width * d })));
+const imageSet = sizes.map((img, i) => `url("${img.src}") ${i + 1}x`).join(', ');
+---
+
+<span
+	class:list={['decorative-image', className]}
+	aria-hidden="true"
+	style={`background-image: url("${sizes[0].src}"); background-image: image-set(${imageSet}); aspect-ratio: ${src.width} / ${src.height}`}
+></span>
+
+<style>
+	/* The plain url() first is the fallback for browsers without image-set(). */
+	.decorative-image {
+		display: block;
+		background-position: center;
+		background-size: contain;
+		background-repeat: no-repeat;
+	}
+</style>

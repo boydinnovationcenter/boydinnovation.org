@@ -6,29 +6,32 @@
 import { Image } from 'astro:assets';
 import flywheel from '../assets/images/brand/flywheel.png';
 import CtaButton from './CtaButton.astro';
+import DecorativeImage from './DecorativeImage.astro';
 
 interface Props {
 	heading: string;
 	cta?: { label: string; href: string };
 	image: ImageMetadata;
+	/** Describes the photo for screen readers and image search. */
+	imageAlt: string;
 	/** Headline weight; the live Space headline is bold, Book a Tour's is not. */
 	weight?: 500 | 700;
 }
 
-const { heading, cta, image, weight = 700 } = Astro.props;
+const { heading, cta, image, imageAlt, weight = 700 } = Astro.props;
 ---
 
 <section class="photo-hero" aria-labelledby="page-title">
 	<Image
 		class="photo-hero__bg"
 		src={image}
-		alt=""
+		alt={imageAlt}
 		widths={[640, 1024, 1440, 1920, 2500]}
 		sizes="100vw"
 		loading="eager"
 		fetchpriority="high"
 	/>
-	<Image class="photo-hero__flywheel" src={flywheel} alt="" width={100} densities={[1, 2, 3]} loading="eager" />
+	<DecorativeImage class="photo-hero__flywheel" src={flywheel} width={100} />
 	<div class="photo-hero__content">
 		<h1 id="page-title" style={`font-weight: ${weight}`}>{heading}</h1>
 		{cta && <CtaButton class="photo-hero__cta" variant="glass" label={cta.label} href={cta.href} />}
@@ -65,7 +68,7 @@ const { heading, cta, image, weight = 700 } = Astro.props;
 		background: rgb(4 30 52 / 0.7);
 	}
 
-	.photo-hero__flywheel {
+	.photo-hero :global(.photo-hero__flywheel) {
 		position: absolute;
 		top: calc(var(--header-height) + 1.5rem);
 		right: var(--gutter);

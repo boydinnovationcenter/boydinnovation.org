@@ -179,7 +179,7 @@ const space = defineCollection({
 		const photo = () => z.object({ image: image(), alt: z.string() });
 		return z.object({
 			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
-			hero: z.object({ heading: z.string(), cta: link, image: image() }),
+			hero: z.object({ heading: z.string(), cta: link, image: image(), imageAlt: z.string() }),
 			spaces: z.object({
 				heading: z.string(),
 				options: z.array(
@@ -389,6 +389,7 @@ const bookATour = defineCollection({
 			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
 			heading: z.string(),
 			image: image(),
+			imageAlt: z.string(),
 			/** HubSpot Meetings scheduling link. */
 			meetingsUrl: z.url(),
 		}),

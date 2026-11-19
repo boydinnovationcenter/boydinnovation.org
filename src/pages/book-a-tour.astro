@@ -6,7 +6,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const entry = await getEntry('bookATour', 'bookATour');
 if (!entry) throw new Error('Missing Book a Tour content: src/content/book-a-tour.yaml');
-const { seo, heading, image, meetingsUrl } = entry.data;
+const { seo, heading, image, imageAlt, meetingsUrl } = entry.data;
 
 const structuredData = {
 	'@context': 'https://schema.org',
@@ -20,7 +20,7 @@ const structuredData = {
 
 <BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
 	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-	<PhotoHero heading={heading} image={image} weight={500} />
+	<PhotoHero heading={heading} image={image} imageAlt={imageAlt} weight={500} />
 	<section class="scheduler" aria-label="Schedule a tour">
 		<div class="container">
 			<!-- HubSpot Meetings scheduler; HubSpot's script turns this into the booking calendar. -->

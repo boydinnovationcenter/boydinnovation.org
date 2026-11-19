@@ -7,6 +7,7 @@ import { Image } from 'astro:assets';
 import flywheel from '../../assets/images/brand/flywheel-navy.png';
 import { tracking } from '../../config/site';
 import CtaButton from '../CtaButton.astro';
+import DecorativeImage from '../DecorativeImage.astro';
 
 interface Props {
 	heading: string;
@@ -22,7 +23,7 @@ const { heading, cta, photos, venues } = Astro.props;
 	<div class="container head-cta-layout">
 		<div class="head-cta-layout__head event-space__title">
 			<h2 id="event-space-heading">{heading}</h2>
-			<Image src={flywheel} alt="" width={48} densities={[1, 2, 3]} />
+			<DecorativeImage class="event-space__flywheel" src={flywheel} width={48} />
 		</div>
 		<CtaButton
 			class="head-cta-layout__cta"
@@ -72,7 +73,7 @@ const { heading, cta, photos, venues } = Astro.props;
 		gap: var(--space-4);
 	}
 
-	.event-space__title img {
+	.event-space__title :global(.event-space__flywheel) {
 		width: 2.6rem;
 		flex: none;
 	}
