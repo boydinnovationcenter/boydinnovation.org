@@ -9,15 +9,17 @@ techOnTap:
 
   hero:
     heading: "Tech On Tap"
-    # The next session (Eastern time). Not shown on the page; tells search engines the date.
-    start: "2026-11-19T17:00"
-    end: "2026-11-19T18:30"
-    # Register button in the "Tech on Tap is for you if" box. Switched off until the
-    # next session is on Eventbrite: remove the # from these three lines and put in
-    # the new Eventbrite id and link to bring it back.
+    # Tech on Tap is paused until January 2027. When the next session is set, remove
+    # the # from these lines and fill them in:
+    # - start / end: Eastern time, 24-hour clock. Not shown on the page; tells search
+    #   engines when the session is.
+    # - register: the Eventbrite event (the id is the number at the end of the link).
+    #   Shows the Register button in the "Tech on Tap is for you if" box.
+    # start: "2027-01-21T17:00"
+    # end: "2027-01-21T18:30"
     # register:
     #   label: "REGISTER NOW"
-    #   eventbrite: { id: "2003836042545", url: "https://www.eventbrite.com/e/tech-on-tap-november-2026-tickets-2003836042545" }
+    #   eventbrite: { id: "EVENTBRITE-ID", url: "https://www.eventbrite.com/e/EVENTBRITE-LINK" }
     # Muted background loop behind the hero (clips from "Alpha Boyd Innovation Center 2").
     background:
       poster: ../assets/images/tech-on-tap/hero-video-poster.jpg

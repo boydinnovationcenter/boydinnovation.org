@@ -213,10 +213,10 @@ The tour scheduler link is `meetingsUrl` in **`src/content/book-a-tour.yaml`**. 
 
 Everything on the Tech on Tap page is in **`src/content/tech-on-tap.yaml`**.
 
-For the next session, change these in `hero`:
+For the next session, fill these in under `hero` (they're switched off with `#` while Tech on Tap is paused; remove the `#`s to turn them back on):
 
-- **`start` and `end`**: the date and times, in Columbia time on a 24-hour clock (`"2026-12-17T17:00"`). They aren't shown in the hero; they tell search engines when the next session is.
-- **`register`**: the Eventbrite event for the Register button in the "Tech on Tap is for you if" box. The `id` is the number at the end of the Eventbrite link. Between sessions it's switched off by putting `#` in front of its three lines, which hides the button; remove the `#`s and update the link to bring it back.
+- **`start` and `end`**: the date and times, in Columbia time on a 24-hour clock (`"2027-01-21T17:00"`). They aren't shown on the page; they tell search engines when the next session is. Leave them out when no session is scheduled, so Google isn't told about an event that isn't happening.
+- **`register`**: the Eventbrite event for the Register button in the "Tech on Tap is for you if" box. The `id` is the number at the end of the Eventbrite link. Without it, there's no Register button.
 
 The hero shows only the title over a looping video (`hero.background`). The video files are `public/video/tech-on-tap-hero-1080.mp4` (desktop) and `tech-on-tap-hero-720.mp4` (phones), and `poster` is the still that shows while it loads. To swap the video, replace those files with short (about 20 seconds), silent, horizontal clips and ask a developer to compress them.
 

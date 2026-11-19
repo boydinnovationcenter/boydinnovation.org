@@ -403,9 +403,9 @@ const techOnTap = defineCollection({
 			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
 			hero: z.object({
 				heading: z.string(),
-				/** The next session. Not shown in the hero; drives the Register button lower on the page and the Event data for search engines. */
-				start: localDateTime,
-				end: localDateTime,
+				/** The next session, for search engines (not shown on the page). Leave out while Tech on Tap is paused. */
+				start: localDateTime.optional(),
+				end: localDateTime.optional(),
 				/** The Register button in the "Tech on Tap is for you if" box. `url` is the fallback without JavaScript. Leave out to hide the button. */
 				register: z.object({ label: z.string(), eventbrite: z.object({ id: z.string(), url: z.url() }) }).optional(),
 				/** Muted looping video behind the title. Files in public/video/; `poster` shows until it plays. */

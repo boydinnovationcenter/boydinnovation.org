@@ -29,7 +29,7 @@ const structuredData = {
 			],
 		},
 		// The session shown in the hero, while it's still ahead.
-		...(eventStatus(hero.end) === 'upcoming'
+		...(hero.start && hero.end && eventStatus(hero.end) === 'upcoming'
 			? [
 					{
 						'@type': 'Event',
