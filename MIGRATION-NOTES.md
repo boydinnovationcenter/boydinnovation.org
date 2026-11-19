@@ -19,18 +19,20 @@ Reference: live site captured 2026-10-27 at 1440px and 390px.
 
 ### Hero video edit
 
-The live loop is a heavily compressed Squarespace stream. It was rebuilt from the originals in `~/Desktop/BIC Video`, which are not in the repo. The loop is 21.25 s at 24 fps, silent. Interviews, people talking to camera, name captions, title cards and slide text are left out because the video plays without sound behind the headline.
+The live loop is a heavily compressed Squarespace stream. It was rebuilt from the originals in `~/Desktop/BIC Video`, which are not in the repo. The loop is 20.1 s at 24 fps, silent. Interviews, people talking to camera, name captions, title cards and slide text are left out because the video plays without sound behind the headline.
 
 | # | Source | In–out (s) | Speed | Shot | Exposure trim |
 |---|---|---|---|---|---|
 | 1 | C1822.MP4 | 1.6–4.6 | 0.75× | Office hallway push-in | none |
-| 2 | Alpha Boyd Innovation Center 2 copy.MP4 | 24.0–26.9 | 1× | Networking crowd, wide | none |
+| 2 | Launchpad Pitch Night Full Recap.mp4 | 73.2–74.4 | 0.75× | Shrihan Ganesh Babu on stage with the $5,000 check | none |
 | 3 | Launchpad Pitch Night Full Recap.mp4 | 70.5–72.3 | 1× | Audience filming a pitch on a phone | gamma 0.62 |
-| 4 | Alpha… | 54.8–56.6 | 1× | Crowd at an event | none |
+| 4 | Alpha Boyd Innovation Center 2 copy.MP4 | 54.8–56.6 | 1× | Crowd at an event | none |
 | 5 | C1820.MP4 | 2.0–5.2 | 0.75× | Coworking room | none |
 | 6 | Alpha… | 68.0–70.6 | 1× | High-five while networking | gamma 0.60 |
 | 7 | Launchpad… | 100.8–102.2 | 1× | Pitch-night food table | none |
 | 8 | Alpha… | 123.7–126.0 | 1× | Full-house crowd | gamma 0.84 |
+
+2026-11-19: shot 2 was the networking crowd at the drinks table (Alpha… 24.0–26.9); swapped for the check shot at Kennedy's request. Exposure trims are ffmpeg `eq=gamma`.
 
 The exposure trims bring the bright daytime shots down to the brightness range of the old loop, so the white headline stays readable without making the overlay darker than live. The encode is H.264 at CRF 28 (1080p and 720p, `-movflags +faststart`); the poster is the first frame.
 
