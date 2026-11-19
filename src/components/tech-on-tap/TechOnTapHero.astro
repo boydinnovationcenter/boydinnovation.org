@@ -1,18 +1,24 @@
 ---
 /**
- * Tech on Tap hero: the page title over a muted background loop of event
- * footage (as on the homepage). The poster shows first; the video plays only
+ * Tech on Tap hero: title, subheading and a button over a muted background
+ * loop of event footage (as on the homepage), laid out like the Events hero:
+ * text bottom left, button bottom right. The poster shows first; the video plays only
  * without prefers-reduced-motion or Save-Data, and a button pauses it
  * (WCAG 2.2.2).
  */
 import { Image } from 'astro:assets';
+import CtaButton from '../CtaButton.astro';
 
 interface Props {
 	heading: string;
+	/** Line under the title. */
+	subheading?: string;
+	/** Button beside the title, e.g. More Events. */
+	cta?: { label: string; href: string };
 	background: { poster: ImageMetadata; small: string; large: string };
 }
 
-const { heading, background } = Astro.props;
+const { heading, subheading, cta, background } = Astro.props;
 ---
 
 <section class="tot-hero" aria-labelledby="page-title">
@@ -32,7 +38,19 @@ const { heading, background } = Astro.props;
 		</video>
 	</div>
 
-	<h1 id="page-title">{heading}</h1>
+	<div class="container tot-hero__inner">
+		<div class="tot-hero__title">
+			<h1 id="page-title">{heading}</h1>
+			{subheading && <p class="tot-hero__sub">{subheading}</p>}
+		</div>
+		{
+			cta && (
+				<div class="tot-hero__actions">
+					<CtaButton variant="primary" label={cta.label} href={cta.href} />
+				</div>
+			)
+		}
+	</div>
 
 	<button class="tot-hero__pause" type="button" aria-pressed="false" hidden>
 		<span class="visually-hidden">Pause background video</span>
@@ -75,17 +93,18 @@ const { heading, background } = Astro.props;
 </script>
 
 <style>
+	/* Same height and spacing as the Events hero: content held near the bottom. */
 	.tot-hero {
 		position: relative;
 		isolation: isolate;
-		display: grid;
-		place-items: center;
-		min-height: clamp(24rem, 48vw, 40rem);
-		padding: calc(var(--header-height) + var(--space-5)) var(--gutter) var(--space-7);
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		min-height: clamp(30rem, 47.5vw, 46rem);
+		padding-block: calc(var(--header-height) + 3.5rem) 5rem;
 		overflow: hidden;
 		background: var(--color-navy-deep);
 		color: #fff;
-		text-align: center;
 	}
 
 	.tot-hero__bg {
@@ -120,10 +139,50 @@ const { heading, background } = Astro.props;
 		opacity: 1;
 	}
 
-	h1 {
-		font-size: clamp(3rem, 1.6rem + 6vw, 6.5rem);
-		line-height: 1;
+	.tot-hero__inner {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: var(--space-5) var(--space-6);
+	}
+
+	.tot-hero__title {
+		flex: 1 1 32rem;
+		max-width: 51rem;
+		display: grid;
+		gap: 1.25rem;
 		text-shadow: 0 2px 24px rgb(0 3 31 / 0.35);
+	}
+
+	h1 {
+		font-size: clamp(2.4rem, 1.2rem + 3.5vw, 4rem);
+		font-weight: 400;
+		line-height: 1.05;
+	}
+
+	.tot-hero__sub {
+		max-width: 40rem;
+		font-size: clamp(1.05rem, 1rem + 0.25vw, 1.25rem);
+		line-height: 1.6;
+		color: var(--color-text-on-dark);
+	}
+
+	.tot-hero__actions {
+		flex: 0 1 16.25rem;
+		display: grid;
+	}
+
+	.tot-hero__actions :global(.btn) {
+		min-height: 3.5rem;
+		border-radius: 6px;
+		font-size: 0.875rem;
+	}
+
+	@media (max-width: 47.99rem) {
+		.tot-hero__actions {
+			flex-basis: 100%;
+		}
 	}
 
 	.tot-hero__pause {

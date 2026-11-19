@@ -71,24 +71,23 @@ const fullDate = (date: string) =>
 							<div class="session__meta">
 								{isPanel(s) && s.talk ? (
 									<h3 class="session__speakers">
-										<span class="session__name">{s.talk}</span>
-										<span class="session__company">
-											<span class="visually-hidden">, with </span>
-											{s.speakers.map((p) => p.name).join(', ')}
+										{/* Separators sit inside the name span so screen readers hear "Title, with names" (no stray space before the comma). */}
+										<span class="session__name">
+											{s.talk}
+											<span class="visually-hidden">{', with '}</span>
 										</span>
+										<span class="session__company">{s.speakers.map((p) => p.name).join(', ')}</span>
 									</h3>
 								) : (
 									<h3 class="session__speakers">
 										{s.speakers.map((p, j) => (
 											<span class="session__speaker">
-												<span class="session__name">{p.name}</span>
-												{p.company && (
-													<span class="session__company">
-														<span class="visually-hidden">, </span>
-														{p.company}
-													</span>
-												)}
-												{j < s.speakers.length - 1 && <span class="visually-hidden">; </span>}
+												<span class="session__name">
+													{p.name}
+													{p.company && <span class="visually-hidden">{', '}</span>}
+												</span>
+												{p.company && <span class="session__company">{p.company}</span>}
+												{j < s.speakers.length - 1 && <span class="visually-hidden">{'; '}</span>}
 											</span>
 										))}
 									</h3>

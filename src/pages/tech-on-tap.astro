@@ -52,7 +52,7 @@ const structuredData = {
 
 <BaseLayout title={seo.title} description={seo.description} ogImage={seo.ogImage}>
 	<script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-	<TechOnTapHero heading={hero.heading} background={hero.background} />
+	<TechOnTapHero heading={hero.heading} subheading={hero.subheading} cta={hero.cta} background={hero.background} />
 	<PastSessions {...past} />
 	<TechOnTapAbout {...about} register={hero.register} eventTitle={eventName} />
 	<PhotoStrip photos={photos} />

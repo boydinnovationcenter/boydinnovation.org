@@ -3,12 +3,13 @@
 techOnTap:
   seo:
     title: "Tech on Tap | Boyd Innovation"
-    # Empty on the live site.
-    description: ""
+    description: "Connect with Columbia's tech scene and learn from founders who've built, scaled, and exited companies at Tech on Tap, a monthly gathering at the Boyd Innovation Center."
     ogImage: "https://boydinnovation.org/og/boyd-innovation-logo.png"
 
   hero:
     heading: "Tech On Tap"
+    subheading: "Connect with Columbia's tech scene and learn from founders who've built, scaled, and exited companies"
+    cta: { label: "MORE EVENTS", href: /events }
     # Tech on Tap is paused until January 2027. When the next session is set, remove
     # the # from these lines and fill them in:
     # - start / end: Eastern time, 24-hour clock. Not shown on the page; tells search
@@ -116,7 +117,7 @@ techOnTap:
         imageAlt: "Sam Herskovitz, seen from behind, speaking to a crowd under string lights at Tech on Tap at the Boyd Innovation Center"
   about:
     paragraphs:
-      - "*Tech on Tap* is a monthly community gathering to connect with Columbia’s tech scene and learn from pros who have built, scaled, and exited successful companies ."
+      - "*Tech on Tap* is a monthly community gathering to connect with Columbia’s tech scene and learn from pros who have built, scaled, and exited successful companies."
       - "Every third Thursday evening we bring in an expert to share insights on the challenges that can make or break your tech startup—from incorporation decisions to scaling strategies."
       - "It's networking with purpose: connect with fellow founders & tech professionals while learning from entrepreneurs who've guided successful companies through these exact decisions."
     audienceHeading: "Tech on Tap is for you if:"

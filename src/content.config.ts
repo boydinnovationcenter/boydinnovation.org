@@ -403,6 +403,10 @@ const techOnTap = defineCollection({
 			seo: z.object({ title: z.string(), description: z.string(), ogImage: z.url() }),
 			hero: z.object({
 				heading: z.string(),
+				/** Line under the title. */
+				subheading: z.string().optional(),
+				/** Button beside the title. */
+				cta: link.optional(),
 				/** The next session, for search engines (not shown on the page). Leave out while Tech on Tap is paused. */
 				start: localDateTime.optional(),
 				end: localDateTime.optional(),
