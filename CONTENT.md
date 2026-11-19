@@ -220,7 +220,7 @@ For the next session, fill these in under `hero` (they're switched off with `#` 
 
 The hero shows only the title over a looping video (`hero.background`). The video files are `public/video/tech-on-tap-hero-1080.mp4` (desktop) and `tech-on-tap-hero-720.mp4` (phones), and `poster` is the still that shows while it loads. To swap the video, replace those files with short (about 20 seconds), silent, horizontal clips and ask a developer to compress them.
 
-The **"Past Tech on Tap"** section is `past`: one entry per session with the `date`, the `speakers` (name and company), an optional `talk` title, and a photo (`image` and `imageAlt`). Sessions with more than one speaker show as a panel: the talk title, then the names. The page sorts by date and shows the newest one large. Put photos in `src/assets/images/tech-on-tap/past/`; wide (landscape) photos work best.
+The **"Past Tech on Tap Events"** section is `past`: one entry per session with the `date`, the `speakers` (name and company), an optional `talk` title, and a photo (`image` and `imageAlt`). Sessions with more than one speaker show as a panel: the talk title, then the names. The page sorts by date, newest first, two across. The recap video (`past.video`) sits large above them; it plays only when clicked and has captions (`tech-on-tap.en.vtt`). Put photos in `src/assets/images/tech-on-tap/past/`; wide (landscape) photos work best.
 
 The page doesn't hide itself when the date passes. It shows whatever is in the file. The Tech on Tap card on the Events page is a separate file (`src/content/events/tech-on-tap.yaml`), so update both.
 

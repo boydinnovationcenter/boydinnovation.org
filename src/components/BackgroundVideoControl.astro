@@ -1,0 +1,93 @@
+---
+/**
+ * Starts a muted background video and adds a pause/play button for it
+ * (WCAG 2.2.2: moving content longer than 5 seconds needs a way to stop it).
+ *
+ * The video plays only when the visitor hasn't asked for reduced motion and
+ * isn't saving data; otherwise its poster stays and the button stays hidden.
+ * Once playing, the video gets the `is-playing` class (use it to fade it in).
+ * Position the button with `class` from the parent, e.g. bottom right.
+ *
+ * Used by the homepage hero and the Tech on Tap hero.
+ */
+interface Props {
+	/** id of the <video> element this controls. */
+	for: string;
+	class?: string;
+}
+
+const { for: videoId, class: className } = Astro.props;
+---
+
+<button class:list={['bg-video-control', className]} type="button" aria-pressed="false" data-video-for={videoId} hidden>
+	<span class="visually-hidden">Pause background video</span>
+	<svg class="bg-video-control__pause" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+		<rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"></rect>
+		<rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"></rect>
+	</svg>
+	<svg class="bg-video-control__play" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+		<path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" fill="currentColor"></path>
+	</svg>
+</button>
+
+<script>
+	const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+
+	for (const button of document.querySelectorAll<HTMLButtonElement>('[data-video-for]')) {
+		const video = document.getElementById(button.dataset.videoFor!) as HTMLVideoElement | null;
+		if (!video || reduceMotion || saveData) continue;
+
+		const label = button.querySelector('.visually-hidden')!;
+		video.addEventListener(
+			'playing',
+			() => {
+				video.classList.add('is-playing');
+				button.hidden = false;
+			},
+			{ once: true },
+		);
+		button.addEventListener('click', () => {
+			const pause = !video.paused;
+			if (pause) video.pause();
+			else video.play().catch(() => {});
+			button.setAttribute('aria-pressed', String(pause));
+			label.textContent = pause ? 'Play background video' : 'Pause background video';
+		});
+		video.play().catch(() => {});
+	}
+</script>
+
+<style>
+	.bg-video-control {
+		position: absolute;
+		z-index: 2;
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		padding: 0;
+		border: 1px solid rgb(236 246 242 / 0.6);
+		border-radius: 50%;
+		background: rgb(0 3 31 / 0.55);
+		color: var(--color-text-on-dark);
+		cursor: pointer;
+	}
+
+	.bg-video-control[hidden] {
+		display: none;
+	}
+
+	.bg-video-control:hover {
+		background: rgb(0 3 31 / 0.8);
+	}
+
+	.bg-video-control__play,
+	.bg-video-control[aria-pressed='true'] .bg-video-control__pause {
+		display: none;
+	}
+
+	.bg-video-control[aria-pressed='true'] .bg-video-control__play {
+		display: block;
+	}
+</style>

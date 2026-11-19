@@ -1,10 +1,11 @@
 # Monthly series. Set next.start (and add a Register action with the Eventbrite event) for the next Tech on Tap.
-# Until then (or once it passes) the card says "Next date coming soon".
+# Without an upcoming date the card shows `ongoing` ("Back in January 2027" while paused),
+# or "Next date coming soon" if `ongoing` is left out.
 section: recurring
 order: 1
 title: "Tech on Tap"
 cadence: "MONTHLY · THIRD THURSDAY · EVENINGS"
-next: { start: "2026-10-22T17:00" }
+ongoing: "Back in January 2027"
 description: "Tech on Tap is a monthly community gathering to connect with Columbia’s tech scene and learn from pros who have built, scaled, and exited successful companies."
 image: ../../assets/images/events/tech-on-tap.jpg
 imageAlt: "Tech on Tap"

@@ -4,9 +4,10 @@
  * loop of event footage (as on the homepage), laid out like the Events hero:
  * text bottom left, button bottom right. The poster shows first; the video plays only
  * without prefers-reduced-motion or Save-Data, and a button pauses it
- * (WCAG 2.2.2).
+ * (BackgroundVideoControl, WCAG 2.2.2).
  */
 import { Image } from 'astro:assets';
+import BackgroundVideoControl from '../BackgroundVideoControl.astro';
 import CtaButton from '../CtaButton.astro';
 
 interface Props {
@@ -32,7 +33,7 @@ const { heading, subheading, cta, background } = Astro.props;
 			loading="eager"
 			fetchpriority="high"
 		/>
-		<video class="tot-hero__bg-video" muted loop playsinline preload="none" disablepictureinpicture>
+		<video id="tot-hero-video" class="tot-hero__bg-video" muted loop playsinline preload="none" disablepictureinpicture>
 			<source src={background.small} type="video/mp4" media="(max-width: 767px)" />
 			<source src={background.large} type="video/mp4" />
 		</video>
@@ -52,45 +53,8 @@ const { heading, subheading, cta, background } = Astro.props;
 		}
 	</div>
 
-	<button class="tot-hero__pause" type="button" aria-pressed="false" hidden>
-		<span class="visually-hidden">Pause background video</span>
-		<svg class="tot-hero__pause-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-			<rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"></rect>
-			<rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"></rect>
-		</svg>
-		<svg class="tot-hero__play-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-			<path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" fill="currentColor"></path>
-		</svg>
-	</button>
+	<BackgroundVideoControl for="tot-hero-video" class="tot-hero__pause" />
 </section>
-
-<script>
-	// Play the background loop only when motion is welcome and the visitor isn't saving data.
-	const video = document.querySelector<HTMLVideoElement>('.tot-hero__bg-video');
-	const button = document.querySelector<HTMLButtonElement>('.tot-hero__pause');
-	const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-	const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-
-	if (video && button && !reduceMotion && !saveData) {
-		const label = button.querySelector('.visually-hidden')!;
-		video.addEventListener(
-			'playing',
-			() => {
-				video.classList.add('is-playing');
-				button.hidden = false;
-			},
-			{ once: true },
-		);
-		button.addEventListener('click', () => {
-			const pause = !video.paused;
-			if (pause) video.pause();
-			else video.play().catch(() => {});
-			button.setAttribute('aria-pressed', String(pause));
-			label.textContent = pause ? 'Play background video' : 'Pause background video';
-		});
-		video.play().catch(() => {});
-	}
-</script>
 
 <style>
 	/* Same height and spacing as the Events hero: content held near the bottom. */
@@ -157,7 +121,7 @@ const { heading, subheading, cta, background } = Astro.props;
 
 	h1 {
 		font-size: clamp(2.4rem, 1.2rem + 3.5vw, 4rem);
-		font-weight: 400;
+		font-weight: 700; /* matches the Events hero title */
 		line-height: 1.05;
 	}
 
@@ -185,36 +149,8 @@ const { heading, subheading, cta, background } = Astro.props;
 		}
 	}
 
-	.tot-hero__pause {
-		position: absolute;
+	.tot-hero :global(.tot-hero__pause) {
 		right: var(--gutter);
 		bottom: var(--space-4);
-		display: grid;
-		place-items: center;
-		width: 2.75rem;
-		height: 2.75rem;
-		padding: 0;
-		border: 1px solid rgb(236 246 242 / 0.6);
-		border-radius: 50%;
-		background: rgb(0 3 31 / 0.55);
-		color: var(--color-text-on-dark);
-		cursor: pointer;
-	}
-
-	.tot-hero__pause[hidden] {
-		display: none;
-	}
-
-	.tot-hero__pause:hover {
-		background: rgb(0 3 31 / 0.8);
-	}
-
-	.tot-hero__play-icon,
-	.tot-hero__pause[aria-pressed='true'] .tot-hero__pause-icon {
-		display: none;
-	}
-
-	.tot-hero__pause[aria-pressed='true'] .tot-hero__play-icon {
-		display: block;
 	}
 </style>

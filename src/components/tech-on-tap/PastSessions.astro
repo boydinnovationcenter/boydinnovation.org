@@ -1,14 +1,15 @@
 ---
 /**
- * "Past Tech on Tap": heading (and optional button) in a left column, the
- * sessions on the right, newest first. The newest is shown large; the rest
- * sit two across, split by a hairline. Each card shows the speaker with
+ * "Past Tech on Tap Events": heading and optional button in a left column
+ * (sticky on desktop). On the right, the recap video large at the top (plays
+ * when clicked, with captions), then every session newest first, two across
+ * and split by a hairline. Each card shows the speaker with
  * their company and the month; a panel shows its title, then the panelists'
  * names. (Single speakers' talk titles are kept in the content but not shown.) Cards aren't links and have
  * no hover effect. Sessions without a photo get a branded placeholder.
  * One column on phones; the left column moves above from 64rem down.
  */
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 import CtaButton from '../CtaButton.astro';
 
 interface Session {
@@ -22,12 +23,15 @@ interface Session {
 interface Props {
 	heading: string;
 	cta?: { label: string; href: string };
+	/** Recap video, large above the sessions: plays only when clicked, with captions. */
+	video?: { src: string; captions?: string; poster: ImageMetadata; label: string };
 	events: Session[];
 }
 
-const { heading, cta, events } = Astro.props;
+const { heading, cta, video, events } = Astro.props;
+// Sharp at the ~830px-wide top spot (and on phones).
+const videoPoster = video ? await getImage({ src: video.poster, width: 1400, format: 'webp' }) : undefined;
 const sessions = [...events].sort((a, b) => b.date.localeCompare(a.date));
-const featured = sessions[0];
 /** Panels show the title where a speaker's name would be, with the names (comma-separated) below. */
 const isPanel = (s: Session) => s.speakers.length > 1;
 
@@ -43,7 +47,7 @@ const fullDate = (date: string) =>
 ---
 
 {
-	featured && (
+	(sessions.length > 0 || video) && (
 		<section class="past" aria-labelledby="past-heading">
 			<div class="container past__inner">
 				<div class="past__intro">
@@ -51,16 +55,34 @@ const fullDate = (date: string) =>
 					{cta && <CtaButton class="past__cta" variant="primary" label={cta.label} href={cta.href} />}
 				</div>
 
+				<div class="past__main">
+					{video && (
+						<div class="past__feature">
+							<video
+								class="past__video"
+								controls
+								playsinline
+								preload="none"
+								poster={videoPoster!.src}
+								width="1920"
+								height="1080"
+								aria-label={video.label}
+							>
+								<source src={video.src} type="video/mp4" />
+								{video.captions && <track kind="captions" src={video.captions} srclang="en" label="English" />}
+							</video>
+						</div>
+					)}
 				<ul class="past__list" role="list">
-					{sessions.map((s, i) => (
-						<li class:list={['session', { 'session--featured': i === 0 }]}>
+					{sessions.map((s) => (
+						<li class="session">
 							<div class="session__media">
 								{s.image ? (
 									<Image
 										src={s.image}
 										alt={s.imageAlt ?? ''}
-										widths={i === 0 ? [640, 960, 1400] : [400, 640, 900]}
-										sizes={i === 0 ? '(min-width: 64rem) 52rem, 100vw' : '(min-width: 64rem) 25rem, (min-width: 36rem) 50vw, 100vw'}
+										widths={[400, 640, 900]}
+										sizes="(min-width: 64rem) 25rem, (min-width: 36rem) 50vw, 100vw"
 									/>
 								) : (
 									<div class="session__placeholder" aria-hidden="true">
@@ -99,6 +121,7 @@ const fullDate = (date: string) =>
 						</li>
 					))}
 				</ul>
+				</div>
 			</div>
 		</section>
 	)
@@ -124,14 +147,30 @@ const fullDate = (date: string) =>
 		gap: var(--space-4);
 	}
 
+	/* The recap video in the top spot, above the two-across sessions. */
+	.past__feature {
+		margin-bottom: var(--space-5);
+		padding-bottom: var(--space-5);
+		border-bottom: var(--border);
+	}
+
+	.past__video {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 9;
+		object-fit: cover; /* the poster photo is 3:2 */
+		border-radius: 10px;
+		background: var(--color-black);
+	}
+
 	h2 {
 		font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
 		font-weight: 500;
 		line-height: 1.05;
 	}
 
-	/* Sessions: one column on phones, two from small tablets; the featured
-	   (newest) session spans both. */
+	/* Sessions: one column on phones, two from small tablets. */
 	.past__list {
 		display: grid;
 		grid-template-columns: 1fr;
@@ -151,10 +190,6 @@ const fullDate = (date: string) =>
 		overflow: hidden;
 		border-radius: 10px;
 		aspect-ratio: 3 / 2;
-	}
-
-	.session--featured .session__media {
-		aspect-ratio: 16 / 9;
 	}
 
 	.session__media img {
@@ -193,10 +228,6 @@ const fullDate = (date: string) =>
 		line-height: var(--leading-tight);
 	}
 
-	.session--featured .session__speakers {
-		font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.55rem);
-	}
-
 	.session__speaker,
 	.session__name,
 	.session__company {
@@ -222,18 +253,12 @@ const fullDate = (date: string) =>
 			grid-template-columns: 1fr 1fr;
 		}
 
-		.session--featured {
-			grid-column: 1 / -1;
-			padding-bottom: var(--space-5);
-			border-bottom: var(--border);
-		}
-
 		/* Hairline between the two columns, as in the grid's left/right split. */
-		.session:not(.session--featured):nth-child(even) {
+		.session:nth-child(odd) {
 			padding-right: var(--space-4);
 		}
 
-		.session:not(.session--featured):nth-child(odd) {
+		.session:nth-child(even) {
 			padding-left: var(--space-4);
 			border-left: var(--border);
 		}
@@ -252,7 +277,7 @@ const fullDate = (date: string) =>
 			padding-right: var(--space-5);
 		}
 
-		.past__list {
+		.past__main {
 			padding-left: var(--space-5);
 			border-left: var(--border);
 		}

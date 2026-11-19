@@ -1,6 +1,7 @@
 ---
 /**
- * Homepage hero: looping background video, the headline, and the
+ * Homepage hero: looping background video (with a pause button,
+ * BackgroundVideoControl), the headline, and the
  * "What are you looking for?" panel that overlaps the bottom of the hero.
  *
  * The overlap was built on Squarespace with `translate: 0 500px` on each block.
@@ -8,6 +9,7 @@
  * so it never causes overflow and the next section doesn't need a spacer.
  */
 import { Image } from 'astro:assets';
+import BackgroundVideoControl from '../BackgroundVideoControl.astro';
 import flywheel from '../../assets/images/brand/flywheel.png';
 
 interface Props {
@@ -41,11 +43,12 @@ const parseLine = (line: string) =>
 			loading="eager"
 			fetchpriority="high"
 		/>
-		<video class="hero__video" muted loop playsinline preload="none" disablepictureinpicture>
+		<video id="home-hero-video" class="hero__video" muted loop playsinline preload="none" disablepictureinpicture>
 			<source src="/video/hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
 			<source src="/video/hero-1080.mp4" type="video/mp4" />
 		</video>
 	</div>
+	<BackgroundVideoControl for="home-hero-video" class="hero__pause" />
 
 	<h1 class="hero__title">
 		<Image class="hero__flywheel" src={flywheel} alt="" width={160} loading="eager" />
@@ -78,18 +81,6 @@ const parseLine = (line: string) =>
 		</ul>
 	</div>
 </section>
-
-<script>
-	// Play the background video only when motion is welcome and the visitor isn't saving data.
-	const video = document.querySelector<HTMLVideoElement>('.hero__video');
-	const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-	const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-
-	if (video && !reduceMotion && !saveData) {
-		video.addEventListener('playing', () => video.classList.add('is-playing'), { once: true });
-		video.play().catch(() => {});
-	}
-</script>
 
 <style>
 	.hero,
@@ -140,6 +131,12 @@ const parseLine = (line: string) =>
 
 	.hero__video.is-playing {
 		opacity: 1;
+	}
+
+	/* Pause/play for the background video: top right, clear of the overlapping panel. */
+	.hero :global(.hero__pause) {
+		top: calc(var(--header-height) + var(--space-3));
+		right: var(--gutter);
 	}
 
 	.hero__title {

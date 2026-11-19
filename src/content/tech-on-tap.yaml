@@ -29,12 +29,18 @@ techOnTap:
 
 
   # "Past Tech on Tap". Add a session to `events` (any order; the page sorts by
-  # date and shows the newest one large). Each speaker has a name and, if known,
+  # date, newest first). Each speaker has a name and, if known,
   # a company. Add `image:` (put the photo in src/assets/images/tech-on-tap/past/)
   # and `imageAlt:` to replace the placeholder.
   past:
     heading: "Past Tech on Tap Events"
     cta: { label: "READ THE RECAPS", href: "/blog/tag/Tech+on+Tap" }
+    # Recap video, large above the sessions (plays when clicked; captions in the .vtt file).
+    video:
+      src: /video/tech-on-tap.mp4
+      captions: /video/tech-on-tap.en.vtt
+      poster: ../assets/images/events/hero.jpg
+      label: "Video: founders on the Boyd Innovation Center community"
     events:
       - date: "2026-10-22"
         talk: "From Founder to CEO"

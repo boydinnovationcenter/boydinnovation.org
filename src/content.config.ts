@@ -425,6 +425,10 @@ const techOnTap = defineCollection({
 				heading: z.string(),
 				/** Optional button under the heading. */
 				cta: link.optional(),
+				/** Recap video under the heading (click to play). File and captions in public/video/. */
+				video: z
+					.object({ src: z.string(), captions: z.string().optional(), poster: image(), label: z.string() })
+					.optional(),
 				events: z.array(
 					z.object({
 						/** Day of the session, e.g. 2026-08-20. */
