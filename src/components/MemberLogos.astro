@@ -1,7 +1,8 @@
 ---
 /**
  * Grid of member company logos on the swirl texture. Members come from the
- * `members` content collection; a logo links out once the member has a url.
+ * `members` content collection. A card with a url links to the member's site
+ * (the whole card is the click target).
  */
 import { getCollection } from 'astro:content';
 import { getImage, Image } from 'astro:assets';
@@ -23,7 +24,15 @@ const tile = await getImage({ src: swirl, width: 600, format: 'webp' });
 		<ul class="members__grid" role="list">
 			{
 				members.map(({ data: member }) => {
-					const logo = <Image src={member.logo} alt={member.name} width={300} densities={[1, 2]} />;
+					const logo = (
+						<Image
+							src={member.logo}
+							alt={member.name}
+							width={300}
+							densities={[1, 2]}
+							style={member.scale !== 1 ? `--logo-scale: ${member.scale}` : undefined}
+						/>
+					);
 					return (
 						<li class="member">
 							{member.url ? (
@@ -61,6 +70,7 @@ const tile = await getImage({ src: swirl, width: 600, format: 'webp' });
 	}
 
 	.member {
+		position: relative;
 		display: grid;
 		aspect-ratio: 267 / 147;
 		overflow: hidden;
@@ -75,8 +85,25 @@ const tile = await getImage({ src: swirl, width: 600, format: 'webp' });
 		transition: opacity 0.2s ease;
 	}
 
+	/* Stretch the link over the whole card. */
+	.member a::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: 4px;
+	}
+
 	.member a:hover {
 		opacity: 0.8;
+	}
+
+	.member a:focus-visible {
+		outline: none;
+	}
+
+	.member a:focus-visible::after {
+		outline: 3px solid var(--color-blue);
+		outline-offset: 2px;
 	}
 
 	.member img {
@@ -84,6 +111,7 @@ const tile = await getImage({ src: swirl, width: 600, format: 'webp' });
 		height: 100%;
 		min-height: 0;
 		object-fit: contain;
+		scale: var(--logo-scale, 1);
 	}
 
 	@media (min-width: 48rem) {

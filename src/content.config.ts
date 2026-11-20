@@ -169,6 +169,8 @@ const members = defineCollection({
 			order: z.number(),
 			url: z.url().optional(),
 			description: z.string().optional(),
+			/** Shrinks or grows one logo in its card, e.g. 0.8 for a logo that looks too big. */
+			scale: z.number().min(0.4).max(1.5).default(1),
 		}),
 });
 

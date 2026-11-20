@@ -1,37 +1,48 @@
 # BIC member companies, shown on the Space page under "Home to Columbia's Tech Founders".
 # See CONTENT.md.
 # order sets the position on the page (lowest first).
-# Optional fields: url (makes the logo a link to the company's site) and description.
+# Optional fields: url (makes the card a link to the company's site), description,
+# and scale (e.g. 0.8 to make one logo smaller in its card).
 
-- id: pulmanage
-  name: "PulManage"
-  order: 1
-  logo: ../assets/images/members/pulmanage.png
 - id: govpossible
   name: "GovPossible"
   order: 2
   logo: ../assets/images/members/govpossible.png
+  url: "https://govpossible.com/"
 - id: rampart-cio
   name: "Rampart CIO"
   order: 3
   logo: ../assets/images/members/rampart-cio.png
+  url: "https://rampartcio.com/"
 - id: helloseo
   name: "HelloSEO"
   order: 4
   logo: ../assets/images/members/helloseo.png
+  url: "https://helloseo.com/"
 - id: metamonster
   name: "MetaMonster"
   order: 5
   logo: ../assets/images/members/metamonster.png
-- id: trustshield
-  name: "TrustShield"
-  order: 6
-  logo: ../assets/images/members/trustshield.png
+  url: "https://metamonster.ai/"
 - id: e1t1-tech
   name: "E1T1 Tech"
   order: 7
   logo: ../assets/images/members/e1t1-tech.png
+  url: "https://each1teach1.us/"
 - id: bmc-it
   name: "BMC IT Consulting Service"
   order: 8
   logo: ../assets/images/members/bmc-it.png
+  url: "https://www.bmcitconsultingservice.com/"
+- id: connected-health-partners
+  name: "Connected Health Partners"
+  order: 9
+  logo: ../assets/images/members/connected-health-partners.png
+  scale: 0.8
+  url: "https://www.connectedhealthpartners.com/"
+- id: nautiq-ai
+  name: "NautiQ.ai"
+  order: 10
+  logo: ../assets/images/members/nautiq-ai.png
+  scale: 0.8
+  url: "https://nautiq.ai/"
