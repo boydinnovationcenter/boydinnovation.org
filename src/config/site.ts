@@ -29,7 +29,7 @@ export const mainNav: NavLink[] = [
 	{ label: 'Space', href: '/space' },
 	{ label: 'Events', href: '/events' },
 	{ label: 'About', href: '/about' },
-	{ label: 'Partnerships', href: 'https://partnerships.boydinnovation.org' },
+	{ label: 'Partnerships', href: 'https://partnerships.boydinnovation.org', external: true },
 ];
 
 export const headerCta: NavLink = { label: 'Book a Tour', href: '/book-a-tour' };

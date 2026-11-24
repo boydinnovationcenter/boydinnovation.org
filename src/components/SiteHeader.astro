@@ -28,8 +28,20 @@ const current = (href: string) => (path === href ? 'page' : undefined);
 				{
 					mainNav.map((item) => (
 						<li>
-							<a href={item.href} aria-current={current(item.href)}>
+							<a
+								href={item.href}
+								aria-current={current(item.href)}
+								{...(item.external ? { target: '_blank', rel: 'noopener' } : {})}
+							>
 								{item.label}
+								{item.external && (
+									<>
+										<svg class="nav-external" viewBox="0 0 12 12" width="10" height="10" aria-hidden="true">
+											<path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+										</svg>
+										<span class="visually-hidden"> (opens in a new tab)</span>
+									</>
+								)}
 							</a>
 						</li>
 					))
@@ -50,8 +62,20 @@ const current = (href: string) => (path === href ? 'page' : undefined);
 				{
 					mainNav.map((item) => (
 						<li>
-							<a href={item.href} aria-current={current(item.href)}>
+							<a
+								href={item.href}
+								aria-current={current(item.href)}
+								{...(item.external ? { target: '_blank', rel: 'noopener' } : {})}
+							>
 								{item.label}
+								{item.external && (
+									<>
+										<svg class="nav-external" viewBox="0 0 12 12" width="10" height="10" aria-hidden="true">
+											<path d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+										</svg>
+										<span class="visually-hidden"> (opens in a new tab)</span>
+									</>
+								)}
 							</a>
 						</li>
 					))
@@ -290,5 +314,14 @@ const current = (href: string) => (path === href ? 'page' : undefined);
 		.mobile-menu {
 			display: none;
 		}
+	}
+
+	/* Arrow after links that open in a new tab (Partnerships). */
+	.nav-external {
+		display: inline-block;
+		width: 0.6em;
+		height: 0.6em;
+		margin-left: 0.3em;
+		vertical-align: 0.1em;
 	}
 </style>
